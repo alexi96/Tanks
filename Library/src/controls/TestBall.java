@@ -7,14 +7,14 @@ import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import utilities.Server;
+import utilities.synchronization.SyncManager;
 
-public class TestBall extends NetworkControl {
+public class TestBall extends SyncGameControl {
 
     private Transform tr = new Transform();
 
     @Override
-    public void create(boolean server) {
+    public void create() {
         GameController gc = GameController.getInstance();
         Spatial s = gc.getLoader().loadModel("Models/Ball.j3o");
         gc.getApplication().getRootNode().attachChild(s);
@@ -22,6 +22,7 @@ public class TestBall extends NetworkControl {
         s.addControl(this);
         s.setLocalTranslation(Vector3f.UNIT_Y.mult(5));
 
+        boolean server = GameController.getInstance().getSynchronizer() != null;
         if (!server) {
             AmbientLight ambient = new AmbientLight();
             ambient.setColor(ColorRGBA.White);
@@ -34,21 +35,20 @@ public class TestBall extends NetworkControl {
         gc.getPhysics().add(rbc);
     }
 
-    @Override
-    public void updateClient() {
+    public void synchronizeTransform() {
         super.spatial.setLocalTransform(this.tr);
     }
 
     @Override
     public void update(float tpf) {
-        Server s = GameController.getInstance().getServer();
+        SyncManager s = GameController.getInstance().getSynchronizer();
         if (s == null) {
             return;
         }
         RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
         rbc.applyCentralForce(Vector3f.UNIT_XYZ.mult(tpf));
         this.tr = super.spatial.getLocalTransform().clone();
-        s.update(this);
+        s.update(this, "synchronizeTransform");
     }
 
     @Override

@@ -39,10 +39,19 @@ class InvocationEndPoint implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        try {
+            Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            return method.invoke(this, args);
+        } catch (NoSuchMethodException | SecurityException e) {
+        }
+
         synchronized (this) {
             RemoteInvocation inv = new RemoteInvocation(method.getName(), method.getParameterTypes(), args);
             this.output.reset();
             this.output.writeObject(inv);
+            if (method.getReturnType().equals(Void.TYPE)) {
+                return Void.TYPE;
+            }
             return this.input.readObject();
         }
     }

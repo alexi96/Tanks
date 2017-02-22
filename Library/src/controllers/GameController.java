@@ -3,7 +3,7 @@ package controllers;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.PhysicsSpace;
 import utilities.LoadingManager;
-import utilities.Server;
+import utilities.synchronization.SyncManager;
 
 public final class GameController {
 
@@ -12,7 +12,7 @@ public final class GameController {
     private PhysicsSpace physics;
     private LoadingManager loader;
     
-    private Server server = new Server();
+    private SyncManager synchronizer = new SyncManager();
 
     public SimpleApplication getApplication() {
         return application;
@@ -26,18 +26,18 @@ public final class GameController {
         return loader;
     }
 
-    public Server getServer() {
-        return server;
+    public SyncManager getSynchronizer() {
+        return synchronizer;
     }
-
+    
     private GameController() {
     }
 
-    public void initialise(SimpleApplication application, LoadingManager loader, PhysicsSpace physics, Server server) {
+    public void initialise(SimpleApplication application, LoadingManager loader, PhysicsSpace physics, SyncManager synchronizer) {
         this.application = application;
         this.loader = loader;
         this.physics = physics;
-        this.server = server;
+        this.synchronizer = synchronizer;
     }
 
     public static GameController getInstance() {

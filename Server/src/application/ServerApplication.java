@@ -13,23 +13,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
 import utilities.LoadingManager;
-import utilities.Server;
+import utilities.ServerAppState;
 
 public class ServerApplication extends SimpleApplication {
 
     public static void main(String[] args) {
         ServerApplication s = new ServerApplication();
         s.start(JmeContext.Type.Headless);
+        //Logger.getLogger(HiRpc.class.getName()).setLevel(Level.OFF);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        GameController.getInstance().getServer().update();
     }
-    
+
     @Override
     public void simpleInitApp() {
-        Server s = new Server();
+        assetManager.registerLocator("../Library/assets", FileLocator.class);
+        BulletAppState bulletState = new BulletAppState();
+        LoadingManager loader = new LoadingManager(this.assetManager);
+        super.stateManager.attach(bulletState);
+
+        ServerAppState s = new ServerAppState();
 
         try {
             HiRpc.start(null, 4321, s, new Class[]{GameConnection.class});
@@ -37,15 +42,13 @@ public class ServerApplication extends SimpleApplication {
             Logger.getLogger(ServerApplication.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
+        super.stateManager.attach(s);
 
-        assetManager.registerLocator("../Library/assets", FileLocator.class);
-        BulletAppState bulletState = new BulletAppState();
-        LoadingManager loader = new LoadingManager(this.assetManager);
-        super.stateManager.attach(bulletState);
         GameController.getInstance().initialise(this, loader, bulletState.getPhysicsSpace(), s);
 
         TestMap t = new TestMap();
         s.create(t);
+        
         s.create(new TestBall());
     }
 }

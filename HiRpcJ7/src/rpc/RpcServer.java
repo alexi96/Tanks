@@ -86,8 +86,6 @@ class RpcServer implements Runnable {
                 };
 
                 new Thread(rb, s.getInetAddress().getHostAddress()).start();
-
-                this.handler.connected(rpcs);
             } catch (Exception ex) {
             }
         }
