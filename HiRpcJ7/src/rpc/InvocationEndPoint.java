@@ -41,6 +41,9 @@ class InvocationEndPoint implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
             Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            if (method.getName().equals("equals")) {
+                return proxy == args[0];
+            }
             return method.invoke(this, args);
         } catch (NoSuchMethodException | SecurityException e) {
         }

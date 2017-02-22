@@ -7,7 +7,7 @@ public class SyncManager {
     private int last;
     protected TreeSet<Synchronizer> existent = new TreeSet<>();
     protected TreeSet<Synchronizer> created = new TreeSet<>();
-    protected TreeSet<Synchronizer> destroyed = new TreeSet<>();
+    protected TreeSet<Integer> destroyed = new TreeSet<>();
     protected TreeSet<SyncEntry> updated = new TreeSet<>();
 
     public void create(Synchronizer c) {
@@ -18,7 +18,7 @@ public class SyncManager {
     }
 
     public void destroy(Synchronizer c) {
-        this.destroyed.add(c);
+        this.destroyed.add(c.getId());
         this.existent.remove(c);
     }
 

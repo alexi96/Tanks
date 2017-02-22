@@ -54,9 +54,9 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
     }
 
     @Override
-    public void destroy(Collection<Synchronizer> cts) {
-        for (Synchronizer s : cts) {
-            this.managed.put(Integer.SIZE, s);
+    public void destroy(Collection<Integer> cts) {
+        for (Integer s : cts) {
+            this.managed.remove(s);
         }
     }
 
