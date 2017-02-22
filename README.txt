@@ -31,3 +31,4 @@ Jocul va implementa facilitatile:
   seta din meniu daca ecranul va defila automat cand vehicolul lui paraseste
   zona curent afisata sau explicit prin taste/mouse;
  - un sistem de punctaj si un fisier cu cele mai mari scoruri.
+ Test
