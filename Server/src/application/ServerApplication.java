@@ -1,7 +1,6 @@
 package application;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.system.JmeContext;
 import connection.GameConnection;
@@ -20,7 +19,6 @@ public class ServerApplication extends SimpleApplication {
     public static void main(String[] args) {
         ServerApplication s = new ServerApplication();
         s.start(JmeContext.Type.Headless);
-        //Logger.getLogger(HiRpc.class.getName()).setLevel(Level.OFF);
     }
 
     @Override
@@ -29,7 +27,6 @@ public class ServerApplication extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        assetManager.registerLocator("../Library/assets", FileLocator.class);
         BulletAppState bulletState = new BulletAppState();
         LoadingManager loader = new LoadingManager(this.assetManager);
         super.stateManager.attach(bulletState);

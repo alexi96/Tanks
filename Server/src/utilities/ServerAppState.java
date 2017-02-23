@@ -1,6 +1,6 @@
 package utilities;
 
-import utilities.synchronization.SyncManager;
+import synchronization.SyncManager;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
@@ -8,7 +8,7 @@ import com.jme3.renderer.RenderManager;
 import connection.GameConnection;
 import java.util.ArrayList;
 import rpc.ConnectionHandler;
-import utilities.synchronization.Synchronizer;
+import synchronization.Synchronizer;
 
 public class ServerAppState extends SyncManager implements ConnectionHandler, AppState {
 
@@ -62,6 +62,7 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
         initialized = false;
     }
 
+    @Override
     public void update() {
         ArrayList<GameConnection> lost = new ArrayList<>();
         if (!this.created.isEmpty()) {
@@ -113,7 +114,7 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
     @Override
     public void connected(Object proc) throws Exception {
         GameConnection con = (GameConnection) proc;
-        con.create(this.existent);
+        con.create(this.managed);
         this.clients.add(con);
     }
 }

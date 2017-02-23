@@ -3,7 +3,7 @@ package controllers;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.PhysicsSpace;
 import utilities.LoadingManager;
-import utilities.synchronization.SyncManager;
+import synchronization.SyncManager;
 
 public final class GameController {
 

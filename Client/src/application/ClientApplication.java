@@ -1,7 +1,6 @@
 package application;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.plugins.FileLocator;
 import com.jme3.system.AppSettings;
 import controllers.GameController;
 import java.util.logging.Level;
@@ -14,8 +13,6 @@ public class ClientApplication extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        assetManager.registerLocator("../Library/assets", FileLocator.class);
-
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, loader, null, null);
         try {

@@ -1,8 +1,8 @@
 package connection;
 
 import java.util.Collection;
-import utilities.synchronization.SyncEntry;
-import utilities.synchronization.Synchronizer;
+import synchronization.SyncEntry;
+import synchronization.Synchronizer;
 
 public interface GameConnection {
 

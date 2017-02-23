@@ -1,6 +1,5 @@
-package utilities.synchronization;
+package synchronization;
 
-import controls.SyncGameControl;
 import java.io.Serializable;
 
 public abstract class Synchronizer implements Comparable<Synchronizer>, Serializable {
@@ -16,6 +15,12 @@ public abstract class Synchronizer implements Comparable<Synchronizer>, Serializ
     }
 
     public void create() {
+    }
+    
+    public void synchronize() {
+    }
+    
+    public void destroy() {
     }
     
     public void prepare(Synchronizer s) {

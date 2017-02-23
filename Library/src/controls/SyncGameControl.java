@@ -9,7 +9,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import java.io.IOException;
-import utilities.synchronization.Synchronizer;
+import synchronization.Synchronizer;
 
 public abstract class SyncGameControl extends Synchronizer implements Control {
     
@@ -30,6 +30,12 @@ public abstract class SyncGameControl extends Synchronizer implements Control {
         return spatial;
     }
 
+    @Override
+    public void destroy() {
+        this.spatial.removeFromParent();
+        this.spatial.removeControl(this);
+    }
+    
     @Override
     public void prepare(Synchronizer s) {
         SyncGameControl snc = (SyncGameControl) s;

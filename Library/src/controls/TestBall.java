@@ -3,15 +3,14 @@ package controls;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import utilities.synchronization.SyncManager;
+import synchronization.SyncManager;
 
 public class TestBall extends SyncGameControl {
 
-    private Transform tr = new Transform();
+    private Vector3f loc;
 
     @Override
     public void create() {
@@ -35,8 +34,18 @@ public class TestBall extends SyncGameControl {
         gc.getPhysics().add(rbc);
     }
 
-    public void synchronizeTransform() {
-        super.spatial.setLocalTransform(this.tr);
+    @Override
+    public void setSpatial(Spatial spatial) {
+        if (spatial != null) {
+            this.loc = spatial.getLocalTranslation();
+        }
+
+        super.setSpatial(spatial);
+    }
+
+    @Override
+    public void synchronize() {
+        super.spatial.setLocalTranslation(this.loc);
     }
 
     @Override
@@ -47,12 +56,11 @@ public class TestBall extends SyncGameControl {
         }
         RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
         rbc.applyCentralForce(Vector3f.UNIT_XYZ.mult(tpf));
-        this.tr = super.spatial.getLocalTransform().clone();
-        s.update(this, "synchronizeTransform");
+        s.update(this);
     }
 
     @Override
     public String toString() {
-        return this.tr.toString();
+        return this.loc.toString();
     }
 }

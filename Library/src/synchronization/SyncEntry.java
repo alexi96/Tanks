@@ -1,4 +1,4 @@
-package utilities.synchronization;
+package synchronization;
 
 import java.io.Serializable;
 

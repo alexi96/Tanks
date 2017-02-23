@@ -9,14 +9,15 @@ import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utilities.synchronization.SyncEntry;
-import utilities.synchronization.Synchronizer;
+import synchronization.SyncEntry;
+import synchronization.Synchronizer;
 
 public class ClientAppState extends AbstractAppState implements GameConnection {
 
-    private HashMap<Integer, Synchronizer> managed = new HashMap<>();
-    private TreeSet<Synchronizer> created = new TreeSet<>();
-    private TreeSet<SyncEntry> updated = new TreeSet<>();
+    private final HashMap<Integer, Synchronizer> managed = new HashMap<>();
+    private final TreeSet<Synchronizer> created = new TreeSet<>();
+    private final TreeSet<SyncEntry> updated = new TreeSet<>();
+    private final TreeSet<Integer> destroyed = new TreeSet<>();
 
     @Override
     public void update(float tpf) {
@@ -34,13 +35,20 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
             }
             this.updated.clear();
         }
+        if (!this.destroyed.isEmpty()) {
+            for (Synchronizer s : this.created) {
+                Synchronizer t = this.managed.get(s.getId());
+                t.destroy();
+            }
+            this.created.clear();
+        }
     }
 
-    public void update(Synchronizer n, Synchronizer o, String name) {
+    private void update(Synchronizer n, Synchronizer o, String name) {
         try {
             Method com = n.getClass().getDeclaredMethod(name);
             com.setAccessible(true);
-            
+
             n.prepare(o);
             com.invoke(n);
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -55,9 +63,7 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
 
     @Override
     public void destroy(Collection<Integer> cts) {
-        for (Integer s : cts) {
-            this.managed.remove(s);
-        }
+        this.destroyed.addAll(cts);
     }
 
     @Override
