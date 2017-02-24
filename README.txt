@@ -1,5 +1,21 @@
 https://www.dropbox.com/sh/qab7h94dbgovvnv/AADOa57A0tAfuZ-EM6PFK5vra?dl=0
 
+Folosim jMonkeyEngine
+Modelele sa fie compatibile cu blender, ogreXML sau j3o cumva (vedeti ca de la editor 3d la j3o din joc se pierd multe)
+	Mapam normalmapui in cod dupa regula textura.jpg|png > textura.n.jpg|png
+StarUML (daca gasim mai bun schimbam)
+
+Obiective:
+	Joc multiplayer cu vehicule 1 (un vehicul, sa ne miscam toti la fel pe aceeasi harta)
+	Joc multiplayer cu vehicule 2 (o arma, proiectile explozii)
+	Vehicule si arme
+		Robot care leviteaza de dimensiunea unui om (sa poti sa joci un fps fara animatii, usor de deplasat si de ascuns)
+		UGV stomper (o sa fie ceva gen offroad racing)
+		Drona cu tun (rapida)
+	Selectam vehicule si arme (GUI)
+	
+	Grafica mai buna (harta cool, cer, apa)
+
 7. (echipa de 3-5)
 Joc multiplayer, in care mai multe vehicole de lupta, controlate de jucatori
  diferiti, se dueleaza pe un acelasi camp de lupta.

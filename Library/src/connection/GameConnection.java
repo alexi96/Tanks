@@ -5,6 +5,7 @@ import synchronization.SyncEntry;
 import synchronization.Synchronizer;
 
 public interface GameConnection {
+    int PORT = 2048;
 
     void create(Collection<Synchronizer> cts);
 

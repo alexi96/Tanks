@@ -49,8 +49,8 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
             Method com = n.getClass().getDeclaredMethod(name);
             com.setAccessible(true);
 
-            n.prepare(o);
-            com.invoke(n);
+            o.prepare(n);
+            com.invoke(o);
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(ClientAppState.class.getName()).log(Level.SEVERE, null, ex);
         }

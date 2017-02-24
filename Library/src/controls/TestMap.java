@@ -12,7 +12,10 @@ public class TestMap extends SyncGameControl {
     @Override
     public void create() {
         GameController gc = GameController.getInstance();
-        Spatial s = gc.getLoader().loadModel("Models/TestMap.j3o");
+        Spatial s = gc.getApplication().getAssetManager().loadModel("Models/TestMap.j3o");
+        if (gc.isBestVisualStyles()) {
+            gc.getLoader().loadTextures(s);
+        }
         gc.getApplication().getRootNode().attachChild(s);
 
         boolean server = GameController.getInstance().getSynchronizer() != null;

@@ -11,8 +11,11 @@ public final class GameController {
     private SimpleApplication application;
     private PhysicsSpace physics;
     private LoadingManager loader;
-    
     private SyncManager synchronizer = new SyncManager();
+    private boolean bestVisualStyles = true;
+
+    private GameController() {
+    }
 
     public SimpleApplication getApplication() {
         return application;
@@ -29,8 +32,13 @@ public final class GameController {
     public SyncManager getSynchronizer() {
         return synchronizer;
     }
-    
-    private GameController() {
+
+    public boolean isBestVisualStyles() {
+        return bestVisualStyles;
+    }
+
+    public void setBestVisualStyles(boolean bestVisualStyles) {
+        this.bestVisualStyles = bestVisualStyles;
     }
 
     public void initialise(SimpleApplication application, LoadingManager loader, PhysicsSpace physics, SyncManager synchronizer) {

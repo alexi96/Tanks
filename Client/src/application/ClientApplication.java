@@ -2,6 +2,7 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
+import connection.GameConnection;
 import controllers.GameController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,18 +12,24 @@ import utilities.LoadingManager;
 
 public class ClientApplication extends SimpleApplication {
 
+    String ip;
+
     @Override
     public void simpleInitApp() {
+        super.cam.setFrustumPerspective(45, (float) super.settings.getWidth() / super.settings.getHeight(), 0.01f, 1000);
+
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, loader, null, null);
-        try {
-            ClientAppState state = new ClientAppState();
-            HiRpc.connectReverse("localhost", 4321, state);
-            super.stateManager.attach(state);
-        } catch (Exception ex) {
-            Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (this.ip != null) {
+            try {
+                ClientAppState state = new ClientAppState();
+                HiRpc.connectReverse("localhost", GameConnection.PORT, state);
+                super.stateManager.attach(state);
+            } catch (Exception ex) {
+                Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
     }
 
     @Override
@@ -41,6 +48,10 @@ public class ClientApplication extends SimpleApplication {
         } else {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
+        }
+        app.ip = null;
+        if (args.length > 0) {
+            app.ip = args[0];
         }
         app.start();
     }

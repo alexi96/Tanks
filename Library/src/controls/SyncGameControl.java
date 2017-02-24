@@ -37,12 +37,6 @@ public abstract class SyncGameControl extends Synchronizer implements Control {
     }
     
     @Override
-    public void prepare(Synchronizer s) {
-        SyncGameControl snc = (SyncGameControl) s;
-        this.spatial = snc.spatial;
-    }
-
-    @Override
     public Control cloneForSpatial(Spatial spatial) {
         try {
             SyncGameControl c = (SyncGameControl) super.clone();

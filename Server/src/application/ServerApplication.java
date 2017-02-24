@@ -22,10 +22,6 @@ public class ServerApplication extends SimpleApplication {
     }
 
     @Override
-    public void simpleUpdate(float tpf) {
-    }
-
-    @Override
     public void simpleInitApp() {
         BulletAppState bulletState = new BulletAppState();
         LoadingManager loader = new LoadingManager(this.assetManager);
@@ -34,7 +30,7 @@ public class ServerApplication extends SimpleApplication {
         ServerAppState s = new ServerAppState();
 
         try {
-            HiRpc.start(null, 4321, s, new Class[]{GameConnection.class});
+            HiRpc.start(null, GameConnection.PORT, s, new Class[]{GameConnection.class});
         } catch (IOException ex) {
             Logger.getLogger(ServerApplication.class.getName()).log(Level.SEVERE, null, ex);
             return;
