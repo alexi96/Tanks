@@ -13,24 +13,24 @@ public class TestMap extends SyncGameControl {
     public void create() {
         GameController gc = GameController.getInstance();
         Spatial s = gc.getApplication().getAssetManager().loadModel("Models/TestMap.j3o");
+
         if (gc.isBestVisualStyles()) {
             gc.getLoader().loadTextures(s);
-        }
-        gc.getApplication().getRootNode().attachChild(s);
 
-        boolean server = GameController.getInstance().getSynchronizer() != null;
-        if (!server) {
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
             sun.setColor(ColorRGBA.White);
             gc.getApplication().getRootNode().addLight(sun);
-
-            return;
         }
 
-        RigidBodyControl rbc = new RigidBodyControl(0);
-        s.addControl(rbc);
-        gc.getPhysics().add(rbc);
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+        if (server) {
+            RigidBodyControl rbc = new RigidBodyControl(0);
+            s.addControl(rbc);
+            gc.getPhysics().add(rbc);
+        }
+
+        gc.getApplication().getRootNode().attachChild(s);
     }
 
     @Override

@@ -48,6 +48,10 @@ public final class GameController {
         this.synchronizer = synchronizer;
     }
 
+    public void configConnection(SyncManager synchronizer) {
+        this.synchronizer = synchronizer;
+    }
+
     public static GameController getInstance() {
         return instance;
     }
