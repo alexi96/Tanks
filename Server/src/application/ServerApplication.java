@@ -6,7 +6,7 @@ import com.jme3.system.JmeContext;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.TestBall;
-import controls.TestMap;
+import controls.maps.TestMap;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

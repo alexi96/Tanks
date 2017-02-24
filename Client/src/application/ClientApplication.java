@@ -6,7 +6,7 @@ import com.jme3.system.AppSettings;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.TestBall;
-import controls.TestMap;
+import controls.maps.TestMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;

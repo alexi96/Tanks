@@ -1,4 +1,4 @@
-package controls;
+package controls.maps;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.light.DirectionalLight;
@@ -6,6 +6,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
+import controls.SyncGameControl;
 
 public class TestMap extends SyncGameControl {
 
