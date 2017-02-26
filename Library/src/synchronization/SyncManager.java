@@ -15,11 +15,13 @@ public class SyncManager {
         ++last;
         this.created.add(c);
         this.managed.add(c);
+        c.create();
     }
 
     public void destroy(Synchronizer c) {
         this.destroyed.add(c.getId());
         this.managed.remove(c);
+        c.destroy();
     }
 
     public void update(Synchronizer c, String name) {

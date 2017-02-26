@@ -1,8 +1,7 @@
 package controls;
 
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.light.AmbientLight;
-import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
@@ -11,6 +10,7 @@ import synchronization.SyncManager;
 public class TestBall extends SyncGameControl {
 
     private Vector3f loc;
+    private Quaternion rot;
 
     @Override
     public void create() {
@@ -19,13 +19,9 @@ public class TestBall extends SyncGameControl {
         gc.getApplication().getRootNode().attachChild(s);
 
         s.addControl(this);
-        s.setLocalTranslation(Vector3f.UNIT_Y.mult(5));
 
         boolean server = GameController.getInstance().getSynchronizer() != null;
         if (!server) {
-            AmbientLight ambient = new AmbientLight();
-            ambient.setColor(ColorRGBA.White);
-            s.addLight(ambient);
             return;
         }
 
@@ -38,6 +34,7 @@ public class TestBall extends SyncGameControl {
     public void setSpatial(Spatial spatial) {
         if (spatial != null) {
             this.loc = spatial.getLocalTranslation();
+            this.rot = spatial.getLocalRotation();
         }
 
         super.setSpatial(spatial);
@@ -46,6 +43,7 @@ public class TestBall extends SyncGameControl {
     @Override
     public void synchronize() {
         super.spatial.setLocalTranslation(this.loc);
+        super.spatial.setLocalRotation(this.rot);
     }
 
     @Override

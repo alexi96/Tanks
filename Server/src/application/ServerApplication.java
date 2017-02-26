@@ -2,6 +2,9 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.system.JmeContext;
 import connection.GameConnection;
 import controllers.GameController;
@@ -41,7 +44,12 @@ public class ServerApplication extends SimpleApplication {
 
         TestMap t = new TestMap();
         s.create(t);
-        
-        s.create(new TestBall());
+
+        for (int i = 0; i < 10; i++) {
+            TestBall tb = new TestBall();
+            s.create(tb);
+            Spatial sp = tb.getSpatial();
+            sp.getControl(RigidBodyControl.class).setPhysicsLocation(Vector3f.UNIT_Y.mult(3).add(Vector3f.UNIT_X.mult(i * 3)));
+        }
     }
 }

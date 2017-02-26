@@ -8,7 +8,6 @@ import com.jme3.renderer.RenderManager;
 import connection.GameConnection;
 import java.util.ArrayList;
 import rpc.ConnectionHandler;
-import synchronization.Synchronizer;
 
 public class ServerAppState extends SyncManager implements ConnectionHandler, AppState {
 
@@ -66,9 +65,6 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
     public void update() {
         ArrayList<GameConnection> lost = new ArrayList<>();
         if (!this.created.isEmpty()) {
-            for (Synchronizer c : this.created) {
-                c.create();
-            }
             for (GameConnection c : this.clients) {
                 try {
                     c.create(this.created);

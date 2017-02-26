@@ -1,6 +1,7 @@
 package controls.maps;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -22,6 +23,10 @@ public class TestMap extends SyncGameControl {
             sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
             sun.setColor(ColorRGBA.White);
             gc.getApplication().getRootNode().addLight(sun);
+
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.DarkGray);
+            gc.getApplication().getRootNode().addLight(ambient);
         }
 
         boolean server = GameController.getInstance().getSynchronizer() != null;

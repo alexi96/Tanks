@@ -2,10 +2,13 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.system.AppSettings;
+import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.TestBall;
+import controls.entityes.RobotControl;
 import controls.maps.TestMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,12 +19,12 @@ import utilities.LoadingManager;
 
 public class ClientApplication extends SimpleApplication {
 
-    String ip;
+    private String ip;
 
     @Override
     public void simpleInitApp() {
         super.cam.setFrustumPerspective(45, (float) super.settings.getWidth() / super.settings.getHeight(), 0.01f, 1000);
-
+        
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, loader, null, null);
 
@@ -33,6 +36,19 @@ public class ClientApplication extends SimpleApplication {
             } catch (Exception ex) {
                 Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            try {
+                final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
+                super.inputManager.addListener(new ActionListener() {
+
+                    @Override
+                    public void onAction(String name, boolean isPressed, float tpf) {
+                        cc.command(ip, name, isPressed);
+                    }
+                }, "asd");
+            } catch (Exception ex) {
+                Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             BulletAppState bulletState = new BulletAppState();
             super.stateManager.attach(bulletState);
@@ -41,6 +57,8 @@ public class ClientApplication extends SimpleApplication {
 
             new TestMap().create();
             new TestBall().create();
+
+            new RobotControl().create();
         }
     }
 
