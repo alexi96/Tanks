@@ -11,11 +11,27 @@ import controllers.GameController;
 public class RobotControl extends PlayerControl {
 
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
-    private BetterCharacterControl character = new BetterCharacterControl(0.25f, 1.7f, 100);
+    private BetterCharacterControl character = new BetterCharacterControl(0.25f, 1.7f, 100) {
+        @Override
+        public void update(float tpf) {
+            super.update(tpf);
+            Camera c = GameController.getInstance().getApplication().getCamera();
+
+            Vector3f loc = new Vector3f(c.getDirection());
+            loc.setY(0);
+            loc.normalizeLocal();
+            loc.multLocal(-0.225f);
+            Vector3f sl = super.spatial.getWorldTranslation().clone();
+            loc.addLocal(sl.add(Vector3f.UNIT_Y.mult(1.7f)));
+
+            c.setLocation(loc);
+        }
+    };
     private Spatial head;
     private Spatial weapon1;
     private Spatial weapon2;
     private Vector3f weaponLoc;
+    private Vector3f camLoc = new Vector3f();
 
     @Override
     public void create() {
@@ -24,21 +40,24 @@ public class RobotControl extends PlayerControl {
         GameController.getInstance().getApplication().getRootNode().attachChild(n);
 
         n.addControl(this);
-
-        this.character.setWalkDirection(Vector3f.UNIT_Z.mult(5));
     }
 
     @Override
     public void setSpatial(Spatial spatial) {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+
         if (spatial != null) {
-            spatial.addControl(this.character);
             Node n = (Node) spatial;
             this.head = n.getChild("Head");
             this.weapon1 = n.getChild("Weapon1");
             this.weapon2 = n.getChild("Weapon2");
-            GameController.getInstance().getPhysics().add(this.character);
-            this.weaponLoc = this.weapon1.getLocalTranslation().clone();
-        } else {
+
+            if (server) {
+                spatial.addControl(this.character);
+                GameController.getInstance().getPhysics().add(this.character);
+                this.weaponLoc = this.weapon1.getLocalTranslation().clone();
+            }
+        } else if (server) {
             super.spatial.removeControl(this.character);
             GameController.getInstance().getPhysics().remove(this.character);
         }
@@ -59,18 +78,9 @@ public class RobotControl extends PlayerControl {
         this.weapon1.setLocalRotation(new Quaternion(t));
         this.weapon2.setLocalRotation(new Quaternion(t));
 
-        Vector3f loc = c.getDirection().clone();
-        loc.setY(0);
-        loc.normalizeLocal();
-        loc.multLocal(-5f);
-        Vector3f sl = super.spatial.getWorldTranslation().clone();
-        loc.addLocal(sl.add(Vector3f.UNIT_Y.mult(1.7f)));
-
-        Vector3f loc2 = new Vector3f(0.15f, -0.1f, 0.1f);
-        this.weapon2.setLocalTranslation(this.weaponLoc.add(loc2));
-        loc2.setX(-loc2.getX());
-        this.weapon1.setLocalTranslation(this.weaponLoc.add(loc2));
-
-        c.setLocation(loc);
+        Vector3f loc = new Vector3f(0.15f, -0.1f, 0.1f);
+        this.weapon2.setLocalTranslation(this.weaponLoc.add(loc));
+        loc.setX(-loc.getX());
+        this.weapon1.setLocalTranslation(this.weaponLoc.add(loc));
     }
 }

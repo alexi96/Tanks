@@ -2,6 +2,7 @@ package controllers;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.system.AppSettings;
 import utilities.LoadingManager;
 import synchronization.SyncManager;
 
@@ -9,6 +10,7 @@ public final class GameController {
 
     private static final GameController instance = new GameController();
     private SimpleApplication application;
+    private AppSettings settings;
     private PhysicsSpace physics;
     private LoadingManager loader;
     private SyncManager synchronizer = new SyncManager();
@@ -19,6 +21,10 @@ public final class GameController {
 
     public SimpleApplication getApplication() {
         return application;
+    }
+
+    public AppSettings getSettings() {
+        return settings;
     }
 
     public PhysicsSpace getPhysics() {
@@ -41,9 +47,10 @@ public final class GameController {
         this.bestVisualStyles = bestVisualStyles;
     }
 
-    public void initialise(SimpleApplication application, LoadingManager loader, PhysicsSpace physics, SyncManager synchronizer) {
+    public void initialise(SimpleApplication application, AppSettings settings, LoadingManager loader, PhysicsSpace physics, SyncManager synchronizer) {
         this.application = application;
         this.loader = loader;
+        this.settings = settings;
         this.physics = physics;
         this.synchronizer = synchronizer;
     }

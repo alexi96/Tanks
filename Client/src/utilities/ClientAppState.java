@@ -14,17 +14,18 @@ import synchronization.Synchronizer;
 
 public class ClientAppState extends AbstractAppState implements GameConnection {
 
-    private final HashMap<Integer, Synchronizer> managed = new HashMap<>();
-    private final TreeSet<Synchronizer> created = new TreeSet<>();
-    private final TreeSet<SyncEntry> updated = new TreeSet<>();
-    private final TreeSet<Integer> destroyed = new TreeSet<>();
+    protected final HashMap<Integer, Synchronizer> managed = new HashMap<>();
+    protected final TreeSet<Synchronizer> created = new TreeSet<>();
+    protected final TreeSet<SyncEntry> updated = new TreeSet<>();
+    protected final TreeSet<Integer> destroyed = new TreeSet<>();
 
     @Override
     public void update(float tpf) {
         if (!this.created.isEmpty()) {
             for (Synchronizer c : this.created) {
-                c.create();
-                this.managed.put(c.getId(), c);
+                if (this.managed.put(c.getId(), c) == null) {
+                    c.create();
+                }
             }
             this.created.clear();
         }

@@ -40,7 +40,7 @@ public class ServerApplication extends SimpleApplication {
         }
         super.stateManager.attach(s);
 
-        GameController.getInstance().initialise(this, loader, bulletState.getPhysicsSpace(), s);
+        GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), s);
 
         TestMap t = new TestMap();
         s.create(t);

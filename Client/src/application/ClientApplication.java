@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import rpc.HiRpc;
 import synchronization.SyncManager;
 import utilities.ClientAppState;
+import utilities.InputAppState;
 import utilities.LoadingManager;
 
 public class ClientApplication extends SimpleApplication {
@@ -24,28 +25,17 @@ public class ClientApplication extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         super.cam.setFrustumPerspective(45, (float) super.settings.getWidth() / super.settings.getHeight(), 0.01f, 1000);
-        
+        super.flyCam.setMoveSpeed(15);
+
         LoadingManager loader = new LoadingManager(this.assetManager);
-        GameController.getInstance().initialise(this, loader, null, null);
+        GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
         if (this.ip != null) {
             try {
-                ClientAppState state = new ClientAppState();
-                HiRpc.connectReverse(ip, GameConnection.PORT, state);
-                super.stateManager.attach(state);
-            } catch (Exception ex) {
-                Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            try {
                 final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
-                super.inputManager.addListener(new ActionListener() {
-
-                    @Override
-                    public void onAction(String name, boolean isPressed, float tpf) {
-                        cc.command(ip, name, isPressed);
-                    }
-                }, "asd");
+                InputAppState state = new InputAppState(cc);
+                HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
+                super.stateManager.attach(state);
             } catch (Exception ex) {
                 Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -53,7 +43,7 @@ public class ClientApplication extends SimpleApplication {
             BulletAppState bulletState = new BulletAppState();
             super.stateManager.attach(bulletState);
 
-            GameController.getInstance().initialise(this, loader, bulletState.getPhysicsSpace(), new SyncManager());
+            GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), new SyncManager());
 
             new TestMap().create();
             new TestBall().create();
