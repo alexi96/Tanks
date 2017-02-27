@@ -3,55 +3,20 @@ package controls.entityes;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import controls.DestroyableControl;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class PlayerControl extends DestroyableControl implements ActionListener {
 
-    static {
-        try {
-            ArrayList<String> mappings = new ArrayList<>();
-            Field[] fs = PlayerControl.class.getDeclaredFields();
-            for (Field f : fs) {
-                int mod = f.getModifiers();
-                if (!f.getType().equals(String.class)) {
-                    continue;
-                }
-                if (!Modifier.isStatic(mod)) {
-                    continue;
-                }
-                if (!Modifier.isFinal(mod)) {
-                    continue;
-                }
-                if (!Character.isUpperCase(f.getName().charAt(0))) {
-                    continue;
-                }
-
-                mappings.add(f.getName());
-            }
-
-            Field f = PlayerControl.class.getDeclaredField("MAPPINGS");
-            Field m = f.getClass().getDeclaredField("modifiers");
-            m.setAccessible(true);
-            f.setAccessible(true);
-            m.set(f, f.getModifiers() ^ Modifier.FINAL);
-            f.set(null, new String[mappings.size()]);
-
-            for (int i = 0; i < PlayerControl.MAPPINGS.length; i++) {
-                PlayerControl.MAPPINGS[i] = mappings.get(i);
-            }
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-            Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    public static final String UP = "UP";
     public static final String DOWN = "DOWN";
-    public static final String[] MAPPINGS = null;
-
-    
+    public static final String UP = "UP";
+    public static final String LEFT = "LEFT";
+    public static final String RIGHT = "RIGHT";
+    public static final String FIRE = "FIRE";
+    public static final String SECONDARY_FIRE = "SECONDARY_FIRE";
+    public static final String SPACE = "SPACE";
+    public static final String CTRL = "CTRL";
+    public static final String SHIFT = "SHIFT";
+    public static final String SWAP = "SWAP";
+    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP};
     protected String name;
     protected boolean up;
     protected boolean down;
@@ -64,9 +29,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     protected boolean ctrl;
     protected boolean shift;
     protected boolean swap;
-    public static void main(String[] args) {
-        
-    }
+
     public PlayerControl() {
     }
 
@@ -141,6 +104,33 @@ public abstract class PlayerControl extends DestroyableControl implements Action
         switch (name) {
             case PlayerControl.UP:
                 this.up = isPressed;
+                break;
+            case PlayerControl.DOWN:
+                this.down = isPressed;
+                break;
+            case PlayerControl.LEFT:
+                this.left = isPressed;
+                break;
+            case PlayerControl.RIGHT:
+                this.right = isPressed;
+                break;
+            case PlayerControl.FIRE:
+                this.fire = isPressed;
+                break;
+            case PlayerControl.SECONDARY_FIRE:
+                this.secondaryFire = isPressed;
+                break;
+            case PlayerControl.SPACE:
+                this.space = isPressed;
+                break;
+            case PlayerControl.CTRL:
+                this.ctrl = isPressed;
+                break;
+            case PlayerControl.SHIFT:
+                this.shift = isPressed;
+                break;
+            case PlayerControl.SWAP:
+                this.swap = isPressed;
                 break;
         }
     }

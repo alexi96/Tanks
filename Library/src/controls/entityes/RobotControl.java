@@ -31,7 +31,6 @@ public class RobotControl extends PlayerControl {
     private Spatial weapon1;
     private Spatial weapon2;
     private Vector3f weaponLoc;
-    private Vector3f camLoc = new Vector3f();
 
     @Override
     public void create() {
@@ -65,6 +64,20 @@ public class RobotControl extends PlayerControl {
     }
 
     @Override
+    public void synchronize() {
+        Camera c = GameController.getInstance().getApplication().getCamera();
+
+        Vector3f loc = new Vector3f(c.getDirection());
+        loc.setY(0);
+        loc.normalizeLocal();
+        loc.multLocal(-0.225f);
+        Vector3f sl = super.spatial.getWorldTranslation().clone();
+        loc.addLocal(sl.add(Vector3f.UNIT_Y.mult(1.7f)));
+
+        c.setLocation(loc);
+    }
+
+    @Override
     public void update(float tpf) {
         Camera c = GameController.getInstance().getApplication().getCamera();
 
@@ -82,5 +95,26 @@ public class RobotControl extends PlayerControl {
         this.weapon2.setLocalTranslation(this.weaponLoc.add(loc));
         loc.setX(-loc.getX());
         this.weapon1.setLocalTranslation(this.weaponLoc.add(loc));
+
+        Vector3f walkDir = new Vector3f();
+        Vector3f forward = c.getDirection();
+        forward.setY(0);
+        forward.normalizeLocal();
+        Vector3f leftDir = c.getLeft();
+        leftDir.setY(0);
+        leftDir.normalizeLocal();
+
+        if (super.up) {
+            walkDir.addLocal(forward);
+        } else if (super.down) {
+            walkDir.addLocal(forward.negate());
+        }
+        if (super.left) {
+            walkDir.addLocal(leftDir);
+        } else if (super.right) {
+            walkDir.addLocal(leftDir.negate());
+        }
+        
+        this.character.setWalkDirection(walkDir);
     }
 }

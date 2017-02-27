@@ -5922,6 +5922,252 @@
 							"width": 1977,
 							"height": 8,
 							"autoResize": false
+						},
+						{
+							"_type": "RectangleView",
+							"_id": "AAAAAAFagJXURzk8XHY=",
+							"_parent": {
+								"$ref": "AAAAAAFaa42LrfDUy1Q="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#000000",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 48,
+							"top": 928,
+							"width": 2001,
+							"height": 8,
+							"autoResize": false
+						},
+						{
+							"_type": "FCProcessView",
+							"_id": "AAAAAAFagJYE6TlDMMU=",
+							"_parent": {
+								"$ref": "AAAAAAFaa42LrfDUy1Q="
+							},
+							"model": {
+								"$ref": "AAAAAAFagJYE6TlBNEo="
+							},
+							"subViews": [
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAFagJYE6TlEN4Y=",
+									"_parent": {
+										"$ref": "AAAAAAFagJYE6TlDMMU="
+									},
+									"visible": true,
+									"enabled": true,
+									"lineColor": "#000000",
+									"fillColor": "#ffffff",
+									"fontColor": "#000000",
+									"font": "Arial;13;0",
+									"showShadow": true,
+									"containerChangeable": false,
+									"containerExtending": false,
+									"left": 242,
+									"top": 1034,
+									"width": 54.18994140625,
+									"height": 39,
+									"autoResize": false,
+									"underline": false,
+									"text": "Interfata grafica jucator",
+									"horizontalAlignment": 2,
+									"verticalAlignment": 5,
+									"wordWrap": true
+								}
+							],
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 232,
+							"top": 1024,
+							"width": 74.18994140625,
+							"height": 59,
+							"autoResize": false,
+							"nameLabel": {
+								"$ref": "AAAAAAFagJYE6TlEN4Y="
+							},
+							"wordWrap": true
+						},
+						{
+							"_type": "FCProcessView",
+							"_id": "AAAAAAFagJY3ezlMhTQ=",
+							"_parent": {
+								"$ref": "AAAAAAFaa42LrfDUy1Q="
+							},
+							"model": {
+								"$ref": "AAAAAAFagJY3ezlKSmE="
+							},
+							"subViews": [
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAFagJY3ezlN9jk=",
+									"_parent": {
+										"$ref": "AAAAAAFagJY3ezlMhTQ="
+									},
+									"visible": true,
+									"enabled": true,
+									"lineColor": "#000000",
+									"fillColor": "#ffffff",
+									"fontColor": "#000000",
+									"font": "Arial;13;0",
+									"showShadow": true,
+									"containerChangeable": false,
+									"containerExtending": false,
+									"left": 458,
+									"top": 1042,
+									"width": 189,
+									"height": 26,
+									"autoResize": false,
+									"underline": false,
+									"text": "Interfata grafica de ales vehicul si arme",
+									"horizontalAlignment": 2,
+									"verticalAlignment": 5,
+									"wordWrap": true
+								}
+							],
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 448,
+							"top": 1032,
+							"width": 209,
+							"height": 46,
+							"autoResize": false,
+							"nameLabel": {
+								"$ref": "AAAAAAFagJY3ezlN9jk="
+							},
+							"wordWrap": true
+						},
+						{
+							"_type": "FCFlowView",
+							"_id": "AAAAAAFagJaqGzlleeo=",
+							"_parent": {
+								"$ref": "AAAAAAFaa42LrfDUy1Q="
+							},
+							"model": {
+								"$ref": "AAAAAAFagJaqGzljZJ0="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAFagJaqHDlmSdk=",
+									"_parent": {
+										"$ref": "AAAAAAFagJaqGzlleeo="
+									},
+									"model": {
+										"$ref": "AAAAAAFagJaqGzljZJ0="
+									},
+									"visible": false,
+									"enabled": true,
+									"lineColor": "#000000",
+									"fillColor": "#ffffff",
+									"fontColor": "#000000",
+									"font": "Arial;13;0",
+									"showShadow": true,
+									"containerChangeable": false,
+									"containerExtending": false,
+									"left": 376,
+									"top": 1036,
+									"width": 0,
+									"height": 13,
+									"autoResize": false,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAFagJaqGzlleeo="
+									},
+									"edgePosition": 1,
+									"underline": false,
+									"horizontalAlignment": 2,
+									"verticalAlignment": 5,
+									"wordWrap": false
+								}
+							],
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"head": {
+								"$ref": "AAAAAAFagJY3ezlMhTQ="
+							},
+							"tail": {
+								"$ref": "AAAAAAFagJYE6TlDMMU="
+							},
+							"lineStyle": 2,
+							"points": "305:1057;448:1057",
+							"nameLabel": {
+								"$ref": "AAAAAAFagJaqHDlmSdk="
+							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFagJbCZjlsVHA=",
+							"_parent": {
+								"$ref": "AAAAAAFaa42LrfDUy1Q="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"left": 232,
+							"top": 952,
+							"width": 100,
+							"height": 50,
+							"autoResize": false,
+							"text": "VIata munitie",
+							"wordWrap": true
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAFagJbCbjlvZJ0=",
+							"_parent": {
+								"$ref": "AAAAAAFaa42LrfDUy1Q="
+							},
+							"visible": true,
+							"enabled": true,
+							"lineColor": "#000000",
+							"fillColor": "#ffffff",
+							"fontColor": "#000000",
+							"font": "Arial;13;0",
+							"showShadow": true,
+							"containerChangeable": false,
+							"containerExtending": false,
+							"head": {
+								"$ref": "AAAAAAFagJbCZjlsVHA="
+							},
+							"tail": {
+								"$ref": "AAAAAAFagJYE6TlDMMU="
+							},
+							"lineStyle": 1,
+							"points": "273:1023;277:1002"
 						}
 					]
 				},
@@ -6036,6 +6282,37 @@
 						"$ref": "AAAAAAFaa42LrfDTFkw="
 					},
 					"name": "Modelat primul vehicul"
+				},
+				{
+					"_type": "FCProcess",
+					"_id": "AAAAAAFagJYE6TlBNEo=",
+					"_parent": {
+						"$ref": "AAAAAAFaa42LrfDTFkw="
+					},
+					"name": "Interfata grafica jucator",
+					"ownedElements": [
+						{
+							"_type": "FCFlow",
+							"_id": "AAAAAAFagJaqGzljZJ0=",
+							"_parent": {
+								"$ref": "AAAAAAFagJYE6TlBNEo="
+							},
+							"source": {
+								"$ref": "AAAAAAFagJYE6TlBNEo="
+							},
+							"target": {
+								"$ref": "AAAAAAFagJY3ezlKSmE="
+							}
+						}
+					]
+				},
+				{
+					"_type": "FCProcess",
+					"_id": "AAAAAAFagJY3ezlKSmE=",
+					"_parent": {
+						"$ref": "AAAAAAFaa42LrfDTFkw="
+					},
+					"name": "Interfata grafica de ales vehicul si arme"
 				}
 			]
 		}

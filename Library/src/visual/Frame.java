@@ -2,6 +2,7 @@ package visual;
 
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
+import com.jme3.input.MouseInput;
 import com.jme3.input.RawInputListener;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
@@ -73,9 +74,8 @@ public class Frame extends Panel implements Control, RawInputListener {
     }
 
     public void show() {
-        GameController.getInstance().getApplication().getFlyByCamera().setRotationSpeed(0);
+        GameController.getInstance().getApplication().getFlyByCamera().setEnabled(false);
         GameController.getInstance().getApplication().getInputManager().setCursorVisible(true);
-        GameController.getInstance().getApplication().getFlyByCamera().setDragToRotate(true);
         GameController.getInstance().getApplication().getGuiNode().attachChild(this.screen);
 
         this.screen.addControl(this);
@@ -84,6 +84,7 @@ public class Frame extends Panel implements Control, RawInputListener {
     }
 
     public void hide() {
+        GameController.getInstance().getApplication().getFlyByCamera().setEnabled(true);
         GameController.getInstance().getApplication().getFlyByCamera().setRotationSpeed(1);
         GameController.getInstance().getApplication().getInputManager().setCursorVisible(false);
 
