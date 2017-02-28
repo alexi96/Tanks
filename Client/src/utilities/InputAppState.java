@@ -36,9 +36,8 @@ public class InputAppState extends ClientAppState implements ActionListener {
 
     public void spawn(PlayerControl player) {
         PlayerControl result = this.controls.spawn();
-        if (this.managed.put(result.getId(), result) != null) {
-            result.create();
-        }
+        this.managed.put(result.getId(), result);
+        result.create();
 
         this.player = result;
     }

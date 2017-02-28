@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
 import synchronization.SyncManager;
+import synchronization.Synchronizer;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
@@ -45,24 +46,46 @@ public class ClientApplication extends SimpleApplication {
 
         if (this.ip != null) {
             try {
+                super.flyCam.setMoveSpeed(0);
                 final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
                 InputAppState state = new InputAppState(cc);
                 HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
                 super.stateManager.attach(state);
+
+                state.spawn(new RobotControl());
+                
+                inputManager.addListener(state, PlayerControl.MAPPINGS);
             } catch (Exception ex) {
                 Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             BulletAppState bulletState = new BulletAppState();
             super.stateManager.attach(bulletState);
+            SyncManager sm = new SyncManager() {
 
-            GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), new SyncManager());
+                @Override
+                public void create(Synchronizer c) {
+                    c.create();
+                }
 
-            new TestMap().create();
-            new TestBall().create();
+                @Override
+                public void update(Synchronizer c) {
+                    c.synchronize();
+                }
+
+                @Override
+                public void destroy(Synchronizer c) {
+                    c.destroy();
+                }
+            };
+
+            GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), sm);
+
+            sm.create(new TestMap());
+            sm.create(new TestBall());
 
             RobotControl rc = new RobotControl();
-            rc.create();
+            sm.create(rc);
 
             inputManager.addListener(rc, PlayerControl.MAPPINGS);
         }
@@ -91,7 +114,7 @@ public class ClientApplication extends SimpleApplication {
         };
 
         f.add(c);//poti sa suprascrii paint din fereastra si sa nu mai creezi componente
-        f.show();
+        //f.show();
     }
 
     private void initKeys() {

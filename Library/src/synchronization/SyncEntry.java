@@ -2,6 +2,7 @@ package synchronization;
 
 import java.io.Serializable;
 
+@Deprecated
 public class SyncEntry implements Comparable<SyncEntry>, Serializable {
 
     private Synchronizer synch;

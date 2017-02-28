@@ -17,12 +17,12 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public static final String SHIFT = "SHIFT";
     public static final String SWAP = "SWAP";
     public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP};
-    protected String name;
+    protected String name = "";
     protected boolean up;
     protected boolean down;
     protected boolean left;
     protected boolean right;
-    protected Vector3f look;
+    protected Vector3f look = new Vector3f();
     protected boolean fire;
     protected boolean secondaryFire;
     protected boolean space;

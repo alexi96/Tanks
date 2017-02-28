@@ -23,9 +23,11 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
     public void update(float tpf) {
         if (!this.created.isEmpty()) {
             for (Synchronizer c : this.created) {
-                if (this.managed.put(c.getId(), c) == null) {
-                    c.create();
+                if (this.managed.containsKey(c.getId())) {
+                    continue;
                 }
+                this.managed.put(c.getId(), c);
+                c.create();
             }
             this.created.clear();
         }

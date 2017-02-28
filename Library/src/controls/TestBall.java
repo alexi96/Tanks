@@ -3,6 +3,7 @@ package controls;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import synchronization.SyncManager;
@@ -16,6 +17,8 @@ public class TestBall extends SyncGameControl {
     public void create() {
         GameController gc = GameController.getInstance();
         Spatial s = gc.getLoader().loadModel("Models/Ball.j3o");
+        s.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+
         gc.getApplication().getRootNode().attachChild(s);
 
         s.addControl(this);
