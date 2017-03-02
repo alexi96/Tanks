@@ -2,7 +2,7 @@ https://www.dropbox.com/sh/qab7h94dbgovvnv/AADOa57A0tAfuZ-EM6PFK5vra?dl=0
 
 Folosim jMonkeyEngine
 Modelele sa fie compatibile cu blender, ogreXML sau j3o cumva (vedeti ca de la editor 3d la j3o din joc se pierd multe)
-	Mapam normalmapui in cod dupa regula textura.jpg|png > textura.n.jpg|png
+	Mapam normalmapuri in cod dupa regula textura.jpg|png > textura.n.jpg|png
 StarUML (daca gasim mai bun schimbam)
 
 Obiective:
