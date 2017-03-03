@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import rpc.HiRpc;
 import utilities.ControlsAppState;
 import utilities.LoadingManager;
-import utilities.ServerAppState;
 
 public class ServerApplication extends SimpleApplication {
 

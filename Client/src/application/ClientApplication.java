@@ -29,7 +29,6 @@ import utilities.InputAppState;
 import utilities.LoadingManager;
 import visual.Component;
 import visual.Frame;
-import visual.Label;
 
 public class ClientApplication extends SimpleApplication {
 
@@ -52,8 +51,10 @@ public class ClientApplication extends SimpleApplication {
                 HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
                 super.stateManager.attach(state);
 
-                state.spawn(new RobotControl());
+                RobotControl rob = new RobotControl();
                 
+                state.spawn(rob);
+
                 inputManager.addListener(state, PlayerControl.MAPPINGS);
             } catch (Exception ex) {
                 Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
@@ -62,7 +63,6 @@ public class ClientApplication extends SimpleApplication {
             BulletAppState bulletState = new BulletAppState();
             super.stateManager.attach(bulletState);
             SyncManager sm = new SyncManager() {
-
                 @Override
                 public void create(Synchronizer c) {
                     c.create();

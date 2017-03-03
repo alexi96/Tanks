@@ -6,6 +6,7 @@ import controls.DestroyableControl;
 
 public abstract class PlayerControl extends DestroyableControl implements ActionListener {
 
+    public static int serverId;
     public static final String DOWN = "DOWN";
     public static final String UP = "UP";
     public static final String LEFT = "LEFT";

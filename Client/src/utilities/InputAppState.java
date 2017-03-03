@@ -3,10 +3,13 @@ package utilities;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controls.entityes.PlayerControl;
+import controls.entityes.RobotControl;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
@@ -35,7 +38,8 @@ public class InputAppState extends ClientAppState implements ActionListener {
     }
 
     public void spawn(PlayerControl player) {
-        PlayerControl result = this.controls.spawn();
+        PlayerControl result = this.controls.spawn(player);
+        PlayerControl.serverId = result.getId();
         this.managed.put(result.getId(), result);
         result.create();
 
@@ -69,8 +73,20 @@ public class InputAppState extends ClientAppState implements ActionListener {
         if (this.camera.getDirection().equals(this.lastLook)) {
             return;
         }
+        
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
 
+        float[] angs = this.camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            this.camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            this.camera.setRotation(new Quaternion(angs));
+        }
+        
         this.lastLook.set(this.camera.getDirection());
-        this.controls.command(this.player.getId(), this.lastLook);
+        this.controls.command(this.player.getId(), this.lastLook.clone());
     }
 }

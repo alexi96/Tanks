@@ -29,16 +29,15 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     }
     
     @Override
-    public PlayerControl spawn() {
+    public PlayerControl spawn(final PlayerControl pl) {
         try {
             final GameController gc = GameController.getInstance();
             return gc.getApplication().enqueue(new Callable<PlayerControl>() {
                 @Override
                 public PlayerControl call() throws Exception {
-                    RobotControl rc = new RobotControl();
-                    gc.getSynchronizer().create(rc);
-                    players.put(rc.getId(), rc);
-                    return rc;
+                    gc.getSynchronizer().create(pl);
+                    players.put(pl.getId(), pl);
+                    return pl;
                 }
             }).get();
         } catch (InterruptedException | ExecutionException ex) {

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public abstract class Synchronizer implements Comparable<Synchronizer>, Serializable {
 
-    private int id;
+    protected int id;
 
     public int getId() {
         return id;

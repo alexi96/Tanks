@@ -13,25 +13,30 @@ import synchronization.Synchronizer;
 
 public class RobotControl extends PlayerControl {
 
+    private final static float HEIGTH = 1.7f;
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
-    private transient BetterCharacterControl character = new BetterCharacterControl(0.25f, 1.7f, 100) {
-        @Override
-        public void update(float tpf) {
-            super.update(tpf);
-        }
-    };
+    private transient BetterCharacterControl character;
+    private transient Spatial eye;
+    private transient Spatial body;
     private transient Spatial head;
     private transient Spatial weapon1;
     private transient Spatial weapon2;
-    private Vector3f location;
-    private Quaternion rotation;
-    private Quaternion weaponRot = new Quaternion();
-    private Vector3f weaponLoc = new Vector3f();
-    private Quaternion headRot = new Quaternion();
-    private Vector3f weaponDefaultLocation;
+    private Vector3f location = new Vector3f();
+    private Quaternion rotation = new Quaternion();
+    private Quaternion eyeRot = new Quaternion();
+    private Vector3f weaponLoc1 = new Vector3f();
+    private Vector3f weaponLoc2 = new Vector3f();
+    private float duckState;
+    private transient Vector3f weaponDefaultLocation;
+    private transient float headDefaultHeigth;
 
     @Override
     public void create() {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+        if (server) {
+            this.character = new BetterCharacterControl(0.25f, 1.7f, 100);
+        }
+
         Node n = (Node) MODEL.clone();
         n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
@@ -45,14 +50,14 @@ public class RobotControl extends PlayerControl {
         boolean server = GameController.getInstance().getSynchronizer() != null;
 
         if (spatial != null) {
-            this.location = spatial.getLocalTranslation();
-            this.rotation = spatial.getLocalRotation();
-
             Node n = (Node) spatial;
+            this.eye = n.getChild("Eye");
+            this.body = n.getChild("Body");
             this.head = n.getChild("Head");
             this.weapon1 = n.getChild("Weapon1");
             this.weapon2 = n.getChild("Weapon2");
             this.weaponDefaultLocation = this.weapon1.getLocalTranslation().clone();
+            this.headDefaultHeigth = this.head.getLocalTranslation().getY();
 
             if (server) {
                 spatial.addControl(this.character);
@@ -66,44 +71,54 @@ public class RobotControl extends PlayerControl {
     }
 
     private void updatePhysics() {
+        if (super.id != PlayerControl.serverId) {
+            return;
+        }
+
         Camera c = GameController.getInstance().getApplication().getCamera();
-
-        Vector3f loc = new Vector3f(c.getDirection());
-        loc.setY(0);
-        loc.normalizeLocal();
-        loc.multLocal(-0.225f);
-        Vector3f sl = super.spatial.getWorldTranslation().clone();
-        loc.addLocal(sl.add(Vector3f.UNIT_Y.mult(1.7f)));
-
-        c.setLocation(loc);
-    }
-
-    @Override
-    public void prepare(Synchronizer newData) {
-        super.prepare(newData);
+        c.setLocation(this.eye.getWorldTranslation());
     }
 
     @Override
     public void synchronize() {
-        Camera c = GameController.getInstance().getApplication().getCamera();
-
-        Vector3f loc = new Vector3f(c.getDirection());
-        loc.setY(0);
-        loc.normalizeLocal();
-        loc.multLocal(-0.225f);
-        loc.addLocal(this.location.add(Vector3f.UNIT_Y.mult(1.7f)));
-
-        c.setLocation(loc);
-
         super.spatial.setLocalTranslation(this.location);
+        this.body.setLocalScale(1, this.duckState, 1);
+        float t = 1 - this.duckState;
+        this.head.setLocalTranslation(0, this.headDefaultHeigth - t * RobotControl.HEIGTH / 2, 0);
         super.spatial.setLocalRotation(this.rotation);
 
-        this.head.setLocalRotation(this.headRot);
-        this.weapon1.setLocalRotation(this.weaponRot.clone());
-        this.weapon2.setLocalRotation(this.weaponRot);
+        this.eye.setLocalRotation(this.eyeRot);
 
-        this.weapon1.setLocalTranslation(this.weaponLoc);
-        this.weapon2.setLocalTranslation(this.weaponLoc.clone().setX(-this.weaponLoc.getX()));
+        this.weapon1.setLocalTranslation(this.weaponLoc1);
+        this.weapon2.setLocalTranslation(this.weaponLoc2);
+
+        this.updatePhysics();
+    }
+
+    private void updateDuck(float tpf) {
+        tpf *= 2;
+        this.character.setDucked(this.ctrl);
+
+        if (super.ctrl) {
+            if (this.duckState <= 0) {
+                return;
+            }
+
+            this.duckState -= tpf;
+            if (this.duckState < 0) {
+                this.duckState = 0;
+            }
+            return;
+        }
+
+        if (this.duckState >= 1) {
+            return;
+        }
+
+        this.duckState += tpf;
+        if (this.duckState > 1) {
+            this.duckState = 1;
+        }
     }
 
     @Override
@@ -119,20 +134,25 @@ public class RobotControl extends PlayerControl {
         float[] t = rot.toAngles(null);
         t[0] = 0;
         t[2] = 0;
-        this.headRot.set(new Quaternion(t));
+        this.rotation.set(new Quaternion(t));
+        this.location.set(super.spatial.getWorldTranslation());
+
+        this.character.setViewDirection(super.look);
+
         t = rot.toAngles(null);
         t[1] = 0;
         t[2] = 0;
-        this.weaponRot.set(new Quaternion(t));
+        this.eyeRot.set(new Quaternion(t));
 
-        Vector3f loc = new Vector3f(0.15f, -0.1f, 0.1f);
-        this.weaponLoc.set(this.weaponDefaultLocation.add(loc));
+        Vector3f loc = new Vector3f(0.15f, 0, 0.1f);
+        this.weaponLoc1.set(this.weaponDefaultLocation.add(loc));
+        this.weaponLoc2.set(this.weaponDefaultLocation.add(loc.setX(-loc.getX())));
 
-        this.head.setLocalRotation(this.headRot);
-        this.weapon1.setLocalRotation(this.weaponRot);
-        this.weapon1.setLocalTranslation(this.weaponLoc);
-        this.weapon2.setLocalRotation(this.weaponRot);
-        this.weapon2.setLocalTranslation(this.weaponLoc.clone().setX(-this.weaponLoc.getX()));
+        this.eye.setLocalRotation(this.eyeRot);
+
+        if (super.secondaryFire) {
+            this.weaponLoc1.set(this.weaponDefaultLocation);
+        }
 
         Vector3f walkDir = new Vector3f();
         Vector3f forward = super.look.clone();
@@ -153,7 +173,16 @@ public class RobotControl extends PlayerControl {
             walkDir.addLocal(leftDir.negate());
         }
 
+        if (super.space) {
+            super.space = false;
+            this.character.jump();
+        }
+
+        walkDir.multLocal(3);
         this.character.setWalkDirection(walkDir);
-        manager.update(this);
+        this.location = super.spatial.getWorldTranslation().clone();
+        manager.update(RobotControl.this);
+
+        this.updateDuck(tpf);
     }
 }

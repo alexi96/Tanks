@@ -20,7 +20,7 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
     protected final TreeSet<Integer> destroyed = new TreeSet<>();
 
     @Override
-    public void update(float tpf) {
+    public synchronized void update(float tpf) {
         if (!this.created.isEmpty()) {
             for (Synchronizer c : this.created) {
                 if (this.managed.containsKey(c.getId())) {
@@ -47,7 +47,7 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
         }
     }
 
-    private void update(Synchronizer n, Synchronizer o, String name) {
+    private synchronized void update(Synchronizer n, Synchronizer o, String name) {
         try {
             Method com = n.getClass().getDeclaredMethod(name);
             com.setAccessible(true);
@@ -60,17 +60,17 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
     }
 
     @Override
-    public void create(Collection<Synchronizer> cts) {
+    public synchronized void create(Collection<Synchronizer> cts) {
         this.created.addAll(cts);
     }
 
     @Override
-    public void destroy(Collection<Integer> cts) {
+    public synchronized void destroy(Collection<Integer> cts) {
         this.destroyed.addAll(cts);
     }
 
     @Override
-    public void update(Collection<SyncEntry> cts) {
+    public synchronized void update(Collection<SyncEntry> cts) {
         this.updated.addAll(cts);
     }
 }

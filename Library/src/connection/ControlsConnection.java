@@ -9,5 +9,5 @@ public interface ControlsConnection {
 
     void command(int id, Vector3f look);
 
-    PlayerControl spawn();
+    PlayerControl spawn(PlayerControl pl);
 }
