@@ -79,6 +79,10 @@ public class LoadingManager {
         }
         return null;
     }
+    
+    public void mapTexture(Texture d, Texture n) {
+        this.textures.put(d, n);
+    }
 
     public void loadTextures(Spatial s) {
         if (s instanceof Node) {

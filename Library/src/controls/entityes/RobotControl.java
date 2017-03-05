@@ -9,14 +9,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import synchronization.SyncManager;
-import synchronization.Synchronizer;
 
 public class RobotControl extends PlayerControl {
 
     private final static float HEIGTH = 1.7f;
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
     private transient BetterCharacterControl character;
-    private transient Spatial eye;
+    private transient Node eye;
     private transient Spatial body;
     private transient Spatial head;
     private transient Spatial weapon1;
@@ -51,11 +50,14 @@ public class RobotControl extends PlayerControl {
 
         if (spatial != null) {
             Node n = (Node) spatial;
-            this.eye = n.getChild("Eye");
+            this.eye = (Node) n.getChild("Eye");
             this.body = n.getChild("Body");
             this.head = n.getChild("Head");
-            this.weapon1 = n.getChild("Weapon1");
-            this.weapon2 = n.getChild("Weapon2");
+            this.weapon1 = n.getChild("MachineGun");
+            this.weapon2 = n.getChild("TestWeapon");
+            this.eye.detachAllChildren();
+            this.eye.attachChild(this.weapon1);
+            this.eye.attachChild(this.weapon2);
             this.weaponDefaultLocation = this.weapon1.getLocalTranslation().clone();
             this.headDefaultHeigth = this.head.getLocalTranslation().getY();
 
@@ -144,7 +146,7 @@ public class RobotControl extends PlayerControl {
         t[2] = 0;
         this.eyeRot.set(new Quaternion(t));
 
-        Vector3f loc = new Vector3f(0.15f, 0, 0.1f);
+        Vector3f loc = new Vector3f(-0.15f, 0, 0.1f);
         this.weaponLoc1.set(this.weaponDefaultLocation.add(loc));
         this.weaponLoc2.set(this.weaponDefaultLocation.add(loc.setX(-loc.getX())));
 

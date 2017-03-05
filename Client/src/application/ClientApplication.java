@@ -1,6 +1,7 @@
 package application;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -52,7 +53,7 @@ public class ClientApplication extends SimpleApplication {
                 super.stateManager.attach(state);
 
                 RobotControl rob = new RobotControl();
-                
+
                 state.spawn(rob);
 
                 inputManager.addListener(state, PlayerControl.MAPPINGS);
@@ -148,9 +149,15 @@ public class ClientApplication extends SimpleApplication {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
         }
-        app.ip = null;
-        if (args.length > 0 && !debug) {
-            app.ip = args[0];
+        app.ip = "localhost";
+        if (debug) {
+            if (args.length > 1) {
+                app.ip = args[1];
+            }
+        } else {
+            if (args.length > 0) {
+                app.ip = args[0];
+            }
         }
         app.start();
     }
