@@ -40,20 +40,24 @@ public abstract class Synchronizer implements Comparable<Synchronizer>, Serializ
             if (!tc.equals(nc)) {
                 return;
             }
-            Field[] fs = tc.getDeclaredFields();
-            for (Field of : fs) {
-                if (Modifier.isStatic(of.getModifiers())) {
-                    continue;
+            while (!tc.equals(Object.class)) {
+                Field[] fs = tc.getDeclaredFields();
+                for (Field of : fs) {
+                    if (Modifier.isStatic(of.getModifiers())) {
+                        continue;
+                    }
+                    if (Modifier.isTransient(of.getModifiers())) {
+                        continue;
+                    }
+                    if (Modifier.isFinal(of.getModifiers())) {
+                        continue;
+                    }
+                    of.setAccessible(true);
+                    Object o = of.get(newData);
+                    of.set(this, o);
                 }
-                if (Modifier.isTransient(of.getModifiers())) {
-                    continue;
-                }
-                if (Modifier.isFinal(of.getModifiers())) {
-                    continue;
-                }
-                of.setAccessible(true);
-                Object o = of.get(newData);
-                of.set(this, o);
+                tc = tc.getSuperclass();
+                nc = nc.getSuperclass();
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException ex) {
             Logger.getLogger(Synchronizer.class.getName()).log(Level.SEVERE, null, ex);

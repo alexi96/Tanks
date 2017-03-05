@@ -11,18 +11,19 @@ import com.jme3.scene.Spatial;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.util.SkyFactory;
 import controllers.GameController;
-import controls.SyncGameControl;
+import controls.GameControl;
 
-public class TestMap extends SyncGameControl {
+public class TestMap extends GameControl {
 
     @Override
     public void create() {
         GameController gc = GameController.getInstance();
         Spatial s = gc.getApplication().getAssetManager().loadModel("Models/TestMap.j3o");
         SimpleApplication app = gc.getApplication();
-        s.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
         if (gc.isBestVisualStyles()) {
+            s.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+
             gc.getLoader().loadTextures(s);
 
             app.getRootNode().attachChild(SkyFactory.createSky(app.getAssetManager(), "Models/BrightSky.dds", false));

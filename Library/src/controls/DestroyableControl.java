@@ -2,7 +2,7 @@ package controls;
 
 import controllers.GameController;
 
-public abstract class DestroyableControl extends SyncGameControl {
+public abstract class DestroyableControl extends GameControl {
 
     protected float health;
     protected float maxHealth;

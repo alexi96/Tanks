@@ -1,7 +1,6 @@
 package application;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.TextureKey;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -16,6 +15,8 @@ import controls.TestBall;
 import controls.entityes.PlayerControl;
 import controls.entityes.RobotControl;
 import controls.maps.TestMap;
+import controls.weapons.AutoShotgun;
+import controls.weapons.MachineGun;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -53,7 +54,9 @@ public class ClientApplication extends SimpleApplication {
                 super.stateManager.attach(state);
 
                 RobotControl rob = new RobotControl();
-
+                rob.setPrimary(new MachineGun());
+                rob.setSecondary(new AutoShotgun());
+                
                 state.spawn(rob);
 
                 inputManager.addListener(state, PlayerControl.MAPPINGS);

@@ -9,9 +9,10 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import java.io.IOException;
+import synchronization.Synchronizer;
 
-public abstract class GameControl implements Control {
-
+public abstract class GameControl extends Synchronizer implements Control {
+    
     protected transient Spatial spatial;
 
     public GameControl() {
@@ -29,6 +30,12 @@ public abstract class GameControl implements Control {
         return spatial;
     }
 
+    @Override
+    public void destroy() {
+        this.spatial.removeFromParent();
+        this.spatial.removeControl(this);
+    }
+    
     @Override
     public Control cloneForSpatial(Spatial spatial) {
         try {

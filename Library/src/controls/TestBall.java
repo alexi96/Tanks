@@ -8,7 +8,7 @@ import com.jme3.scene.Spatial;
 import controllers.GameController;
 import synchronization.SyncManager;
 
-public class TestBall extends SyncGameControl {
+public class TestBall extends GameControl {
 
     private Vector3f loc;
     private Quaternion rot;

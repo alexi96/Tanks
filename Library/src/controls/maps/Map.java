@@ -2,9 +2,9 @@ package controls.maps;
 
 import com.jme3.light.LightList;
 import controllers.GameController;
-import controls.SyncGameControl;
+import controls.GameControl;
 
-public abstract class Map extends SyncGameControl {
+public abstract class Map extends GameControl {
 
     @Override
     public void create() {
