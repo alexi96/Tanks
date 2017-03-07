@@ -23,7 +23,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     protected boolean down;
     protected boolean left;
     protected boolean right;
-    protected Vector3f look = new Vector3f();
+    protected Vector3f look = new Vector3f(0, 0, 1);
     protected boolean fire;
     protected boolean secondaryFire;
     protected boolean space;

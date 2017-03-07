@@ -2,11 +2,14 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.event.MouseButtonEvent;
+import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import connection.ControlsConnection;
 import connection.GameConnection;
@@ -56,7 +59,7 @@ public class ClientApplication extends SimpleApplication {
                 RobotControl rob = new RobotControl();
                 rob.setPrimary(new MachineGun());
                 rob.setSecondary(new AutoShotgun());
-                
+
                 state.spawn(rob);
 
                 inputManager.addListener(state, PlayerControl.MAPPINGS);
@@ -88,10 +91,37 @@ public class ClientApplication extends SimpleApplication {
             sm.create(new TestMap());
             sm.create(new TestBall());
 
-            RobotControl rc = new RobotControl();
+            RobotControl rc = new RobotControl() {
+                @Override
+                public void update(float tpf) {
+                    super.look = cam.getDirection();
+                    super.update(tpf); //To change body of generated methods, choose Tools | Templates.
+                }
+            };
+            rc.setPrimary(new MachineGun());
+            rc.setSecondary(new AutoShotgun());
+
             sm.create(rc);
+            rc.setId(1);
+            PlayerControl.serverId = rc.getId();
 
             inputManager.addListener(rc, PlayerControl.MAPPINGS);
+
+            RobotControl tr = new RobotControl() {
+                @Override
+                protected void die() {
+                    System.out.println("hello");
+                    ParticleEmitter exp = ExplosionTest.createExplosion();
+                    exp.setLocalTranslation(super.spatial.getLocalTranslation());
+                    exp.emitAllParticles();
+                }
+            };
+            tr.setPrimary(new MachineGun());
+            tr.setSecondary(new AutoShotgun());
+
+            sm.create(tr);
+
+            tr.getSpatial().getControl(BetterCharacterControl.class).warp(Vector3f.UNIT_Z.mult(-5));
         }
 
         final Frame f = new Frame();
@@ -152,7 +182,7 @@ public class ClientApplication extends SimpleApplication {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
         }
-        app.ip = "localhost";
+        app.ip = null;
         if (debug) {
             if (args.length > 1) {
                 app.ip = args[1];
