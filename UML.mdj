@@ -6762,6 +6762,7 @@
 													"visibility": "protected",
 													"isStatic": false,
 													"isLeaf": false,
+													"type": "",
 													"isReadOnly": false,
 													"isOrdered": false,
 													"isUnique": false,
@@ -6935,6 +6936,7 @@
 							"visibility": "protected",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -6952,6 +6954,7 @@
 							"visibility": "protected",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -6969,6 +6972,7 @@
 							"visibility": "protected",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -6986,6 +6990,7 @@
 							"visibility": "protected",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -7003,6 +7008,7 @@
 							"visibility": "protected",
 							"isStatic": false,
 							"isLeaf": false,
+							"type": "",
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
@@ -8666,6 +8672,27 @@
 					"name": "Implementat ProjectileControl"
 				}
 			]
+		},
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAFaqeJSDwi0R5o=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Model1",
+			"ownedElements": [
+				{
+					"_type": "UMLUseCaseDiagram",
+					"_id": "AAAAAAFaqeJSDwi12/I=",
+					"_parent": {
+						"$ref": "AAAAAAFaqeJSDwi0R5o="
+					},
+					"name": "Use case",
+					"visible": true,
+					"defaultDiagram": false
+				}
+			],
+			"visibility": "public"
 		}
 	]
 }
