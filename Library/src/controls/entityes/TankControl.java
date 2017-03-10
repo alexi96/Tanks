@@ -1,5 +1,6 @@
 package controls.entityes;
 
+import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.VehicleControl;
@@ -20,15 +21,14 @@ public class TankControl extends PlayerControl {
     public static final float MAX_STEER = FastMath.HALF_PI / 1.5f;
     public static final float MASS = 500;
     private static final Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Tank.j3o");
-    
     protected boolean altUp;
     protected boolean altDown;
-    
     private final transient VehicleControl vehicle = new VehicleControl();
     private transient float steer;
     private transient float defaultSuspensionLength;
     private transient float hidraFr;
     private transient float hidraBa;
+    private transient AudioNode radio;
 
     public TankControl() {
     }
@@ -87,6 +87,10 @@ public class TankControl extends PlayerControl {
 
         if (gc.isBestVisualStyles()) {
             n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+
+            radio = new AudioNode(gc.getApplication().getAssetManager(), "Sounds/War - Low Rider.wav");
+            this.radio.setPositional(PlayerControl.serverId != this.id);
+            radio.play();
         }
 
         n.addControl(this);
@@ -99,7 +103,6 @@ public class TankControl extends PlayerControl {
 
     @Override
     public void update(float tpf) {
-        float spd = this.vehicle.getCurrentVehicleSpeedKmHour();
         if (super.up) {
             this.vehicle.accelerate(100);
         } else if (!this.down) {
@@ -171,9 +174,32 @@ public class TankControl extends PlayerControl {
             }
         }
 
+        if (super.ctrl) {
+            super.ctrl = false;
+            float dur = radio.getAudioData().getDuration();
+            float time = radio.getTimeOffset();
+            if (time + 15 >= dur) {
+                this.radio.setTimeOffset(0);
+            } else {
+                this.radio.setTimeOffset(radio.getTimeOffset() + 15);
+            }
+        }
+        if (super.shift) {
+            super.shift = false;
+
+            float dur = radio.getAudioData().getDuration();
+            float time = radio.getTimeOffset();
+            if (time - 15 < 0) {
+                this.radio.setTimeOffset(dur - 15);
+            } else {
+                this.radio.setTimeOffset(radio.getTimeOffset() - 15);
+            }
+        }
+        this.radio.setLocalTranslation(super.spatial.getWorldTranslation());
+
         this.vehicle.getWheel(0).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraFr;
         this.vehicle.getWheel(3).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraFr;
-        
+
         this.vehicle.getWheel(2).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraBa;
         this.vehicle.getWheel(5).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraBa;
 

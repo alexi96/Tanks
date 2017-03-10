@@ -96,6 +96,8 @@ public class ClientApplication extends SimpleApplication {
                     cam.setLocation(spatial.getWorldTranslation().add(Vector3f.UNIT_Y).subtract(cam.getDirection().mult(5)));
                 }
             };
+            tc.setId(1);
+            PlayerControl.serverId = 1;
             sm.create(tc);
 
             super.inputManager.addListener(tc, PlayerControl.MAPPINGS);
