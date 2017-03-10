@@ -2,8 +2,6 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.BetterCharacterControl;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -14,9 +12,9 @@ import com.jme3.system.AppSettings;
 import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
-import controls.TestBall;
 import controls.entityes.PlayerControl;
 import controls.entityes.RobotControl;
+import controls.entityes.TankControl;
 import controls.maps.TestMap;
 import controls.weapons.AutoShotgun;
 import controls.weapons.MachineGun;
@@ -89,39 +87,18 @@ public class ClientApplication extends SimpleApplication {
             GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), sm);
 
             sm.create(new TestMap());
-            sm.create(new TestBall());
+            //sm.create(new TestBall());
 
-            RobotControl rc = new RobotControl() {
+            TankControl tc = new TankControl() {
                 @Override
                 public void update(float tpf) {
-                    super.look = cam.getDirection();
-                    super.update(tpf); //To change body of generated methods, choose Tools | Templates.
+                    super.update(tpf);
+                    cam.setLocation(spatial.getWorldTranslation().add(Vector3f.UNIT_Y).subtract(cam.getDirection().mult(5)));
                 }
             };
-            rc.setPrimary(new MachineGun());
-            rc.setSecondary(new AutoShotgun());
+            sm.create(tc);
 
-            sm.create(rc);
-            rc.setId(1);
-            PlayerControl.serverId = rc.getId();
-
-            inputManager.addListener(rc, PlayerControl.MAPPINGS);
-
-            RobotControl tr = new RobotControl() {
-                @Override
-                protected void die() {
-                    System.out.println("hello");
-                    ParticleEmitter exp = ExplosionTest.createExplosion();
-                    exp.setLocalTranslation(super.spatial.getLocalTranslation());
-                    exp.emitAllParticles();
-                }
-            };
-            tr.setPrimary(new MachineGun());
-            tr.setSecondary(new AutoShotgun());
-
-            sm.create(tr);
-
-            tr.getSpatial().getControl(BetterCharacterControl.class).warp(Vector3f.UNIT_Z.mult(-5));
+            super.inputManager.addListener(tc, PlayerControl.MAPPINGS);
         }
 
         final Frame f = new Frame();
@@ -162,6 +139,9 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping("CTRL", new KeyTrigger(KeyInput.KEY_LCONTROL));
         inputManager.addMapping("SHIFT", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SWAP", new KeyTrigger(KeyInput.KEY_Q));
+        
+        inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
+        inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
     }
 
     @Override

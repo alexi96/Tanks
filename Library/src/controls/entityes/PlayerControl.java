@@ -17,19 +17,23 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public static final String CTRL = "CTRL";
     public static final String SHIFT = "SHIFT";
     public static final String SWAP = "SWAP";
-    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP};
+    
+    public static final String ALT_UP = "ALT_UP";
+    public static final String ALT_DOWN = "ALT_DOWN";
+    
+    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN};
     protected String name = "";
-    protected boolean up;
-    protected boolean down;
-    protected boolean left;
-    protected boolean right;
-    protected Vector3f look = new Vector3f(0, 0, 1);
-    protected boolean fire;
-    protected boolean secondaryFire;
-    protected boolean space;
-    protected boolean ctrl;
-    protected boolean shift;
-    protected boolean swap;
+    protected transient boolean up;
+    protected transient boolean down;
+    protected transient boolean left;
+    protected transient boolean right;
+    protected transient Vector3f look = new Vector3f(0, 0, 1);
+    protected transient boolean fire;
+    protected transient boolean secondaryFire;
+    protected transient boolean space;
+    protected transient boolean ctrl;
+    protected transient boolean shift;
+    protected transient boolean swap;
 
     public PlayerControl() {
     }
