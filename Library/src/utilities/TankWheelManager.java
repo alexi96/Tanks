@@ -10,12 +10,20 @@ public class TankWheelManager extends Synchronizer {
     public static final float HIDRA_SPEED = 3f;
     public static final float MAX_HIDRA = 0.4f;
     private transient VehicleControl vehicle;
-    private Vector3f[] position;
-    private Quaternion[] rotation;
+    private Vector3f[] locations;
+    private Quaternion[] rotations;
     private transient float[] hidra;
     private transient byte[] engine;
     private transient float defaultSuspensionLength;
 
+    public Vector3f[] getLocations() {
+        return locations;
+    }
+
+    public Quaternion[] getRotations() {
+        return rotations;
+    }
+    
     public float getDefaultSuspensionLength() {
         return defaultSuspensionLength;
     }
@@ -31,16 +39,15 @@ public class TankWheelManager extends Synchronizer {
 
     public void initialise(VehicleControl vc) {
         this.vehicle = vc;
-        
         int ws = vc.getNumWheels();
-        this.position = new Vector3f[ws];
-        this.rotation = new Quaternion[ws];
+        this.locations = new Vector3f[ws];
+        this.rotations = new Quaternion[ws];
         this.hidra = new float[ws];
         this.engine = new byte[ws];
         
         for (int i = 0; i < ws; i++) {
-            this.position[i] = vc.getWheel(i).getWheelSpatial().getLocalTranslation();
-            this.rotation[i] = vc.getWheel(i).getWheelSpatial().getLocalRotation();
+            this.locations[i] = vc.getWheel(i).getWheelSpatial().getLocalTranslation();
+            this.rotations[i] = vc.getWheel(i).getWheelSpatial().getLocalRotation();
         }
         
         this.defaultSuspensionLength = this.vehicle.getWheel(0).getWheelInfo().getSuspensionRestLength();

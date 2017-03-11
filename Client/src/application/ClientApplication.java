@@ -6,22 +6,14 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
-import controls.entityes.RobotControl;
 import controls.entityes.TankControl;
 import controls.maps.TestMap;
-import controls.weapons.AutoShotgun;
-import controls.weapons.MachineGun;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
@@ -30,8 +22,7 @@ import synchronization.Synchronizer;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
-import visual.Component;
-import visual.Frame;
+import visual.HudFrame;
 
 public class ClientApplication extends SimpleApplication {
 
@@ -54,10 +45,8 @@ public class ClientApplication extends SimpleApplication {
                 HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
                 super.stateManager.attach(state);
 
-                RobotControl rob = new RobotControl();
-                rob.setPrimary(new MachineGun());
-                rob.setSecondary(new AutoShotgun());
-
+                TankControl rob = new TankControl();
+                
                 state.spawn(rob);
 
                 inputManager.addListener(state, PlayerControl.MAPPINGS);
@@ -103,30 +92,7 @@ public class ClientApplication extends SimpleApplication {
             super.inputManager.addListener(tc, PlayerControl.MAPPINGS);
         }
 
-        final Frame f = new Frame();
-        f.size(200, 100);//daca nu setezi size la o componenta da exceptie
-        f.location(0, 0);
-
-        Component c = new Component(0, 0, 200, 100) {//size se seteaza in constructor
-            @Override
-            public void paint(Graphics g) {
-                g.setColor(new Color(0x7f007f00, true));
-                g.fillRoundRect(0, 0, super.width(), super.height(), 80, 40);
-
-                g.setColor(Color.RED);
-                String text = "Viata: xxx/xxx";
-                g.setFont(new Font(Font.SANS_SERIF, Font.ITALIC & Font.BOLD, 30));
-                FontMetrics m = g.getFontMetrics();
-                g.drawString(text, (super.width() - m.stringWidth(text)) / 2, (super.height() + m.getAscent() / 2) / 2);
-            }
-
-            @Override
-            public void onMouseButtonEvent(MouseButtonEvent evt) {
-                f.hide();// pentru a modifica cand se face clik pe o componenta (f e final ca sa poate fi accesata in blocul asta)
-            }
-        };
-
-        f.add(c);//poti sa suprascrii paint din fereastra si sa nu mai creezi componente
+        HudFrame f = new HudFrame();
         //f.show();
     }
 

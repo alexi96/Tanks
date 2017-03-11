@@ -9,7 +9,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controls.entityes.PlayerControl;
-import controls.entityes.RobotControl;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 

@@ -8,7 +8,7 @@ public class SyncManager {
     protected final TreeSet<Synchronizer> managed = new TreeSet<>();
     protected final TreeSet<Synchronizer> created = new TreeSet<>();
     protected final TreeSet<Integer> destroyed = new TreeSet<>();
-    protected final TreeSet<SyncEntry> updated = new TreeSet<>();
+    protected final TreeSet<Synchronizer> updated = new TreeSet<>();
 
     public void create(Synchronizer c) {
         c.setId(last);
@@ -24,12 +24,8 @@ public class SyncManager {
         c.destroy();
     }
 
-    public void update(Synchronizer c, String name) {
-        this.updated.add(new SyncEntry(c, name));
-    }
-    
     public void update(Synchronizer c) {
-        this.updated.add(new SyncEntry(c, "synchronize"));
+        this.updated.add(c);
     }
     
     public void update() {

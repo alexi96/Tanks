@@ -2,21 +2,16 @@ package utilities;
 
 import com.jme3.app.state.AbstractAppState;
 import connection.GameConnection;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import synchronization.SyncEntry;
 import synchronization.Synchronizer;
 
 public class ClientAppState extends AbstractAppState implements GameConnection {
 
     protected final HashMap<Integer, Synchronizer> managed = new HashMap<>();
     protected final TreeSet<Synchronizer> created = new TreeSet<>();
-    protected final TreeSet<SyncEntry> updated = new TreeSet<>();
+    protected final TreeSet<Synchronizer> updated = new TreeSet<>();
     protected final TreeSet<Integer> destroyed = new TreeSet<>();
 
     @Override
@@ -32,9 +27,9 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
             this.created.clear();
         }
         if (!this.updated.isEmpty()) {
-            for (SyncEntry se : this.updated) {
-                Synchronizer s = this.managed.get(se.getSynch().getId());
-                this.update(se.getSynch(), s, se.getCommand());
+            for (Synchronizer se : this.updated) {
+                Synchronizer old = this.managed.get(se.getId());
+                this.update(se, old);
             }
             this.updated.clear();
         }
@@ -47,16 +42,9 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
         }
     }
 
-    private synchronized void update(Synchronizer n, Synchronizer o, String name) {
-        try {
-            Method com = n.getClass().getDeclaredMethod(name);
-            com.setAccessible(true);
-
-            o.prepare(n);
-            com.invoke(o);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(ClientAppState.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    protected void update(Synchronizer n, Synchronizer o) {
+        o.prepare(n);
+        o.synchronize();
     }
 
     @Override
@@ -70,7 +58,7 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
     }
 
     @Override
-    public synchronized void update(Collection<SyncEntry> cts) {
+    public synchronized void update(Collection<Synchronizer> cts) {
         this.updated.addAll(cts);
     }
 }
