@@ -131,9 +131,9 @@ public class ClientApplication extends SimpleApplication {
     }
 
     private void initKeys() {
-        inputManager.addMapping("DOWN", new KeyTrigger(KeyInput.KEY_S));
-        inputManager.addMapping("UP", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("LEFT", new KeyTrigger(KeyInput.KEY_A));
+        inputManager.addMapping(PlayerControl.UP, new KeyTrigger(KeyInput.KEY_W));
+        inputManager.addMapping(PlayerControl.DOWN, new KeyTrigger(KeyInput.KEY_S));
+        inputManager.addMapping(PlayerControl.LEFT, new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("RIGHT", new KeyTrigger(KeyInput.KEY_D));
         inputManager.addMapping("FIRE", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("SECONDARY_FIRE", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
@@ -141,9 +141,11 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping("CTRL", new KeyTrigger(KeyInput.KEY_LCONTROL));
         inputManager.addMapping("SHIFT", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SWAP", new KeyTrigger(KeyInput.KEY_Q));
-        
+
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
+        inputManager.addMapping(PlayerControl.ALT_LEFT, new KeyTrigger(KeyInput.KEY_NUMPAD4));
+        inputManager.addMapping(PlayerControl.ALT_RIGHT, new KeyTrigger(KeyInput.KEY_NUMPAD6));
     }
 
     @Override

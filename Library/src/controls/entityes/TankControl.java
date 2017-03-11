@@ -12,22 +12,19 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import utilities.LoadingManager;
+import utilities.TankWheelManager;
 
 public class TankControl extends PlayerControl {
 
-    public static final float HIDRA_SPEED = 3f;
-    public static final float MAX_HIDRA = 0.4f;
+    
     public static final float STEER_SPEED = 2f;
     public static final float MAX_STEER = FastMath.HALF_PI / 1.5f;
     public static final float MASS = 500;
     private static final Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Tank.j3o");
-    protected boolean altUp;
     protected boolean altDown;
     private final transient VehicleControl vehicle = new VehicleControl();
     private transient float steer;
-    private transient float defaultSuspensionLength;
-    private transient float hidraFr;
-    private transient float hidraBa;
+    private TankWheelManager wheelManager = new TankWheelManager();
     private transient AudioNode radio;
 
     public TankControl() {
@@ -98,7 +95,7 @@ public class TankControl extends PlayerControl {
         gc.getApplication().getRootNode().attachChild(n);
         gc.getPhysics().add(this.vehicle);
 
-        this.defaultSuspensionLength = this.vehicle.getWheel(0).getWheelInfo().getSuspensionRestLength();
+        this.wheelManager.initialise(this.vehicle);
     }
 
     @Override
@@ -150,29 +147,7 @@ public class TankControl extends PlayerControl {
             }
         }
 
-        float hs = tpf * TankControl.HIDRA_SPEED;
-        if (this.altUp && this.hidraFr < TankControl.MAX_HIDRA) {
-            this.hidraFr += hs;
-            if (this.hidraFr < TankControl.MAX_HIDRA) {
-                this.hidraFr = TankControl.MAX_HIDRA;
-            }
-        } else if (this.hidraFr > 0) {
-            this.hidraFr -= hs;
-            if (this.hidraFr < 0) {
-                this.hidraFr = 0;
-            }
-        }
-        if (this.altDown && this.hidraBa < TankControl.MAX_HIDRA) {
-            this.hidraBa += hs;
-            if (this.hidraBa < TankControl.MAX_HIDRA) {
-                this.hidraBa = TankControl.MAX_HIDRA;
-            }
-        } else if (this.hidraBa > 0) {
-            this.hidraBa -= hs;
-            if (this.hidraBa < 0) {
-                this.hidraBa = 0;
-            }
-        }
+        this.wheelManager.update(tpf);
 
         if (super.ctrl) {
             super.ctrl = false;
@@ -197,12 +172,6 @@ public class TankControl extends PlayerControl {
         }
         this.radio.setLocalTranslation(super.spatial.getWorldTranslation());
 
-        this.vehicle.getWheel(0).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraFr;
-        this.vehicle.getWheel(3).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraFr;
-
-        this.vehicle.getWheel(2).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraBa;
-        this.vehicle.getWheel(5).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + hidraBa;
-
         this.vehicle.steer(this.steer * FastMath.QUARTER_PI / 2);
     }
 
@@ -211,10 +180,22 @@ public class TankControl extends PlayerControl {
         super.onAction(name, isPressed, tpf);
         switch (name) {
             case PlayerControl.ALT_UP:
-                this.altUp = isPressed;
+                this.wheelManager.engine(0, isPressed);
+                this.wheelManager.engine(3, isPressed);
                 break;
             case PlayerControl.ALT_DOWN:
-                this.altDown = isPressed;
+                this.wheelManager.engine(2, isPressed);
+                this.wheelManager.engine(5, isPressed);
+                break;
+            case PlayerControl.ALT_LEFT:
+                this.wheelManager.engine(0, isPressed);
+                this.wheelManager.engine(1, isPressed);
+                this.wheelManager.engine(2, isPressed);
+                break;
+            case PlayerControl.ALT_RIGHT:
+                this.wheelManager.engine(3, isPressed);
+                this.wheelManager.engine(4, isPressed);
+                this.wheelManager.engine(5, isPressed);
                 break;
         }
     }
