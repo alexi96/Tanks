@@ -2,6 +2,7 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -11,9 +12,13 @@ import com.jme3.system.AppSettings;
 import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
+import controls.TestBall;
 import controls.entityes.PlayerControl;
+import controls.entityes.RobotControl;
 import controls.entityes.TankControl;
 import controls.maps.TestMap;
+import controls.weapons.AutoShotgun;
+import controls.weapons.MachineGun;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
@@ -46,7 +51,7 @@ public class ClientApplication extends SimpleApplication {
                 super.stateManager.attach(state);
 
                 PlayerControl rob = new TankControl();
-                
+
                 state.spawn(rob);
 
                 inputManager.addListener(state, PlayerControl.MAPPINGS);
@@ -76,14 +81,37 @@ public class ClientApplication extends SimpleApplication {
             GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), sm);
 
             sm.create(new TestMap());
-            //sm.create(new TestBall());
+            sm.create(new TestBall());
 
-            TankControl tc = new TankControl();
-            tc.setId(1);
+            RobotControl rc = new RobotControl() {
+
+                
+                @Override
+                public void update(float tpf) {
+                    super.look = cam.getDirection();
+                    super.update(tpf);
+                }
+            };
+            rc.setPrimary(new MachineGun());
+            rc.setSecondary(new AutoShotgun());
+            rc.setId(1);
             PlayerControl.serverId = 1;
-            sm.create(tc);
+            sm.create(rc);
 
-            super.inputManager.addListener(tc, PlayerControl.MAPPINGS);
+            super.inputManager.addListener(rc, PlayerControl.MAPPINGS);
+
+            rc = new RobotControl() {
+
+                @Override
+                protected void die() {
+                    System.out.println("Died");
+                    ExplosionTest.createExplosion().emitAllParticles();
+                }
+            };
+            rc.setPrimary(new MachineGun());
+            rc.setSecondary(new AutoShotgun());
+            sm.create(rc);
+            rc.getSpatial().getControl(BetterCharacterControl.class).warp(Vector3f.UNIT_Z.mult(-3));
         }
 
         HudFrame f = new HudFrame();
