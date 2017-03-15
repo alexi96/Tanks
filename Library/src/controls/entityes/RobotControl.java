@@ -47,6 +47,8 @@ public class RobotControl extends PlayerControl {
 
     @Override
     public void create() {
+        super.create();
+
         boolean server = GameController.getInstance().getSynchronizer() != null;
         if (server) {
             this.character = new BetterCharacterControl(0.25f, 1.7f, 100);
@@ -227,11 +229,11 @@ public class RobotControl extends PlayerControl {
         walkDir.multLocal(3);
         this.character.setWalkDirection(walkDir);
         this.location = super.spatial.getWorldTranslation().clone();
-        
+
         this.body.setLocalScale(1, this.duckState, 1);
         float td = 1 - this.duckState;
         this.head.setLocalTranslation(0, this.headDefaultHeigth - td * RobotControl.HEIGTH / 2, 0);
-        
+
         manager.update(RobotControl.this);
 
         this.updateDuck(tpf);

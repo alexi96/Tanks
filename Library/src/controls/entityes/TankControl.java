@@ -29,7 +29,9 @@ public class TankControl extends PlayerControl {
     private transient AudioNode radio;
     private Vector3f location;
     private Quaternion rotation;
+    private Quaternion headRot = new Quaternion();
     private transient Spatial[] wheels;
+    private transient Node head;
 
     public TankControl() {
     }
@@ -37,17 +39,18 @@ public class TankControl extends PlayerControl {
     @Override
     public void setSpatial(Spatial spatial) {
         if (spatial != null) {
-            this.wheels[0] = LoadingManager.findByName(spatial, "Wheel.FL");
-            this.wheels[1] = LoadingManager.findByName(spatial, "Wheel.CL");
-            this.wheels[2] = LoadingManager.findByName(spatial, "Wheel.BL");
-            this.wheels[3] = LoadingManager.findByName(spatial, "Wheel.FR");
-            this.wheels[4] = LoadingManager.findByName(spatial, "Wheel.CR");
-            this.wheels[5] = LoadingManager.findByName(spatial, "Wheel.BR");
+            Node n = (Node) spatial;
+            this.wheels[0] = n.getChild("Wheel.FL");
+            this.wheels[1] = n.getChild("Wheel.CL");
+            this.wheels[2] = n.getChild("Wheel.BL");
+            this.wheels[3] = n.getChild("Wheel.FR");
+            this.wheels[4] = n.getChild("Wheel.CR");
+            this.wheels[5] = n.getChild("Wheel.BR");
+            this.head = (Node) n.getChild("Head");
 
             boolean server = GameController.getInstance().getSynchronizer() != null;
 
             if (server) {
-
                 Spatial hull = LoadingManager.findByName(spatial, "Hull");
                 CollisionShape hullShape = CollisionShapeFactory.createDynamicMeshShape(hull);
                 this.vehicle.setCollisionShape(hullShape);
@@ -76,13 +79,13 @@ public class TankControl extends PlayerControl {
                 wheel = this.wheels[2];
                 this.vehicle.addWheel(wheel, wheel.getWorldBound().getCenter(), direction, axle, 0.2f, radius, false);
 
-                wheel = LoadingManager.findByName(spatial, "Wheel.FR");
+                wheel = this.wheels[3];
                 this.vehicle.addWheel(wheel, wheel.getWorldBound().getCenter(), direction, axle, 0.2f, radius, true);
 
-                wheel = LoadingManager.findByName(spatial, "Wheel.CR");
+                wheel = this.wheels[4];
                 this.vehicle.addWheel(wheel, wheel.getWorldBound().getCenter(), direction, axle, 0.2f, radius, false);
 
-                wheel = LoadingManager.findByName(spatial, "Wheel.BR");
+                wheel = this.wheels[5];
                 this.vehicle.addWheel(wheel, wheel.getWorldBound().getCenter(), direction, axle, 0.2f, radius, false);
             }
 
@@ -97,6 +100,8 @@ public class TankControl extends PlayerControl {
 
     @Override
     public void create() {
+        super.create();
+        
         GameController gc = GameController.getInstance();
 
         Node n = (Node) TankControl.MODEL.clone();
@@ -135,15 +140,16 @@ public class TankControl extends PlayerControl {
 
         super.spatial.setLocalTranslation(this.location);
         super.spatial.setLocalRotation(this.rotation);
+        this.head.setLocalRotation(this.headRot);
 
         this.radio.setLocalTranslation(this.location);
-        
+
         if (super.id != PlayerControl.serverId) {
             return;
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
-        c.setLocation(spatial.getWorldTranslation().add(Vector3f.UNIT_Y).subtract(c.getDirection().mult(5)));
+        c.setLocation(super.spatial.getWorldTranslation().add(Vector3f.UNIT_Y).subtract(c.getDirection().mult(5)));
     }
 
     @Override
@@ -153,13 +159,21 @@ public class TankControl extends PlayerControl {
             return;
         }
         
+        Quaternion rot = new Quaternion();
+        rot.lookAt(super.look, Vector3f.UNIT_Y);
+        float[] t = rot.toAngles(null);
+        t[0] = 0;
+        t[2] = 0;
+        this.headRot.set(new Quaternion(t));
+
+        final float acc = 200;
         if (super.up) {
-            this.vehicle.accelerate(100);
+            this.vehicle.accelerate(acc);
         } else if (!this.down) {
             this.vehicle.accelerate(0);
         }
         if (super.down) {
-            this.vehicle.accelerate(-100);
+            this.vehicle.accelerate(-acc);
         } else if (!this.up) {
             this.vehicle.accelerate(0);
         }
@@ -203,29 +217,29 @@ public class TankControl extends PlayerControl {
         this.wheelManager.update(tpf);
 
         /*if (super.ctrl) {
-            super.ctrl = false;
-            float dur = radio.getAudioData().getDuration();
-            float time = radio.getTimeOffset();
-            if (time + 15 >= dur) {
-                this.radio.setTimeOffset(0);
-            } else {
-                this.radio.setTimeOffset(radio.getTimeOffset() + 15);
-            }
-        }
-        if (super.shift) {
-            super.shift = false;
+         super.ctrl = false;
+         float dur = radio.getAudioData().getDuration();
+         float time = radio.getTimeOffset();
+         if (time + 15 >= dur) {
+         this.radio.setTimeOffset(0);
+         } else {
+         this.radio.setTimeOffset(radio.getTimeOffset() + 15);
+         }
+         }
+         if (super.shift) {
+         super.shift = false;
 
-            float dur = radio.getAudioData().getDuration();
-            float time = radio.getTimeOffset();
-            if (time - 15 < 0) {
-                this.radio.setTimeOffset(dur - 15);
-            } else {
-                this.radio.setTimeOffset(radio.getTimeOffset() - 15);
-            }
-        }*/
+         float dur = radio.getAudioData().getDuration();
+         float time = radio.getTimeOffset();
+         if (time - 15 < 0) {
+         this.radio.setTimeOffset(dur - 15);
+         } else {
+         this.radio.setTimeOffset(radio.getTimeOffset() - 15);
+         }
+         }*/
 
         this.vehicle.steer(this.steer * FastMath.QUARTER_PI / 2);
-        
+
         sm.update(this);
     }
 

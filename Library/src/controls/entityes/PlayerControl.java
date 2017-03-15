@@ -29,7 +29,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     protected transient boolean down;
     protected transient boolean left;
     protected transient boolean right;
-    protected transient Vector3f look = new Vector3f(0, 0, 1);
+    protected transient Vector3f look;
     protected transient boolean fire;
     protected transient boolean secondaryFire;
     protected transient boolean space;
@@ -104,6 +104,11 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     public void setFire(boolean fire) {
         this.fire = fire;
+    }
+
+    @Override
+    public void create() {
+        this.look = new Vector3f(0, 0, 1);
     }
 
     @Override

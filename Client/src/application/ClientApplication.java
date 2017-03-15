@@ -45,7 +45,7 @@ public class ClientApplication extends SimpleApplication {
                 HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
                 super.stateManager.attach(state);
 
-                TankControl rob = new TankControl();
+                PlayerControl rob = new TankControl();
                 
                 state.spawn(rob);
 
@@ -78,13 +78,7 @@ public class ClientApplication extends SimpleApplication {
             sm.create(new TestMap());
             //sm.create(new TestBall());
 
-            TankControl tc = new TankControl() {
-                @Override
-                public void update(float tpf) {
-                    super.update(tpf);
-                    cam.setLocation(spatial.getWorldTranslation().add(Vector3f.UNIT_Y).subtract(cam.getDirection().mult(5)));
-                }
-            };
+            TankControl tc = new TankControl();
             tc.setId(1);
             PlayerControl.serverId = 1;
             sm.create(tc);

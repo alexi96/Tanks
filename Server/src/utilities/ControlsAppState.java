@@ -4,7 +4,6 @@ import com.jme3.math.Vector3f;
 import connection.ControlsConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
-import controls.entityes.RobotControl;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +13,7 @@ import synchronization.Synchronizer;
 
 public class ControlsAppState extends ServerAppState implements ControlsConnection {
 
-    private final TreeMap<Integer, PlayerControl> players = new TreeMap<>();
+    protected final TreeMap<Integer, PlayerControl> players = new TreeMap<>();
 
     @Override
     public void command(int id, String com, boolean pressed) {

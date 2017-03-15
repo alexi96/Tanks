@@ -1,6 +1,5 @@
 package controls.weapons;
 
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.GameControl;
