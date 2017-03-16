@@ -11,7 +11,6 @@ public class HudFrame extends Frame {
         super.bounds(10, 10, 300, 100);
     }
     
-    
     @Override
     public void paint(Graphics g) {
         g.setColor(new Color(0x7f007f00, true));

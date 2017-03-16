@@ -1,84 +1,122 @@
-<scene previous_export_time="1489310796.071422" export_time="1489515487.6215513" exported_by="alex_" formatVersion="1.0.1" >
+<scene exported_by="alex_" previous_export_time="1489682963.605541" export_time="1489683507.0300505" formatVersion="1.0.1" >
   <nodes >
-    <node name="Hull" >
-      <position x="-0.000143" y="0.000000" z="-0.195327" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+    <node name="Head" >
+      <position y="0.850000" x="-0.000000" z="-0.500000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="0.050000" x="0.100000" z="0.100000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Hull.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Hull" velocity_max="0.0" actor="False" physics_type="STATIC" />
-      <node name="Head" >
-        <position x="0.000143" y="0.850000" z="-0.304673" />
-        <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-        <scale x="0.150000" y="0.150000" z="0.150000" />
+      <entity lock_trans_x="False" meshFile="Head.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Head" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
+      <node name="Eye" >
+        <position y="13.000006" x="0.000000" z="1.000000" />
+        <rotation qx="0.000000" qz="0.000000" qw="1.000000" qy="0.000000" />
+        <scale y="20.000002" x="10.000000" z="10.000000" />
         <game >
           <sensors />
           <actuators />
         </game>
-        <entity meshFile="Head.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Head" velocity_max="0.0" actor="False" physics_type="STATIC" />
+        <node name="Cannon" >
+          <position y="0.000000" x="0.200000" z="-0.000000" />
+          <rotation qx="0.000000" qz="0.000000" qw="1.000000" qy="-0.000000" />
+          <scale y="1.000000" x="1.000000" z="1.000000" />
+          <game >
+            <sensors />
+            <actuators />
+          </game>
+          <entity lock_trans_x="False" meshFile="Cylinder.007.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.007" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
+          <node name="CannonFront" >
+            <position y="0.000000" x="0.000000" z="-0.000000" />
+            <rotation qx="-0.000000" qz="0.000000" qw="1.000000" qy="0.000000" />
+            <scale y="1.000000" x="1.000000" z="1.000000" />
+            <game >
+              <sensors />
+              <actuators />
+            </game>
+            <entity lock_trans_x="False" meshFile="Cylinder.006.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.006" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
+            <node name="Barrel" >
+              <position y="-0.000001" x="-0.000000" z="1.200001" />
+              <rotation qx="-0.000000" qz="-0.000000" qw="1.000000" qy="-0.000000" />
+              <scale y="1.000000" x="1.000000" z="1.000000" />
+              <game >
+                <sensors />
+                <actuators />
+              </game>
+            </node>
+          </node>
+        </node>
       </node>
     </node>
-    <node name="Wheel.BL" >
-      <position x="0.850000" y="0.400000" z="-1.550000" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+    <node name="Hull" >
+      <position y="0.000000" x="-0.000143" z="-0.195327" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Cylinder.002.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Cylinder.002" velocity_max="0.0" actor="False" physics_type="STATIC" />
+      <entity lock_trans_x="False" meshFile="Hull.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Hull" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
+    </node>
+    <node name="Wheel.BL" >
+      <position y="0.400000" x="0.850000" z="-1.550000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity lock_trans_x="False" meshFile="Cylinder.002.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.002" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
     </node>
     <node name="Wheel.BR" >
-      <position x="-0.850000" y="0.400000" z="-1.550000" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+      <position y="0.400000" x="-0.850000" z="-1.550000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Cylinder.003.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Cylinder.003" velocity_max="0.0" actor="False" physics_type="STATIC" />
+      <entity lock_trans_x="False" meshFile="Cylinder.003.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.003" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
     </node>
     <node name="Wheel.CL" >
-      <position x="0.850000" y="0.400000" z="-0.500000" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+      <position y="0.400000" x="0.850000" z="-0.500000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Cylinder.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Cylinder" velocity_max="0.0" actor="False" physics_type="STATIC" />
+      <entity lock_trans_x="False" meshFile="Cylinder.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
     </node>
     <node name="Wheel.CR" >
-      <position x="-0.850000" y="0.400000" z="-0.500000" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+      <position y="0.400000" x="-0.850000" z="-0.500000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Cylinder.004.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Cylinder.004" velocity_max="0.0" actor="False" physics_type="STATIC" />
+      <entity lock_trans_x="False" meshFile="Cylinder.004.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.004" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
     </node>
     <node name="Wheel.FL" >
-      <position x="0.850000" y="0.400000" z="0.550000" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+      <position y="0.400000" x="0.850000" z="0.550000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Cylinder.001.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Cylinder.001" velocity_max="0.0" actor="False" physics_type="STATIC" />
+      <entity lock_trans_x="False" meshFile="Cylinder.001.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.001" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
     </node>
     <node name="Wheel.FR" >
-      <position x="-0.850000" y="0.400000" z="0.550000" />
-      <rotation qz="-0.000000" qx="0.000000" qw="1.000000" qy="0.000000" />
-      <scale x="1.000000" y="1.000000" z="1.000000" />
+      <position y="0.400000" x="-0.850000" z="0.550000" />
+      <rotation qx="0.000000" qz="-0.000000" qw="1.000000" qy="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity meshFile="Cylinder.005.mesh" velocity_min="0.0" friction_z="1.0" lock_trans_y="False" lock_trans_x="False" anisotropic_friction="False" friction_y="1.0" lock_rot_y="False" mass_radius="1.0" lock_trans_z="False" lock_rot_x="False" damping_trans="0.03999999910593033" lock_rot_z="False" mass="1.0" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" ghost="False" friction_x="1.0" name="Cylinder.005" velocity_max="0.0" actor="False" physics_type="STATIC" />
+      <entity lock_trans_x="False" meshFile="Cylinder.005.mesh" inertia_tensor="0.4000000059604645" friction_x="1.0" lock_rot_x="False" actor="False" lock_trans_z="False" lock_rot_z="False" damping_trans="0.03999999910593033" velocity_min="0.0" lock_rot_y="False" friction_y="1.0" ghost="False" friction_z="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" name="Cylinder.005" velocity_max="0.0" mass="1.0" anisotropic_friction="False" lock_trans_y="False" physics_type="STATIC" />
     </node>
   </nodes>
   <externals >
@@ -90,8 +128,8 @@
     </item>
   </externals>
   <environment >
-    <colourBackground b="0.05087608844041824" g="0.05087608844041824" r="0.05087608844041824" />
-    <colourAmbient b="0.0" g="0.0" r="0.0" />
-    <colourDiffuse b="0.05087608844041824" g="0.05087608844041824" r="0.05087608844041824" />
+    <colourDiffuse r="0.05087608844041824" g="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient r="0.0" g="0.0" b="0.0" />
+    <colourBackground r="0.05087608844041824" g="0.05087608844041824" b="0.05087608844041824" />
   </environment>
 </scene>

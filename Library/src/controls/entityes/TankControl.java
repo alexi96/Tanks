@@ -13,7 +13,9 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
+import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
+import synchronization.Synchronizer;
 import utilities.LoadingManager;
 import utilities.TankWheelManager;
 
@@ -30,10 +32,35 @@ public class TankControl extends PlayerControl {
     private Vector3f location;
     private Quaternion rotation;
     private Quaternion headRot = new Quaternion();
+    private Quaternion eyeRot = new Quaternion();
     private transient Spatial[] wheels;
     private transient Node head;
+    private transient Node eye;
+    private WeaponControl primary;
+    private float aimState;
+    private float radioPos;
 
     public TankControl() {
+    }
+
+    public WeaponControl getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(WeaponControl primary) {
+        this.primary = primary;
+    }
+
+    @Override
+    public void prepare(Synchronizer newData) {
+        TankControl o = (TankControl) newData;
+        this.location.set(o.location);
+        this.rotation.set(o.rotation);
+        this.eyeRot.set(o.eyeRot);
+        this.headRot.set(o.headRot);
+        this.wheelManager.prepare(o.wheelManager);
+        this.primary.prepare(o.primary);
+        this.aimState = o.aimState;
     }
 
     @Override
@@ -47,6 +74,9 @@ public class TankControl extends PlayerControl {
             this.wheels[4] = n.getChild("Wheel.CR");
             this.wheels[5] = n.getChild("Wheel.BR");
             this.head = (Node) n.getChild("Head");
+            this.eye = (Node) n.getChild("Eye");
+            this.eye.detachAllChildren();
+            this.eye.attachChild(this.primary.getSpatial());
 
             boolean server = GameController.getInstance().getSynchronizer() != null;
 
@@ -101,7 +131,7 @@ public class TankControl extends PlayerControl {
     @Override
     public void create() {
         super.create();
-        
+
         GameController gc = GameController.getInstance();
 
         Node n = (Node) TankControl.MODEL.clone();
@@ -113,14 +143,19 @@ public class TankControl extends PlayerControl {
 
         this.wheels = new Spatial[6];
 
+        this.radio = new AudioNode(gc.getApplication().getAssetManager(), "Sounds/LMFAO ft. Lil Jon - Shots.wav");
         if (server) {
             this.vehicle = new VehicleControl();
-        } else {
-            this.radio = new AudioNode(gc.getApplication().getAssetManager(), "Sounds/War - Low Rider.wav");
-            this.radio.setPositional(PlayerControl.serverId != this.id);
+        } else if (id == 2) {
+            this.radio.setPositional(false);
+            this.radio.setTimeOffset(this.radioPos);
+            GameController.getInstance().getApplication().getRootNode().attachChild(radio);
             this.radio.play();
+        } else {
+            this.radio.setPositional(true);
         }
 
+        this.primary.create();
         n.addControl(this);
 
         gc.getApplication().getRootNode().attachChild(n);
@@ -141,6 +176,8 @@ public class TankControl extends PlayerControl {
         super.spatial.setLocalTranslation(this.location);
         super.spatial.setLocalRotation(this.rotation);
         this.head.setLocalRotation(this.headRot);
+        this.eye.setLocalRotation(this.eyeRot);
+        this.primary.synchronize();
 
         this.radio.setLocalTranslation(this.location);
 
@@ -149,7 +186,28 @@ public class TankControl extends PlayerControl {
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
-        c.setLocation(super.spatial.getWorldTranslation().add(Vector3f.UNIT_Y).subtract(c.getDirection().mult(5)));
+        Vector3f dep = Vector3f.UNIT_Y.add(c.getDirection().mult(-5));
+        dep.multLocal(this.aimState);
+        c.setLocation(this.eye.getWorldTranslation().add(dep));
+    }
+
+    private void updateFirstPerson(float tpf) {
+        tpf *= 3;
+        if (this.secondaryFire) {
+            if (this.aimState > 0) {
+                this.aimState -= tpf;
+                if (this.aimState < 0) {
+                    this.aimState = 0;
+                }
+            }
+        } else {
+            if (this.aimState < 1) {
+                this.aimState += tpf;
+                if (this.aimState > 1) {
+                    this.aimState = 1;
+                }
+            }
+        }
     }
 
     @Override
@@ -158,13 +216,24 @@ public class TankControl extends PlayerControl {
         if (sm == null) {
             return;
         }
-        
+
+        float[] dt = super.spatial.getLocalRotation().toAngles(null);
+
         Quaternion rot = new Quaternion();
         rot.lookAt(super.look, Vector3f.UNIT_Y);
         float[] t = rot.toAngles(null);
         t[0] = 0;
         t[2] = 0;
+        t[1] -= dt[1];
         this.headRot.set(new Quaternion(t));
+        this.head.setLocalRotation(this.headRot);
+
+        t = rot.toAngles(null);
+        t[0] -= dt[0];
+        t[1] = 0;
+        t[2] = 0;
+        this.eyeRot.set(new Quaternion(t));
+        this.eye.setLocalRotation(this.eyeRot);
 
         final float acc = 200;
         if (super.up) {
@@ -214,7 +283,14 @@ public class TankControl extends PlayerControl {
             }
         }
 
+        this.primary.fire(super.fire);
+        this.primary.secondaryFire(super.secondaryFire);
+
         this.wheelManager.update(tpf);
+
+        this.updateFirstPerson(tpf);
+
+        this.radioPos += tpf;
 
         /*if (super.ctrl) {
          super.ctrl = false;
@@ -266,5 +342,9 @@ public class TankControl extends PlayerControl {
                 this.wheelManager.engine(5, isPressed);
                 break;
         }
+    }
+
+    public static Node getModel() {
+        return MODEL;
     }
 }

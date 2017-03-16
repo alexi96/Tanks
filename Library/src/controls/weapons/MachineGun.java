@@ -14,7 +14,7 @@ public class MachineGun extends WeaponControl {
     protected Vector3f location = new Vector3f();
     protected transient Vector3f weaponDefaultLocation;
     protected transient boolean aiming;
-    protected float aimState;
+    protected transient float aimState;
 
     public MachineGun() {
         super(15, 0.075f, 1000);
