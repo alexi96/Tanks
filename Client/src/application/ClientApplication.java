@@ -1,30 +1,23 @@
 package application;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
-import controls.TestBall;
 import controls.entityes.PlayerControl;
 import controls.entityes.RobotControl;
 import controls.entityes.TankControl;
-import controls.maps.TestMap;
 import controls.weapons.AutoShotgun;
 import controls.weapons.CannonControl;
 import controls.weapons.MachineGun;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
-import synchronization.SyncManager;
-import synchronization.Synchronizer;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
@@ -43,77 +36,21 @@ public class ClientApplication extends SimpleApplication {
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
-        if (this.ip != null) {
-            try {
-                super.flyCam.setMoveSpeed(0);
-                final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
-                InputAppState state = new InputAppState(cc);
-                HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
-                super.stateManager.attach(state);
+        try {
+            super.flyCam.setMoveSpeed(0);
+            final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
+            InputAppState state = new InputAppState(cc);
+            HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
+            super.stateManager.attach(state);
 
-                TankControl rob = new TankControl();
-                rob.setPrimary(new CannonControl());
+            TankControl rob = new TankControl();
+            rob.setPrimary(new CannonControl());
 
-                state.spawn(rob);
+            state.spawn(rob);
 
-                inputManager.addListener(state, PlayerControl.MAPPINGS);
-            } catch (Exception ex) {
-                Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            BulletAppState bulletState = new BulletAppState();
-            super.stateManager.attach(bulletState);
-            SyncManager sm = new SyncManager() {
-                @Override
-                public void create(Synchronizer c) {
-                    c.create();
-                }
-
-                @Override
-                public void update(Synchronizer c) {
-                    c.synchronize();
-                }
-
-                @Override
-                public void destroy(Synchronizer c) {
-                    c.destroy();
-                }
-            };
-
-            GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), sm);
-
-            sm.create(new TestMap());
-            sm.create(new TestBall());
-
-            RobotControl rc = new RobotControl() {
-
-                
-                @Override
-                public void update(float tpf) {
-                    super.look = cam.getDirection();
-                    super.update(tpf);
-                }
-            };
-            rc.setPrimary(new MachineGun());
-            rc.setSecondary(new AutoShotgun());
-            rc.setId(1);
-            PlayerControl.serverId = 1;
-            sm.create(rc);
-
-            super.inputManager.addListener(rc, PlayerControl.MAPPINGS);
-
-            rc = new RobotControl() {
-
-                @Override
-                protected void die() {
-                    System.out.println("Died");
-                    ExplosionTest.createExplosion().emitAllParticles();
-                }
-            };
-            rc.setPrimary(new MachineGun());
-            rc.setSecondary(new AutoShotgun());
-            sm.create(rc);
-            rc.getSpatial().getControl(BetterCharacterControl.class).warp(Vector3f.UNIT_Z.mult(-3));
+            inputManager.addListener(state, PlayerControl.MAPPINGS);
+        } catch (Exception ex) {
+            Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         HudFrame f = new HudFrame();
@@ -124,7 +61,7 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.UP, new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping(PlayerControl.DOWN, new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping(PlayerControl.LEFT, new KeyTrigger(KeyInput.KEY_A));
-        inputManager.addMapping("RIGHT", new KeyTrigger(KeyInput.KEY_D));
+        inputManager.addMapping(PlayerControl.RIGHT, new KeyTrigger(KeyInput.KEY_D));
         inputManager.addMapping("FIRE", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("SECONDARY_FIRE", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         inputManager.addMapping("SPACE", new KeyTrigger(KeyInput.KEY_SPACE));
@@ -156,7 +93,7 @@ public class ClientApplication extends SimpleApplication {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
         }
-        app.ip = null;
+        app.ip = "localhost";
         if (debug) {
             if (args.length > 1) {
                 app.ip = args[1];

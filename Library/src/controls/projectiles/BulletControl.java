@@ -30,8 +30,8 @@ public class BulletControl extends ProjectileControl {
         s.addControl(this);
         app.getRootNode().attachChild(s);
         
-        SyncManager sm = GameController.getInstance().getSynchronizer();
-        if (sm != null) {
+        
+        if (!GameController.getInstance().isBestVisualStyles()) {
             return;
         }
         AudioNode an = new AudioNode(app.getAssetManager(), "Sounds/Bullet.wav");

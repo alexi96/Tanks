@@ -21,12 +21,18 @@ public class TestMap extends GameControl {
         Spatial s = gc.getApplication().getAssetManager().loadModel("Models/TestMap.j3o");
         SimpleApplication app = gc.getApplication();
 
-        if (gc.isBestVisualStyles()) {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+        if (server) {
+            RigidBodyControl rbc = new RigidBodyControl(0);
+            s.addControl(rbc);
+            gc.getPhysics().add(rbc);
+        } else {
             s.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
             gc.getLoader().loadTextures(s);
 
-            app.getRootNode().attachChild(SkyFactory.createSky(app.getAssetManager(), "Models/BrightSky.dds", false));
+            Spatial sky = SkyFactory.createSky(app.getAssetManager(), "Models/BrightSky.dds", false);
+            app.getRootNode().attachChild(sky);
 
             DirectionalLight sun = new DirectionalLight();
             sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)).normalizeLocal());
@@ -40,13 +46,6 @@ public class TestMap extends GameControl {
             DirectionalLightShadowRenderer dlsr = new DirectionalLightShadowRenderer(app.getAssetManager(), 1024, 2);
             dlsr.setLight(sun);
             app.getViewPort().addProcessor(dlsr);
-        }
-
-        boolean server = GameController.getInstance().getSynchronizer() != null;
-        if (server) {
-            RigidBodyControl rbc = new RigidBodyControl(0);
-            s.addControl(rbc);
-            gc.getPhysics().add(rbc);
         }
 
         gc.getApplication().getRootNode().attachChild(s);

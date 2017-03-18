@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package application;
 
 import com.jme3.app.SimpleApplication;
@@ -72,7 +68,7 @@ public class VehicleTest extends SimpleApplication implements ActionListener {
     public void simpleInitApp() {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+        bulletAppState.getPhysicsSpace();
         if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
             bsr.setDirection(new Vector3f(-0.5f, -0.3f, -0.3f).normalizeLocal());
@@ -103,7 +99,7 @@ public class VehicleTest extends SimpleApplication implements ActionListener {
         Material mat = assetManager.loadMaterial("Textures/Terrain/BrickWall/BrickWall.j3m");
         mat.getTextureParam("DiffuseMap").getTextureValue().setWrap(WrapMode.Repeat);
         mat.getTextureParam("NormalMap").getTextureValue().setWrap(WrapMode.Repeat);
-        mat.getTextureParam("ParallaxMap").getTextureValue().setWrap(WrapMode.Repeat);
+//        mat.getTextureParam("ParallaxMap").getTextureValue().setWrap(WrapMode.Repeat);
 
         Box floor = new Box(Vector3f.ZERO, 140, 1f, 140);
         floor.scaleTextureCoordinates(new Vector2f(112.0f, 112.0f));
@@ -199,6 +195,7 @@ public class VehicleTest extends SimpleApplication implements ActionListener {
         getPhysicsSpace().add(player);
     }
 
+    @Override
     public void onAction(String binding, boolean value, float tpf) {
         if (binding.equals("Lefts")) {
             if (value) {
@@ -250,7 +247,7 @@ public class VehicleTest extends SimpleApplication implements ActionListener {
 
     private void hidra(VehicleWheel vw, float lo) {
         try {
-            vw.getWheelInfo().suspensionRestLength1 = lo;
+            vw.setRestLength(lo);
         } catch (Exception ex) {
             Logger.getLogger(VehicleTest.class.getName()).log(Level.SEVERE, null, ex);
         }

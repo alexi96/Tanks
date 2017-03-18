@@ -120,15 +120,15 @@ public abstract class ProjectileControl extends GameControl {
                 continue;
             }
             DestroyableControl dc = (DestroyableControl) gc;
-            this.hit(dc);
+            this.hit(dc, r.getContactNormal().negate(), r.getContactPoint());
             return true;
         }
 
         return false;
     }
 
-    public void hit(DestroyableControl d) {
-        d.hit(this.damage);
+    public void hit(DestroyableControl d, Vector3f dir, Vector3f loc) {
+        d.hit(this.damage, dir, loc);
     }
 
     @Override

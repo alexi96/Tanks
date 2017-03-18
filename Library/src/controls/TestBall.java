@@ -8,7 +8,7 @@ import com.jme3.scene.Spatial;
 import controllers.GameController;
 import synchronization.SyncManager;
 
-public class TestBall extends GameControl {
+public class TestBall extends DestroyableControl {
 
     private Vector3f loc;
     private Quaternion rot;
@@ -41,6 +41,13 @@ public class TestBall extends GameControl {
         }
 
         super.setSpatial(spatial);
+    }
+
+    @Override
+    public void hit(float dmg, Vector3f dir, Vector3f loc) {
+        RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
+        System.out.println(loc);
+        rbc.applyImpulse(dir.mult(dmg), loc);
     }
 
     @Override

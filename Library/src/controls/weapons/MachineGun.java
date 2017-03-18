@@ -52,7 +52,7 @@ public class MachineGun extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getWorldRotation().getRotationColumn(2);
-        BulletControl bc = new BulletControl(dir, 100, super.damage, super.holder, 100);
+        BulletControl bc = new BulletControl(dir, 100, super.damage, super.holder, 300);
         bc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(bc);
         

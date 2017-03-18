@@ -1,5 +1,6 @@
 package controls;
 
+import com.jme3.math.Vector3f;
 import controllers.GameController;
 
 public abstract class DestroyableControl extends GameControl {
@@ -46,6 +47,10 @@ public abstract class DestroyableControl extends GameControl {
         if (this.health <= 0) {
             this.die();
         }
+    }
+    
+    public void hit(float dmg, Vector3f dir, Vector3f loc) {
+        this.hit(dmg);
     }
 
     protected void die() {
