@@ -191,6 +191,12 @@ public class TankControl extends PlayerControl {
         c.setLocation(this.eye.getWorldTranslation().add(dep));
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        GameController.getInstance().getApplication().getInputManager().removeListener(this);
+    }
+
     private void updateFirstPerson(float tpf) {
         tpf *= 3;
         if (this.secondaryFire) {

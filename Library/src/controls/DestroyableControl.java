@@ -38,7 +38,7 @@ public abstract class DestroyableControl extends GameControl {
         this.armor = armor;
     }
 
-    public void hit(float val) {
+    private void hit(float val) {
         if (this.armor >= val) {
             return;
         }

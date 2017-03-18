@@ -11,9 +11,7 @@ import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
 import controls.entityes.RobotControl;
-import controls.entityes.TankControl;
 import controls.weapons.AutoShotgun;
-import controls.weapons.CannonControl;
 import controls.weapons.MachineGun;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,8 +41,9 @@ public class ClientApplication extends SimpleApplication {
             HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
             super.stateManager.attach(state);
 
-            TankControl rob = new TankControl();
-            rob.setPrimary(new CannonControl());
+            RobotControl rob = new RobotControl();
+            rob.setPrimary(new MachineGun());
+            rob.setSecondary(new AutoShotgun());
 
             state.spawn(rob);
 

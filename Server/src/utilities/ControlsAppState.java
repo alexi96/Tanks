@@ -26,31 +26,19 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         PlayerControl pc = this.players.get(id);
         pc.setLook(look);
     }
-    
+
     @Override
     public PlayerControl spawn(final PlayerControl pl) {
         try {
             final GameController gc = GameController.getInstance();
-            return gc.getApplication().enqueue(new Callable<PlayerControl>() {
-                @Override
-                public PlayerControl call() throws Exception {
-                    gc.getSynchronizer().create(pl);
-                    players.put(pl.getId(), pl);
-                    return pl;
-                }
+            return gc.getApplication().enqueue(() -> {
+                gc.getSynchronizer().create(pl);
+                players.put(pl.getId(), pl);
+                return pl;
             }).get();
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(ControlsAppState.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
-
-    @Override
-    public void destroy(Synchronizer c) {
-        super.destroy(c);
-        
-        if (c instanceof PlayerControl) {
-            this.players.remove(c.getId());
-        }
     }
 }

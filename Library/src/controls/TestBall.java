@@ -46,8 +46,7 @@ public class TestBall extends DestroyableControl {
     @Override
     public void hit(float dmg, Vector3f dir, Vector3f loc) {
         RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
-        System.out.println(loc);
-        rbc.applyImpulse(dir.mult(dmg), loc);
+        rbc.applyImpulse(dir.mult(dmg / rbc.getMass()), loc);
     }
 
     @Override
@@ -64,6 +63,12 @@ public class TestBall extends DestroyableControl {
         }
         RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
         rbc.applyCentralForce(Vector3f.UNIT_XYZ.mult(tpf));
+        
+        if (this.loc.length() > 250) {
+            rbc.setPhysicsLocation(Vector3f.UNIT_Y.mult(3));
+            rbc.clearForces();
+        }
+        
         s.update(this);
     }
 

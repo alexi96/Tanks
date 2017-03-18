@@ -50,7 +50,6 @@ public class TankWheelManager extends Synchronizer {
             this.rotations[i] = vc.getWheel(i).getWheelSpatial().getLocalRotation();
         }
         
-        //this.defaultSuspensionLength = this.vehicle.getWheel(0).getWheelInfo().getSuspensionRestLength();
         this.defaultSuspensionLength = this.vehicle.getWheel(0).getRestLength();
     }
 
@@ -77,7 +76,6 @@ public class TankWheelManager extends Synchronizer {
                 }
             }
 
-            //this.vehicle.getWheel(i).getWheelInfo().suspensionRestLength1 = this.defaultSuspensionLength + this.hidra[i];
             this.vehicle.getWheel(i).setRestLength(this.defaultSuspensionLength + this.hidra[i]);
         }
     }

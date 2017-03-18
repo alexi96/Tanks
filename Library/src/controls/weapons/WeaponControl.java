@@ -9,10 +9,10 @@ import utilities.LoadingManager;
 
 public abstract class WeaponControl extends GameControl {
 
-    protected transient float damage;
+    protected float damage;
     protected float fireRate;
     protected transient boolean fireing;
-    protected float state;
+    protected transient float state;
     protected int ammo;
     protected transient PlayerControl holder;
     protected transient Spatial barrel;

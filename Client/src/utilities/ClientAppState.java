@@ -26,19 +26,26 @@ public class ClientAppState extends AbstractAppState implements GameConnection {
             }
             this.created.clear();
         }
-        if (!this.updated.isEmpty()) {
-            for (Synchronizer se : this.updated) {
-                Synchronizer old = this.managed.get(se.getId());
-                this.update(se, old);
-            }
-            this.updated.clear();
-        }
+        
         if (!this.destroyed.isEmpty()) {
             for (Integer s : this.destroyed) {
                 Synchronizer t = this.managed.get(s);
                 t.destroy();
+                this.managed.remove(s);
             }
             this.destroyed.clear();
+        }
+        
+        if (!this.updated.isEmpty()) {
+            for (Synchronizer se : this.updated) {
+                Synchronizer old = this.managed.get(se.getId());
+                if (old == null) {
+                    continue;
+                }
+                
+                this.update(se, old);
+            }
+            this.updated.clear();
         }
     }
 

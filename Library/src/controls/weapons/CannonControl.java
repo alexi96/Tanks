@@ -57,7 +57,7 @@ public class CannonControl extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getParent().getWorldRotation().getRotationColumn(2);
-        BulletControl bc = new BulletControl(dir, 10, super.damage, super.holder, 100) {
+        BulletControl bc = new BulletControl(dir, 20, super.damage, super.holder, 100) {
 
             @Override
             public void create() {

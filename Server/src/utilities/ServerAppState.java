@@ -13,7 +13,7 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
 
     protected boolean initialized = false;
     private boolean enabled = true;
-    private ArrayList<GameConnection> clients = new ArrayList<>();
+    private final ArrayList<GameConnection> clients = new ArrayList<>();
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
