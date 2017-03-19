@@ -13,6 +13,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
+import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 import utilities.LoadingManager;
@@ -27,7 +28,6 @@ public class TankControl extends PlayerControl {
     private transient VehicleControl vehicle;
     private transient float steer;
     private TankWheelManager wheelManager = new TankWheelManager();
-    private transient AudioNode radio;
     private Vector3f location;
     private Quaternion rotation;
     private Quaternion headRot = new Quaternion();
@@ -36,7 +36,8 @@ public class TankControl extends PlayerControl {
     private transient Node head;
     private transient Node eye;
     private float aimState;
-    private float radioPos;
+
+    private transient WeaponControl selectedWeapon;
 
     public TankControl() {
     }
@@ -50,6 +51,7 @@ public class TankControl extends PlayerControl {
         this.headRot.set(o.headRot);
         this.wheelManager.prepare(o.wheelManager);
         this.primary.prepare(o.primary);
+        this.secondary.prepare(o.secondary);
         this.aimState = o.aimState;
     }
 
@@ -67,6 +69,7 @@ public class TankControl extends PlayerControl {
             this.eye = (Node) n.getChild("Eye");
             this.eye.detachAllChildren();
             this.eye.attachChild(this.primary.getSpatial());
+            this.eye.attachChild(this.secondary.getSpatial());
 
             boolean server = GameController.getInstance().getSynchronizer() != null;
 
@@ -130,22 +133,15 @@ public class TankControl extends PlayerControl {
             n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         }
         boolean server = GameController.getInstance().getSynchronizer() != null;
-
         this.wheels = new Spatial[6];
 
-        this.radio = new AudioNode(gc.getApplication().getAssetManager(), "Sounds/LMFAO ft. Lil Jon - Shots.wav");
         if (server) {
             this.vehicle = new VehicleControl();
-        } else if (id == 2) {
-            this.radio.setPositional(false);
-            this.radio.setTimeOffset(this.radioPos);
-            GameController.getInstance().getApplication().getRootNode().attachChild(radio);
-            this.radio.play();
-        } else {
-            this.radio.setPositional(true);
         }
 
         this.primary.create();
+        this.secondary.create();
+        this.selectedWeapon = primary;
         n.addControl(this);
 
         gc.getApplication().getRootNode().attachChild(n);
@@ -168,15 +164,14 @@ public class TankControl extends PlayerControl {
         this.head.setLocalRotation(this.headRot);
         this.eye.setLocalRotation(this.eyeRot);
         this.primary.synchronize();
-
-        this.radio.setLocalTranslation(this.location);
+        this.secondary.synchronize();
 
         if (super.id != PlayerControl.serverId) {
             return;
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
-        Vector3f dep = Vector3f.UNIT_Y.add(c.getDirection().mult(-5));
+        Vector3f dep = Vector3f.UNIT_Y.mult(0).add(c.getDirection().mult(-5));
         dep.multLocal(this.aimState);
         c.setLocation(this.eye.getWorldTranslation().add(dep));
     }
@@ -279,36 +274,23 @@ public class TankControl extends PlayerControl {
             }
         }
 
-        this.primary.fire(super.fire);
-        this.primary.secondaryFire(super.secondaryFire);
+        this.selectedWeapon.secondaryFire(super.secondaryFire);
+        this.selectedWeapon.fire(super.fire);
+
+        if (super.swap) {
+            super.swap = false;
+            this.selectedWeapon.secondaryFire(false);
+            this.selectedWeapon.fire(false);
+            if (this.primary == this.selectedWeapon) {
+                this.selectedWeapon = this.secondary;
+            } else {
+                this.selectedWeapon = this.primary;
+            }
+        }
 
         this.wheelManager.update(tpf);
 
         this.updateFirstPerson(tpf);
-
-        this.radioPos += tpf;
-
-        /*if (super.ctrl) {
-         super.ctrl = false;
-         float dur = radio.getAudioData().getDuration();
-         float time = radio.getTimeOffset();
-         if (time + 15 >= dur) {
-         this.radio.setTimeOffset(0);
-         } else {
-         this.radio.setTimeOffset(radio.getTimeOffset() + 15);
-         }
-         }
-         if (super.shift) {
-         super.shift = false;
-
-         float dur = radio.getAudioData().getDuration();
-         float time = radio.getTimeOffset();
-         if (time - 15 < 0) {
-         this.radio.setTimeOffset(dur - 15);
-         } else {
-         this.radio.setTimeOffset(radio.getTimeOffset() - 15);
-         }
-         }*/
 
         this.vehicle.steer(this.steer * FastMath.QUARTER_PI / 2);
 

@@ -15,6 +15,7 @@ import controls.entityes.TankControl;
 import controls.weapons.AutoShotgun;
 import controls.weapons.CannonControl;
 import controls.weapons.MachineGun;
+import controls.weapons.MinigunControl;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,14 +47,9 @@ public class ClientApplication extends SimpleApplication {
 
             PlayerControl pl;
 
-            if (ip.equals("localhost")) {
-                pl = new RobotControl();
-                pl.setPrimary(new MachineGun());
-                pl.setSecondary(new AutoShotgun());
-            } else {
-                pl = new TankControl();
-                pl.setPrimary(new CannonControl());
-            }
+            pl = new TankControl();
+            pl.setPrimary(new CannonControl());
+            pl.setSecondary(new MinigunControl());
 
             state.spawn(pl);
 

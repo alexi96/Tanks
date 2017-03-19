@@ -12,7 +12,7 @@ public abstract class WeaponControl extends GameControl {
     protected float damage;
     protected float fireRate;
     protected transient boolean fireing;
-    protected transient float state;
+    protected float state;
     protected int ammo;
     protected transient PlayerControl holder;
     protected transient Spatial barrel;

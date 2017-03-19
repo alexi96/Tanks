@@ -10,15 +10,16 @@ import controls.entityes.TankControl;
 import controls.projectiles.BulletControl;
 import synchronization.SyncManager;
 
-public class CannonControl extends WeaponControl {
+public class MinigunControl extends WeaponControl {
 
     private final static Node MODEL = TankControl.getModel();
     protected transient boolean aiming;
     protected float aimState;
-    protected transient Spatial front;
+    protected transient Spatial spinner;
+    protected float spin;
 
-    public CannonControl() {
-        super(200, 3f, 20);
+    public MinigunControl() {
+        super(10, 0.1f, 1000);
     }
 
     @Override
@@ -27,28 +28,29 @@ public class CannonControl extends WeaponControl {
     }
 
     @Override
-    public void create() {
-        Spatial s = CannonControl.MODEL.getChild("Cannon").clone();
-
-        s.addControl(this);
-    }
-
-    @Override
     public void setSpatial(Spatial spatial) {
         if (spatial != null) {
             Node n = (Node) spatial;
-            this.front = n.getChild("CannonFront");
-        } else {
+            this.spinner = n.getChild("Spinner");
         }
         super.setSpatial(spatial);
     }
 
     @Override
+    public void create() {
+        Spatial s = MinigunControl.MODEL.getChild("Minigun").clone();
+
+        s.addControl(this);
+    }
+
+    @Override
     public void synchronize() {
         Quaternion rot = new Quaternion();
-        rot.fromAngleAxis(FastMath.HALF_PI * -(1 - this.aimState), Vector3f.UNIT_Z);
+        float t = 1 - this.aimState;
+        rot.fromAngleAxis(FastMath.HALF_PI * -t, Vector3f.UNIT_Z);
         super.spatial.setLocalRotation(rot);
-        this.front.setLocalTranslation(0, 0, -this.state / this.fireRate * 0.65f);
+
+        this.spinner.setLocalRotation(new Quaternion().fromAngleAxis(this.spin, Vector3f.UNIT_Z));
     }
 
     @Override
@@ -57,14 +59,7 @@ public class CannonControl extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getParent().getWorldRotation().getRotationColumn(2);
-        BulletControl bc = new BulletControl(dir, 20, super.damage, super.holder, 100) {
-
-            @Override
-            public void create() {
-                super.create(); //To change body of generated methods, choose Tools | Templates.
-                super.spatial.scale(10);
-            }
-        };
+        BulletControl bc = new BulletControl(dir, 100, super.damage, super.holder, 150);
         bc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(bc);
 
@@ -99,6 +94,9 @@ public class CannonControl extends WeaponControl {
         Quaternion rot = new Quaternion();
         rot.fromAngleAxis(FastMath.HALF_PI * this.aimState, Vector3f.UNIT_Z);
         super.spatial.setLocalRotation(rot);
-        this.front.setLocalTranslation(0, 0, -this.state / this.fireRate * 0.65f);
+
+        if (super.fireing) {
+            this.spin += tpf * 10;
+        }
     }
 }
