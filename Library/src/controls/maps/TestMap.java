@@ -10,7 +10,6 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.util.SkyFactory;
-import com.jme3.util.SkyFactory.EnvMapType;
 import controllers.GameController;
 import controls.GameControl;
 
@@ -32,7 +31,7 @@ public class TestMap extends GameControl {
 
             gc.getLoader().loadTextures(s);
 
-            Spatial sky = SkyFactory.createSky(app.getAssetManager(), "Models/BrightSky.dds", SkyFactory.EnvMapType.CubeMap);
+            Spatial sky = SkyFactory.createSky(app.getAssetManager(), "Textures/BrightSky.dds", SkyFactory.EnvMapType.CubeMap);
             app.getRootNode().attachChild(sky);
 
             DirectionalLight sun = new DirectionalLight();
