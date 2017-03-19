@@ -31,7 +31,7 @@ public class TestMap extends GameControl {
 
             gc.getLoader().loadTextures(s);
 
-            Spatial sky = SkyFactory.createSky(app.getAssetManager(), "Models/BrightSky.dds", false);
+            Spatial sky = SkyFactory.createSky(app.getAssetManager(), "Textures/BrightSky.dds", false);
             app.getRootNode().attachChild(sky);
 
             DirectionalLight sun = new DirectionalLight();

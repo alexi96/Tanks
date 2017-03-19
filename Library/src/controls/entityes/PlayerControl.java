@@ -3,6 +3,7 @@ package controls.entityes;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import controls.DestroyableControl;
+import controls.weapons.WeaponControl;
 
 public abstract class PlayerControl extends DestroyableControl implements ActionListener {
 
@@ -36,18 +37,15 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     protected transient boolean ctrl;
     protected transient boolean shift;
     protected transient boolean swap;
+    
+    protected WeaponControl primary;
+    protected WeaponControl secondary;
 
     public PlayerControl() {
     }
 
-    public PlayerControl(String name, boolean up, boolean down, boolean left, boolean right, Vector3f look, boolean fire) {
+    public PlayerControl(String name) {
         this.name = name;
-        this.up = up;
-        this.down = down;
-        this.left = left;
-        this.right = right;
-        this.look = look;
-        this.fire = fire;
     }
 
     public String getName() {
@@ -104,6 +102,22 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     public void setFire(boolean fire) {
         this.fire = fire;
+    }
+
+    public WeaponControl getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(WeaponControl primary) {
+        this.primary = primary;
+    }
+
+    public WeaponControl getSecondary() {
+        return secondary;
+    }
+
+    public void setSecondary(WeaponControl secondary) {
+        this.secondary = secondary;
     }
 
     @Override

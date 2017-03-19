@@ -11,8 +11,11 @@ import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
 import controls.entityes.RobotControl;
+import controls.entityes.TankControl;
 import controls.weapons.AutoShotgun;
+import controls.weapons.CannonControl;
 import controls.weapons.MachineGun;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
@@ -41,14 +44,21 @@ public class ClientApplication extends SimpleApplication {
             HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
             super.stateManager.attach(state);
 
-            RobotControl rob = new RobotControl();
-            rob.setPrimary(new MachineGun());
-            rob.setSecondary(new AutoShotgun());
+            PlayerControl pl;
 
-            state.spawn(rob);
+            if (ip.equals("localhost")) {
+                pl = new RobotControl();
+                pl.setPrimary(new MachineGun());
+                pl.setSecondary(new AutoShotgun());
+            } else {
+                pl = new TankControl();
+                pl.setPrimary(new CannonControl());
+            }
+
+            state.spawn(pl);
 
             inputManager.addListener(state, PlayerControl.MAPPINGS);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -61,9 +71,9 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.DOWN, new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping(PlayerControl.LEFT, new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping(PlayerControl.RIGHT, new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("FIRE", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        inputManager.addMapping("SECONDARY_FIRE", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        inputManager.addMapping("SPACE", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping(PlayerControl.FIRE, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping(PlayerControl.SECONDARY_FIRE, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        inputManager.addMapping(PlayerControl.SPACE, new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("CTRL", new KeyTrigger(KeyInput.KEY_LCONTROL));
         inputManager.addMapping("SHIFT", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SWAP", new KeyTrigger(KeyInput.KEY_Q));

@@ -20,30 +20,12 @@ public class RobotControl extends PlayerControl {
     private transient Node eye;
     private transient Spatial body;
     private transient Spatial head;
-    private WeaponControl primary;
-    private WeaponControl secondary;
     private transient WeaponControl selectedWeapon;
     private Vector3f location = new Vector3f();
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
     private float duckState;
     private transient float headDefaultHeigth;
-
-    public WeaponControl getPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(WeaponControl primary) {
-        this.primary = primary;
-    }
-
-    public WeaponControl getSecondary() {
-        return secondary;
-    }
-
-    public void setSecondary(WeaponControl secondary) {
-        this.secondary = secondary;
-    }
 
     @Override
     public void create() {
