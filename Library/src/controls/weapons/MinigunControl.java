@@ -47,7 +47,7 @@ public class MinigunControl extends WeaponControl {
     public void synchronize() {
         Quaternion rot = new Quaternion();
         float t = 1 - this.aimState;
-        rot.fromAngleAxis(FastMath.HALF_PI * -t, Vector3f.UNIT_Z);
+        rot.fromAngleAxis(FastMath.HALF_PI * t, Vector3f.UNIT_Z);
         super.spatial.setLocalRotation(rot);
 
         this.spinner.setLocalRotation(new Quaternion().fromAngleAxis(this.spin, Vector3f.UNIT_Z));

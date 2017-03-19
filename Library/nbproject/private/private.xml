@@ -6,9 +6,8 @@
             <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/TestBall.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/maps/TestMap.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/entityes/TankControl.java</file>
-            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/entityes/RobotControl.java</file>
-            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/DestroyableControl.java</file>
-            <file>file:/D:/Alex/Facultate/Tanks/Library/src/utilities/TankWheelManager.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/weapons/CannonControl.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/maps/FightingYardMap.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/entityes/PlayerControl.java</file>
         </group>
     </open-files>

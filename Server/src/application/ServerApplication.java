@@ -10,6 +10,7 @@ import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.TestBall;
+import controls.maps.Map;
 import controls.maps.TestMap;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -44,7 +45,7 @@ public class ServerApplication extends SimpleApplication {
         GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), s);
         GameController.getInstance().setBestVisualStyles(false);
 
-        TestMap t = new TestMap();
+        Map t = new TestMap();
         s.create(t);
 
         TestBall tb = new TestBall();

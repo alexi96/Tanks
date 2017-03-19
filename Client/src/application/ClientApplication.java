@@ -10,11 +10,8 @@ import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
-import controls.entityes.RobotControl;
 import controls.entityes.TankControl;
-import controls.weapons.AutoShotgun;
 import controls.weapons.CannonControl;
-import controls.weapons.MachineGun;
 import controls.weapons.MinigunControl;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -70,9 +67,9 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.FIRE, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping(PlayerControl.SECONDARY_FIRE, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         inputManager.addMapping(PlayerControl.SPACE, new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("CTRL", new KeyTrigger(KeyInput.KEY_LCONTROL));
-        inputManager.addMapping("SHIFT", new KeyTrigger(KeyInput.KEY_LSHIFT));
-        inputManager.addMapping("SWAP", new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping(PlayerControl.CTRL, new KeyTrigger(KeyInput.KEY_LCONTROL));
+        inputManager.addMapping(PlayerControl.SHIFT, new KeyTrigger(KeyInput.KEY_LSHIFT));
+        inputManager.addMapping(PlayerControl.SWAP, new KeyTrigger(KeyInput.KEY_Q));
 
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));

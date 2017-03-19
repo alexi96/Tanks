@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controls.entityes.PlayerControl;
+import java.util.Collection;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
@@ -72,7 +73,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
         if (this.camera.getDirection().equals(this.lastLook)) {
             return;
         }
-        
+
         final float min = FastMath.DEG_TO_RAD * 20;
         final float max = -FastMath.DEG_TO_RAD * 45;
 
@@ -84,7 +85,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
             angs[0] = max;
             this.camera.setRotation(new Quaternion(angs));
         }
-        
+
         this.lastLook.set(this.camera.getDirection());
         this.controls.command(this.player.getId(), this.lastLook.clone());
     }

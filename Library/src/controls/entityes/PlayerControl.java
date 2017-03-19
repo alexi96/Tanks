@@ -1,7 +1,10 @@
 package controls.entityes;
 
+import com.jme3.bullet.control.PhysicsControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import controllers.GameController;
 import controls.DestroyableControl;
 import controls.weapons.WeaponControl;
 
@@ -18,12 +21,12 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public static final String CTRL = "CTRL";
     public static final String SHIFT = "SHIFT";
     public static final String SWAP = "SWAP";
-    
+
     public static final String ALT_UP = "ALT_UP";
     public static final String ALT_DOWN = "ALT_DOWN";
     public static final String ALT_LEFT = "ALT_LEFT";
     public static final String ALT_RIGHT = "ALT_RIGHT";
-    
+
     public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT};
     protected String name = "";
     protected transient boolean up;
@@ -37,7 +40,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     protected transient boolean ctrl;
     protected transient boolean shift;
     protected transient boolean swap;
-    
+
     protected WeaponControl primary;
     protected WeaponControl secondary;
 
@@ -122,7 +125,32 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     @Override
     public void create() {
+        super.create();
+        
         this.look = new Vector3f(0, 0, 1);
+        
+        GameController gc = GameController.getInstance();
+        if (gc.getSynchronizer() != null) {
+            return;
+        }
+        
+        if (super.id == PlayerControl.serverId) {
+            gc.getApplication().getFlyByCamera().setMoveSpeed(0);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        
+        GameController gc = GameController.getInstance();
+        if (gc.getSynchronizer() != null) {
+            return;
+        }
+
+        if (super.id == PlayerControl.serverId) {
+            gc.getApplication().getFlyByCamera().setMoveSpeed(10);
+        }
     }
 
     @Override

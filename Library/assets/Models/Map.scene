@@ -1,0 +1,24 @@
+<scene formatVersion="1.0.1" exported_by="alex_" previous_export_time="1489926095.303885" export_time="1489926467.693007" >
+  <nodes >
+    <node name="Plane" >
+      <position x="0.000000" z="-0.000000" y="1.000000" />
+      <rotation qz="-0.000000" qx="0.000000" qy="0.000000" qw="1.000000" />
+      <scale x="1.000000" z="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity friction_z="1.0" lock_rot_x="False" anisotropic_friction="False" mass="1.0" mass_radius="1.0" damping_rot="0.10000000149011612" actor="False" velocity_max="0.0" ghost="False" physics_type="STATIC" friction_y="1.0" inertia_tensor="0.4000000059604645" friction_x="1.0" damping_trans="0.03999999910593033" lock_trans_z="False" lock_rot_y="False" name="Plane" meshFile="Plane.mesh" lock_trans_y="False" velocity_min="0.0" lock_trans_x="False" lock_rot_z="False" />
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="D:\Alex\Facultate\Tanks\Library\assets\Models\Map.material" />
+    </item>
+  </externals>
+  <environment >
+    <colourDiffuse r="0.05087608844041824" g="0.05087608844041824" b="0.05087608844041824" />
+    <colourBackground r="0.05087608844041824" g="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient r="0.0" g="0.0" b="0.0" />
+  </environment>
+</scene>

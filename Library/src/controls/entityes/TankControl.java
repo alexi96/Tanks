@@ -23,7 +23,7 @@ public class TankControl extends PlayerControl {
 
     public static final float STEER_SPEED = 2f;
     public static final float MAX_STEER = FastMath.HALF_PI / 1.5f;
-    public static final float MASS = 500;
+    public static final float MASS = 750;
     private static final Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Tank.j3o");
     private transient VehicleControl vehicle;
     private transient float steer;
@@ -40,6 +40,7 @@ public class TankControl extends PlayerControl {
     private transient WeaponControl selectedWeapon;
 
     public TankControl() {
+        super.resetHealth(400);
     }
 
     @Override
@@ -76,10 +77,9 @@ public class TankControl extends PlayerControl {
             if (server) {
                 Spatial hull = LoadingManager.findByName(spatial, "Hull");
                 CollisionShape hullShape = CollisionShapeFactory.createDynamicMeshShape(hull);
-                this.vehicle.setCollisionShape(hullShape);
-                this.vehicle.setMass(TankControl.MASS);
-
+                this.vehicle = new VehicleControl(hullShape, TankControl.MASS);
                 spatial.addControl(this.vehicle);
+
                 float stiff = 25;
                 float damping = 0.1f;
                 float comp = 0.75f;
@@ -116,6 +116,7 @@ public class TankControl extends PlayerControl {
             this.rotation = spatial.getLocalRotation();
         } else {
             super.spatial.removeControl(this.vehicle);
+            this.vehicle = null;
         }
 
         super.setSpatial(spatial);
@@ -135,10 +136,8 @@ public class TankControl extends PlayerControl {
         boolean server = GameController.getInstance().getSynchronizer() != null;
         this.wheels = new Spatial[6];
 
-        if (server) {
-            this.vehicle = new VehicleControl();
-        }
-
+        this.primary.setHolder(this);
+        this.secondary.setHolder(this);
         this.primary.create();
         this.secondary.create();
         this.selectedWeapon = primary;
@@ -149,6 +148,8 @@ public class TankControl extends PlayerControl {
         if (server) {
             gc.getPhysics().add(this.vehicle);
             this.wheelManager.initialise(this.vehicle);
+            
+            this.vehicle.setPhysicsLocation(Vector3f.UNIT_Y);
         }
     }
 
@@ -176,12 +177,6 @@ public class TankControl extends PlayerControl {
         c.setLocation(this.eye.getWorldTranslation().add(dep));
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-        GameController.getInstance().getApplication().getInputManager().removeListener(this);
-    }
-
     private void updateFirstPerson(float tpf) {
         tpf *= 3;
         if (this.secondaryFire) {
@@ -201,6 +196,22 @@ public class TankControl extends PlayerControl {
         }
     }
 
+    private void updateWeapons(float tpf) {
+        if (super.swap) {
+            super.swap = false;
+            this.selectedWeapon.secondaryFire(false);
+            this.selectedWeapon.fire(false);
+            if (this.primary == this.selectedWeapon) {
+                this.selectedWeapon = this.secondary;
+            } else {
+                this.selectedWeapon = this.primary;
+            }
+        }
+        
+        this.selectedWeapon.secondaryFire(super.secondaryFire);
+        this.selectedWeapon.fire(super.fire);
+    }
+    
     @Override
     public void update(float tpf) {
         SyncManager sm = GameController.getInstance().getSynchronizer();
@@ -274,19 +285,7 @@ public class TankControl extends PlayerControl {
             }
         }
 
-        this.selectedWeapon.secondaryFire(super.secondaryFire);
-        this.selectedWeapon.fire(super.fire);
-
-        if (super.swap) {
-            super.swap = false;
-            this.selectedWeapon.secondaryFire(false);
-            this.selectedWeapon.fire(false);
-            if (this.primary == this.selectedWeapon) {
-                this.selectedWeapon = this.secondary;
-            } else {
-                this.selectedWeapon = this.primary;
-            }
-        }
+        this.updateWeapons(tpf);
 
         this.wheelManager.update(tpf);
 
@@ -295,6 +294,12 @@ public class TankControl extends PlayerControl {
         this.vehicle.steer(this.steer * FastMath.QUARTER_PI / 2);
 
         sm.update(this);
+    }
+
+    @Override
+    public void hit(float dmg, Vector3f dir, Vector3f loc) {
+        super.hit(dmg, dir, loc);
+        this.vehicle.applyImpulse(dir.mult(dmg), loc);
     }
 
     @Override

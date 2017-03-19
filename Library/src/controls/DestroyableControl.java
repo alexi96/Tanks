@@ -37,6 +37,15 @@ public abstract class DestroyableControl extends GameControl {
     public void setArmor(float armor) {
         this.armor = armor;
     }
+    
+    public void resetHealth() {
+        this.health = this.maxHealth;
+    }
+    
+    public void resetHealth(float health) {
+        this.health = health;
+        this.maxHealth = health;
+    }
 
     private void hit(float val) {
         if (this.armor >= val) {

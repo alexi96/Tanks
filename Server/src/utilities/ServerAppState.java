@@ -63,48 +63,50 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
 
     @Override
     public void update() {
-        ArrayList<GameConnection> lost = new ArrayList<>();
-        if (!this.created.isEmpty()) {
-            for (GameConnection c : this.clients) {
-                try {
-                    c.create(this.created);
-                } catch (Exception e) {
-                    lost.add(c);
-                    System.out.println("Lost: ");
+        synchronized (this.clients) {
+            ArrayList<GameConnection> lost = new ArrayList<>();
+            if (!this.created.isEmpty()) {
+                for (GameConnection c : this.clients) {
+                    try {
+                        c.create(this.created);
+                    } catch (Exception e) {
+                        lost.add(c);
+                        System.out.println("Lost: ");
+                    }
                 }
+                this.created.clear();
             }
-            this.created.clear();
-        }
-        this.clients.removeAll(lost);
-        lost.clear();
+            this.clients.removeAll(lost);
+            lost.clear();
 
-        if (!this.destroyed.isEmpty()) {
-            for (GameConnection c : this.clients) {
-                try {
-                    c.destroy(this.destroyed);
-                } catch (Exception e) {
-                    lost.add(c);
-                    System.out.println("Lost: ");
+            if (!this.destroyed.isEmpty()) {
+                for (GameConnection c : this.clients) {
+                    try {
+                        c.destroy(this.destroyed);
+                    } catch (Exception e) {
+                        lost.add(c);
+                        System.out.println("Lost: ");
+                    }
                 }
+                this.destroyed.clear();
             }
-            this.destroyed.clear();
-        }
-        this.clients.removeAll(lost);
-        lost.clear();
+            this.clients.removeAll(lost);
+            lost.clear();
 
-        if (!this.updated.isEmpty()) {
-            for (GameConnection c : this.clients) {
-                try {
-                    c.update(this.updated);
-                } catch (Exception e) {
-                    lost.add(c);
-                    System.out.println("Lost: ");
+            if (!this.updated.isEmpty()) {
+                for (GameConnection c : this.clients) {
+                    try {
+                        c.update(this.updated);
+                    } catch (Exception e) {
+                        lost.add(c);
+                        System.out.println("Lost: ");
+                    }
                 }
+                this.updated.clear();
             }
-            this.updated.clear();
+            this.clients.removeAll(lost);
+            lost.clear();
         }
-        this.clients.removeAll(lost);
-        lost.clear();
     }
 
     @Override
@@ -112,6 +114,9 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
         System.out.println("Connected");
         GameConnection con = (GameConnection) proc;
         con.create(this.managed);
-        this.clients.add(con);
+
+        synchronized (this.clients) {
+            this.clients.add(con);
+        }
     }
 }

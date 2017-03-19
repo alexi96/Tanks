@@ -11,9 +11,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.util.SkyFactory;
 import controllers.GameController;
-import controls.GameControl;
 
-public class TestMap extends GameControl {
+public class TestMap extends Map {
 
     @Override
     public void create() {
