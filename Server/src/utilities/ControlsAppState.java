@@ -5,11 +5,9 @@ import connection.ControlsConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import synchronization.Synchronizer;
 
 public class ControlsAppState extends ServerAppState implements ControlsConnection {
 

@@ -13,7 +13,6 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 import utilities.LoadingManager;
@@ -36,19 +35,10 @@ public class TankControl extends PlayerControl {
     private transient Spatial[] wheels;
     private transient Node head;
     private transient Node eye;
-    private WeaponControl primary;
     private float aimState;
     private float radioPos;
 
     public TankControl() {
-    }
-
-    public WeaponControl getPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(WeaponControl primary) {
-        this.primary = primary;
     }
 
     @Override
