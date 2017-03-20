@@ -41,11 +41,11 @@ public class SpawnFrame extends Frame {
     }
 
     private void nextVehicle() {
-
+        
     }
 
     private void lastVehicle() {
-
+        
     }
 
     @Override
