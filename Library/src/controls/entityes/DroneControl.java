@@ -12,29 +12,25 @@ import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 
-public class RobotControl extends PlayerControl {
+public class DroneControl extends PlayerControl {
 
-    private final static float HEIGTH = 1.7f;
-    private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
+    private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Drone.j3o");
     private transient BetterCharacterControl character;
     private transient Node eye;
-    private transient Spatial body;
-    private transient Spatial head;
     private transient WeaponControl selectedWeapon;
     private Vector3f location = new Vector3f();
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
-    private float duckState;
-    private transient float headDefaultHeigth;
 
     @Override
     public void create() {
         super.create();
 
         GameController gc = GameController.getInstance();
+
         boolean server = gc.getSynchronizer() != null;
         if (server) {
-            this.character = new BetterCharacterControl(0.25f, 1.7f, 100);
+            this.character = new BetterCharacterControl(0.5f, 0.5f, 10);
         }
 
         Node n = (Node) MODEL.clone();
@@ -49,6 +45,8 @@ public class RobotControl extends PlayerControl {
         this.selectedWeapon = primary;
 
         n.addControl(this);
+        
+        this.character.warp(Vector3f.UNIT_Y.mult(10));
     }
 
     @Override
@@ -58,12 +56,9 @@ public class RobotControl extends PlayerControl {
         if (spatial != null) {
             Node n = (Node) spatial;
             this.eye = (Node) n.getChild("Eye");
-            this.body = n.getChild("Body");
-            this.head = n.getChild("Head");
             this.eye.detachAllChildren();
             this.eye.attachChild(this.primary.getSpatial());
             this.eye.attachChild(this.secondary.getSpatial());
-            this.headDefaultHeigth = this.head.getLocalTranslation().getY();
 
             if (server) {
                 spatial.addControl(this.character);
@@ -78,31 +73,17 @@ public class RobotControl extends PlayerControl {
 
     @Override
     public void prepare(Synchronizer newData) {
-        RobotControl o = (RobotControl) newData;
+        DroneControl o = (DroneControl) newData;
         this.location.set(o.location);
         this.rotation.set(o.rotation);
-        this.eyeRot.set(o.eyeRot);
-        this.duckState = o.duckState;
 
         this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
     }
 
-    private void updatePhysics() {
-        if (super.id != PlayerControl.serverId) {
-            return;
-        }
-
-        Camera c = GameController.getInstance().getApplication().getCamera();
-        c.setLocation(this.eye.getWorldTranslation());
-    }
-
     @Override
     public void synchronize() {
         super.spatial.setLocalTranslation(this.location);
-        this.body.setLocalScale(1, this.duckState, 1);
-        float t = 1 - this.duckState;
-        this.head.setLocalTranslation(0, this.headDefaultHeigth - t * RobotControl.HEIGTH / 2, 0);
         super.spatial.setLocalRotation(this.rotation);
 
         this.eye.setLocalRotation(this.eyeRot);
@@ -110,33 +91,12 @@ public class RobotControl extends PlayerControl {
         this.primary.synchronize();
         this.secondary.synchronize();
 
-        this.updatePhysics();
-    }
-
-    private void updateDuck(float tpf) {
-        tpf *= 2;
-        this.character.setDucked(this.ctrl);
-
-        if (super.ctrl) {
-            if (this.duckState <= 0) {
-                return;
-            }
-
-            this.duckState -= tpf;
-            if (this.duckState < 0) {
-                this.duckState = 0;
-            }
+        if (super.id != PlayerControl.serverId) {
             return;
         }
 
-        if (this.duckState >= 1) {
-            return;
-        }
-
-        this.duckState += tpf;
-        if (this.duckState > 1) {
-            this.duckState = 1;
-        }
+        Camera c = GameController.getInstance().getApplication().getCamera();
+        c.setLocation(this.eye.getWorldTranslation());
     }
 
     private void updateWeapons(float tpf) {
@@ -164,7 +124,7 @@ public class RobotControl extends PlayerControl {
         if (manager == null) {
             return;
         }
-
+        
         Quaternion rot = new Quaternion();
         rot.lookAt(look, Vector3f.UNIT_Y);
 
@@ -172,7 +132,7 @@ public class RobotControl extends PlayerControl {
         t[0] = 0;
         t[2] = 0;
         this.rotation.set(new Quaternion(t));
-        this.location.set(super.spatial.getWorldTranslation());
+        this.location.set(super.spatial.getLocalTranslation());
 
         this.character.setViewDirection(super.look);
 
@@ -204,22 +164,13 @@ public class RobotControl extends PlayerControl {
             walkDir.addLocal(leftDir.negate());
         }
 
-        if (super.space) {
-            super.space = false;
-            this.character.jump();
-        }
-
-        walkDir.multLocal(3);
+        walkDir.multLocal(6);
+        
         this.character.setWalkDirection(walkDir);
         this.location = super.spatial.getWorldTranslation().clone();
 
-        this.body.setLocalScale(1, this.duckState, 1);
-        float td = 1 - this.duckState;
-        this.head.setLocalTranslation(0, this.headDefaultHeigth - td * RobotControl.HEIGTH / 2, 0);
 
-        manager.update(RobotControl.this);
-
-        this.updateDuck(tpf);
+        manager.update(this);
     }
 
     public static Node getModel() {

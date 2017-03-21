@@ -28,6 +28,7 @@ public class SpawnFrame extends Frame {
         AppSettings set = GameController.getInstance().getSettings();
 
         super.size(set.getWidth() * 3 / 4, set.getHeight() * 3 / 4);
+        super.center();
 
         final int buttonSize = 100;
 

@@ -36,7 +36,7 @@ public class ClientApplication extends SimpleApplication {
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
-        /*try {
+        try {
             super.flyCam.setMoveSpeed(0);
             final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
             InputAppState state = new InputAppState(cc);
@@ -54,11 +54,11 @@ public class ClientApplication extends SimpleApplication {
             inputManager.addListener(state, PlayerControl.MAPPINGS);
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
 
         HudFrame f = new HudFrame();
         //f.show();
-        
+
         SpawnFrame sf = new SpawnFrame();
         sf.show();
     }
