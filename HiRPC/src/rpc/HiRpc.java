@@ -10,8 +10,8 @@ public final class HiRpc {
     private HiRpc() {
     }
 
-    public static void start(Object proc, int port, ConnectionHandler handler, Class... clientProc) throws IOException {
-        final ServerSocket ss = new ServerSocket(port);
+    public static RpcServer start(Object proc, int port, ConnectionHandler handler, Class... clientProc) throws IOException {
+        ServerSocket ss = new ServerSocket(port);
 
         String name = "Server ";
         if (proc != null) {
@@ -19,31 +19,29 @@ public final class HiRpc {
         }
         name += " (" + port + ')';
         RpcServer server = new RpcServer(ss, proc, clientProc, handler);
-        server.setHandler(handler);
         new Thread(server, name).start();
+        return server;
     }
 
-    public static void start(Object proc, int port) throws IOException {
-        ConnectionHandler handler = new ConnectionHandler() {
-            @Override
-            public void connected(Object proc) throws Exception {
-            }
+    public static RpcServer start(Object proc, int port) throws IOException {
+        ConnectionHandler handler = (p) -> {
         };
-        HiRpc.start(proc, port, handler, (Class[]) null);
-    }
-
-    public static Object connect(String ip, int port, Class... procs) throws IOException {
-        Socket s = new Socket(ip, port);
-        s.getOutputStream().write(0);
-
-        InvocationEndPoint inv = new InvocationEndPoint(s);
-        Object r = Proxy.newProxyInstance(HiRpc.class.getClassLoader(), procs, inv);
-        return r;
+        return HiRpc.start(proc, port, handler, (Class[]) null);
     }
 
     public static <C> C connectSimple(String ip, int port, Class<C> proc) throws IOException {
         Class[] procs = {proc};
         return (C) HiRpc.connect(ip, port, procs);
+    }
+
+    public static Object connect(String ip, int port, Class... procs) throws IOException {
+        Socket s = new Socket(ip, port);
+
+        s.getOutputStream().write(0);
+
+        InvocationEndPoint inv = new InvocationEndPoint(s);
+        Object r = Proxy.newProxyInstance(HiRpc.class.getClassLoader(), procs, inv);
+        return r;
     }
 
     public static void connectReverse(String ip, int port, Object client) throws IOException {

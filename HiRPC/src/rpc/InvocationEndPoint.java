@@ -33,7 +33,7 @@ class InvocationEndPoint implements InvocationHandler {
             this.output = new ObjectOutputStream(s.getOutputStream());
             this.input = new ObjectInputStream(s.getInputStream());
         } catch (IOException ex) {
-            Logger.getLogger(InvocationEndPoint.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HiRpc.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -47,7 +47,7 @@ class InvocationEndPoint implements InvocationHandler {
             return method.invoke(this, args);
         } catch (NoSuchMethodException | SecurityException e) {
         }
-
+        
         synchronized (this) {
             RemoteInvocation inv = new RemoteInvocation(method.getName(), method.getParameterTypes(), args);
             this.output.reset();

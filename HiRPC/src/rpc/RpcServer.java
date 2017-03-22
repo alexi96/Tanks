@@ -7,10 +7,11 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class RpcServer implements Runnable {
+public class RpcServer implements Runnable {
 
     private static final int SERVER_TYPE = 0;
     private static final int CLIENT_TYPE = 1;
+
     private ServerSocket server;
     private Object serverProcedures;
     private Class[] clientProcedures;
@@ -70,31 +71,32 @@ class RpcServer implements Runnable {
             new Thread(exe, s.getInetAddress().getHostAddress()).start();
         } else {
             InvocationEndPoint inv = new InvocationEndPoint(s);
-            final Object rpcs = Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), this.clientProcedures, inv);
+            Object rpcs = Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), this.clientProcedures, inv);
 
-            try {
-                Runnable rb = new Runnable() {
+            Runnable rb = () -> {
+                try {
+                    this.handler.connected(rpcs);
+                } catch (Exception ex) {
+                    Logger.getLogger(HiRpc.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            };
 
-                    @Override
-                    public void run() {
-                        try {
-                            handler.connected(rpcs);
-                        } catch (Exception ex) {
-                            Logger.getLogger(RpcServer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                };
+            new Thread(rb, s.getInetAddress().getHostAddress()).start();
+        }
+    }
 
-                new Thread(rb, s.getInetAddress().getHostAddress()).start();
-            } catch (Exception ex) {
-            }
+    public void stop() {
+        try {
+            this.server.close();
+        } catch (IOException ex) {
+            Logger.getLogger(HiRpc.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public void run() {
         try {
-            while (true) {
+            while (!this.server.isClosed()) {
                 Socket s = this.server.accept();
 
                 this.accept(s);
