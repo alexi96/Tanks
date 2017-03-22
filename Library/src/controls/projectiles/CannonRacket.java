@@ -12,6 +12,9 @@ import controls.entityes.PlayerControl;
 public class CannonRacket extends ProjectileControl {
 
     private final static AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/CannonFire.wav", AudioData.DataType.Buffer);
+    static {
+        FIRE.setVolume(5);
+    }
 
     public CannonRacket() {
     }
@@ -33,7 +36,7 @@ public class CannonRacket extends ProjectileControl {
         s.addControl(this);
         app.getRootNode().attachChild(s);
 
-        if (!GameController.getInstance().isBestVisualStyles()) {
+        if (GameController.getInstance().getSynchronizer() != null) {
             return;
         }
         

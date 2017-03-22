@@ -43,7 +43,6 @@ public class ServerApplication extends SimpleApplication {
         super.stateManager.attach(s);
 
         GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), s);
-        GameController.getInstance().setBestVisualStyles(false);
 
         Map t = new TestMap();
         s.create(t);
@@ -52,5 +51,7 @@ public class ServerApplication extends SimpleApplication {
         s.create(tb);
         Spatial sp = tb.getSpatial();
         sp.getControl(RigidBodyControl.class).setPhysicsLocation(Vector3f.UNIT_Y.mult(3).add(Vector3f.UNIT_X.mult(3)));
+        
+        GameController.getInstance().getDeathSubject().addListener((p) -> System.out.println(p.getName() + " died!"));
     }
 }

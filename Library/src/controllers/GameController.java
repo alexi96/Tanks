@@ -3,8 +3,10 @@ package controllers;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.system.AppSettings;
+import controls.entityes.PlayerControl;
 import utilities.LoadingManager;
 import synchronization.SyncManager;
+import utilities.observer.ObserverSubject;
 
 public final class GameController {
 
@@ -14,7 +16,7 @@ public final class GameController {
     private PhysicsSpace physics;
     private LoadingManager loader;
     private SyncManager synchronizer = new SyncManager();
-    private boolean bestVisualStyles = true;
+    private final ObserverSubject<PlayerControl> deathSubject = new ObserverSubject<>();
 
     private GameController() {
     }
@@ -39,12 +41,8 @@ public final class GameController {
         return synchronizer;
     }
 
-    public boolean isBestVisualStyles() {
-        return bestVisualStyles;
-    }
-
-    public void setBestVisualStyles(boolean bestVisualStyles) {
-        this.bestVisualStyles = bestVisualStyles;
+    public ObserverSubject<PlayerControl> getDeathSubject() {
+        return deathSubject;
     }
 
     public void initialise(SimpleApplication application, AppSettings settings, LoadingManager loader, PhysicsSpace physics, SyncManager synchronizer) {

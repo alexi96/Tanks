@@ -33,7 +33,7 @@ public class BulletControl extends ProjectileControl {
         app.getRootNode().attachChild(s);
         
         
-        if (!GameController.getInstance().isBestVisualStyles()) {
+        if (GameController.getInstance().getSynchronizer() != null) {
             return;
         }
         AudioNode an = BulletControl.FIRE.clone();

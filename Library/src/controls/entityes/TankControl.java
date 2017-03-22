@@ -58,6 +58,8 @@ public class TankControl extends PlayerControl {
 
     @Override
     public void setSpatial(Spatial spatial) {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+
         if (spatial != null) {
             Node n = (Node) spatial;
             this.wheels[0] = n.getChild("Wheel.FL");
@@ -71,8 +73,6 @@ public class TankControl extends PlayerControl {
             this.eye.detachAllChildren();
             this.eye.attachChild(this.primary.getSpatial());
             this.eye.attachChild(this.secondary.getSpatial());
-
-            boolean server = GameController.getInstance().getSynchronizer() != null;
 
             if (server) {
                 Spatial hull = LoadingManager.findByName(spatial, "Hull");
@@ -110,11 +110,15 @@ public class TankControl extends PlayerControl {
 
                 wheel = this.wheels[5];
                 this.vehicle.addWheel(wheel, wheel.getWorldBound().getCenter(), direction, axle, 0.2f, radius, false);
+
+                GameController.getInstance().getPhysics().add(this.vehicle);
+                this.wheelManager.initialise(this.vehicle);
             }
 
             this.location = spatial.getLocalTranslation();
             this.rotation = spatial.getLocalRotation();
-        } else {
+        } else if (server) {
+            GameController.getInstance().getPhysics().remove(this.vehicle);
             super.spatial.removeControl(this.vehicle);
             this.vehicle = null;
         }
@@ -130,10 +134,11 @@ public class TankControl extends PlayerControl {
 
         Node n = (Node) TankControl.MODEL.clone();
 
-        if (gc.isBestVisualStyles()) {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+        if (server) {
             n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         }
-        boolean server = GameController.getInstance().getSynchronizer() != null;
+
         this.wheels = new Spatial[6];
 
         this.primary.setHolder(this);
@@ -146,9 +151,6 @@ public class TankControl extends PlayerControl {
         gc.getApplication().getRootNode().attachChild(n);
 
         if (server) {
-            gc.getPhysics().add(this.vehicle);
-            this.wheelManager.initialise(this.vehicle);
-            
             this.vehicle.setPhysicsLocation(Vector3f.UNIT_Y);
         }
     }
@@ -207,11 +209,11 @@ public class TankControl extends PlayerControl {
                 this.selectedWeapon = this.primary;
             }
         }
-        
+
         this.selectedWeapon.secondaryFire(super.secondaryFire);
         this.selectedWeapon.fire(super.fire);
     }
-    
+
     @Override
     public void update(float tpf) {
         SyncManager sm = GameController.getInstance().getSynchronizer();
@@ -298,8 +300,9 @@ public class TankControl extends PlayerControl {
 
     @Override
     public void hit(float dmg, Vector3f dir, Vector3f loc) {
-        super.hit(dmg, dir, loc);
         this.vehicle.applyImpulse(dir.mult(dmg), loc);
+
+        super.hit(dmg, dir, loc);
     }
 
     @Override
