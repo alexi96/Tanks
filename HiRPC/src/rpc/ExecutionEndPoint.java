@@ -44,13 +44,11 @@ class ExecutionEndPoint implements Runnable {
 
             Method m = this.procedures.getClass().getMethod(inv.getMethod(), inv.getParamsTypes());
             Object res = m.invoke(this.procedures, (Object[]) inv.getParams());
-            if (!Void.TYPE.equals(res)) {
+            if (!Void.TYPE.equals(m.getReturnType())) {
                 out.writeObject(res);
-            } else {
-                System.out.println("ad");
             }
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(ExecutionEndPoint.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HiRpc.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

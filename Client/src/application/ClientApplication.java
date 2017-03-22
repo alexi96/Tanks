@@ -60,7 +60,7 @@ public class ClientApplication extends SimpleApplication {
         //f.show();
 
         SpawnFrame sf = new SpawnFrame();
-        sf.show();
+        //sf.show();
     }
 
     private void initKeys() {

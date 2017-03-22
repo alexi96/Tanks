@@ -110,7 +110,7 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
     }
 
     @Override
-    public void connected(Object proc) throws Exception {
+    public void connected(Object proc) {
         System.out.println("Connected");
         GameConnection con = (GameConnection) proc;
         con.create(this.managed);
