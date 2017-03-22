@@ -10,9 +10,6 @@ import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
-import controls.entityes.TankControl;
-import controls.weapons.CannonControl;
-import controls.weapons.MinigunControl;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +34,6 @@ public class ClientApplication extends SimpleApplication {
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
         try {
-            super.flyCam.setMoveSpeed(0);
             final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
             InputAppState state = new InputAppState(cc);
             HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
@@ -45,11 +41,11 @@ public class ClientApplication extends SimpleApplication {
 
             PlayerControl pl;
 
-            pl = new TankControl();
+            /*pl = new TankControl();
             pl.setPrimary(new CannonControl());
             pl.setSecondary(new MinigunControl());
 
-            state.spawn(pl);
+            state.spawn(pl);*/
 
             inputManager.addListener(state, PlayerControl.MAPPINGS);
         } catch (IOException ex) {

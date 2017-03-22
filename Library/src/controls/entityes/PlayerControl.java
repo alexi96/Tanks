@@ -141,6 +141,8 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     @Override
     public void destroy() {
+        GameController.getInstance().getDeathSubject().changeState(this);
+
         super.destroy();
         
         GameController gc = GameController.getInstance();

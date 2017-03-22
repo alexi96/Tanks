@@ -131,6 +131,12 @@ public abstract class ProjectileControl extends GameControl {
         d.hit(this.damage, dir, loc);
     }
 
+    
+    @Override
+    public void synchronize() {
+        super.spatial.setLocalTranslation(this.location);
+    }
+    
     @Override
     public void destroy() {
         super.destroy();

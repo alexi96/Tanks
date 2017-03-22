@@ -8,8 +8,12 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
+import controllers.GameController;
 import controls.entityes.PlayerControl;
-import java.util.Collection;
+import controls.entityes.TankControl;
+import controls.weapons.CannonControl;
+import controls.weapons.MinigunControl;
+import utilities.observer.ObserverListener;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
@@ -17,6 +21,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
     private ControlsConnection controls;
     private Camera camera;
     private Vector3f lastLook = new Vector3f();
+    private final ObserverListener<PlayerControl> deathListener = (p) -> this.death(p);
 
     public InputAppState() {
     }
@@ -46,20 +51,37 @@ public class InputAppState extends ClientAppState implements ActionListener {
         this.player = result;
     }
 
+    private void death(PlayerControl p) {
+        if (p.getId() != this.player.getId()) {
+            return;
+        }
+
+        this.player = null;
+        System.out.println(p.getName() + " died!");
+    }
+
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.camera = app.getCamera();
+        GameController.getInstance().getDeathSubject().addListener(this.deathListener);
     }
 
     @Override
     public void cleanup() {
         this.camera = null;
+        GameController.getInstance().getDeathSubject().removeListener(this.deathListener);
     }
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
+            if (name.equals(PlayerControl.SPACE)) {
+                PlayerControl pl = new TankControl();
+                pl.setPrimary(new CannonControl());
+                pl.setSecondary(new MinigunControl());
+                this.spawn(pl);
+            }
             return;
         }
 
@@ -69,6 +91,10 @@ public class InputAppState extends ClientAppState implements ActionListener {
     @Override
     public void update(float tpf) {
         super.update(tpf);
+
+        if (this.player == null) {
+            return;
+        }
 
         if (this.camera.getDirection().equals(this.lastLook)) {
             return;
