@@ -9,7 +9,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controls.entityes.PlayerControl;
-import java.util.Collection;
+import controls.entityes.TankControl;
+import controls.weapons.CannonControl;
+import controls.weapons.MinigunControl;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
@@ -60,6 +62,12 @@ public class InputAppState extends ClientAppState implements ActionListener {
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
+            if (name.equals(PlayerControl.SPACE)) {
+                PlayerControl pl = new TankControl();
+                pl.setPrimary(new CannonControl());
+                pl.setSecondary(new MinigunControl());
+                this.spawn(pl);
+            }
             return;
         }
 
@@ -69,6 +77,10 @@ public class InputAppState extends ClientAppState implements ActionListener {
     @Override
     public void update(float tpf) {
         super.update(tpf);
+
+        if (this.player == null) {
+            return;
+        }
 
         if (this.camera.getDirection().equals(this.lastLook)) {
             return;
