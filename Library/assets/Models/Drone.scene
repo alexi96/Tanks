@@ -1,0 +1,64 @@
+<scene previous_export_time="1490283680.2628543" exported_by="alex_" formatVersion="1.0.1" export_time="1490285262.5092516" >
+  <nodes >
+    <node name="Spinner.2" >
+      <position x="-1.000000" z="-0.000000" y="0.000000" />
+      <rotation qz="-0.000000" qy="0.000000" qw="1.000000" qx="0.000000" />
+      <scale x="0.050000" z="0.050000" y="0.025000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity velocity_min="0.0" lock_trans_x="False" mass_radius="1.0" damping_trans="0.03999999910593033" actor="False" meshFile="Cube.007.mesh" lock_rot_x="False" lock_trans_y="False" friction_y="1.0" velocity_max="0.0" lock_rot_z="False" lock_rot_y="False" anisotropic_friction="False" mass="1.0" physics_type="STATIC" ghost="False" inertia_tensor="0.4000000059604645" friction_z="1.0" friction_x="1.0" lock_trans_z="False" damping_rot="0.10000000149011612" name="Cube.007" />
+    </node>
+    <node name="Spinner.3" >
+      <position x="1.000000" z="-0.000000" y="0.000000" />
+      <rotation qz="-0.000000" qy="0.000000" qw="1.000000" qx="0.000000" />
+      <scale x="0.050000" z="0.050000" y="0.025000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity velocity_min="0.0" lock_trans_x="False" mass_radius="1.0" damping_trans="0.03999999910593033" actor="False" meshFile="Cube.006.mesh" lock_rot_x="False" lock_trans_y="False" friction_y="1.0" velocity_max="0.0" lock_rot_z="False" lock_rot_y="False" anisotropic_friction="False" mass="1.0" physics_type="STATIC" ghost="False" inertia_tensor="0.4000000059604645" friction_z="1.0" friction_x="1.0" lock_trans_z="False" damping_rot="0.10000000149011612" name="Cube.006" />
+    </node>
+    <node name="Spinner.4" >
+      <position x="0.000000" z="1.000000" y="0.000000" />
+      <rotation qz="-0.000000" qy="0.000000" qw="1.000000" qx="0.000000" />
+      <scale x="0.050000" z="0.050000" y="0.025000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity velocity_min="0.0" lock_trans_x="False" mass_radius="1.0" damping_trans="0.03999999910593033" actor="False" meshFile="Cube.005.mesh" lock_rot_x="False" lock_trans_y="False" friction_y="1.0" velocity_max="0.0" lock_rot_z="False" lock_rot_y="False" anisotropic_friction="False" mass="1.0" physics_type="STATIC" ghost="False" inertia_tensor="0.4000000059604645" friction_z="1.0" friction_x="1.0" lock_trans_z="False" damping_rot="0.10000000149011612" name="Cube.005" />
+    </node>
+    <node name="Spinner.1" >
+      <position x="0.000000" z="-1.000000" y="0.000000" />
+      <rotation qz="-0.000000" qy="0.000000" qw="1.000000" qx="0.000000" />
+      <scale x="0.050000" z="0.050000" y="0.025000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity velocity_min="0.0" lock_trans_x="False" mass_radius="1.0" damping_trans="0.03999999910593033" actor="False" meshFile="Cube.mesh" lock_rot_x="False" lock_trans_y="False" friction_y="1.0" velocity_max="0.0" lock_rot_z="False" lock_rot_y="False" anisotropic_friction="False" mass="1.0" physics_type="STATIC" ghost="False" inertia_tensor="0.4000000059604645" friction_z="1.0" friction_x="1.0" lock_trans_z="False" damping_rot="0.10000000149011612" name="Cube" />
+    </node>
+    <node name="Base" >
+      <position x="0.000000" z="-0.000000" y="0.050000" />
+      <rotation qz="-0.000000" qy="0.000000" qw="1.000000" qx="0.000000" />
+      <scale x="1.000000" z="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity velocity_min="0.0" lock_trans_x="False" mass_radius="1.0" damping_trans="0.03999999910593033" actor="False" meshFile="Circle.mesh" lock_rot_x="False" lock_trans_y="False" friction_y="1.0" velocity_max="0.0" lock_rot_z="False" lock_rot_y="False" anisotropic_friction="False" mass="1.0" physics_type="STATIC" ghost="False" inertia_tensor="0.4000000059604645" friction_z="1.0" friction_x="1.0" lock_trans_z="False" damping_rot="0.10000000149011612" name="Circle" />
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="D:\Alex\Facultate\Tanks\Library\assets\Models\Drone.material" />
+    </item>
+  </externals>
+  <environment >
+    <colourAmbient g="0.0" b="0.0" r="0.0" />
+    <colourBackground g="0.05087608844041824" b="0.05087608844041824" r="0.05087608844041824" />
+    <colourDiffuse g="0.05087608844041824" b="0.05087608844041824" r="0.05087608844041824" />
+  </environment>
+</scene>

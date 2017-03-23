@@ -39,14 +39,6 @@ public class ClientApplication extends SimpleApplication {
             HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
             super.stateManager.attach(state);
 
-            PlayerControl pl;
-
-            /*pl = new TankControl();
-            pl.setPrimary(new CannonControl());
-            pl.setSecondary(new MinigunControl());
-
-            state.spawn(pl);*/
-
             inputManager.addListener(state, PlayerControl.MAPPINGS);
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);

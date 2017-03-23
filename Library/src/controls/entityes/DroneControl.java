@@ -9,6 +9,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.weapons.WeaponControl;
+import java.util.List;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 
@@ -21,6 +22,8 @@ public class DroneControl extends PlayerControl {
     private Vector3f location = new Vector3f();
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
+    private transient Spatial[] spinners;
+    private transient boolean gravity;
 
     @Override
     public void create() {
@@ -30,7 +33,7 @@ public class DroneControl extends PlayerControl {
 
         boolean server = gc.getSynchronizer() != null;
         if (server) {
-            this.character = new BetterCharacterControl(0.5f, 0.5f, 10);
+            this.character = new BetterCharacterControl(1f, 2f, 10);
         }
 
         Node n = (Node) MODEL.clone();
@@ -38,15 +41,16 @@ public class DroneControl extends PlayerControl {
 
         gc.getApplication().getRootNode().attachChild(n);
 
-        this.primary.setHolder(this);
-        this.secondary.setHolder(this);
-        this.primary.create();
-        this.secondary.create();
-        this.selectedWeapon = primary;
-
+//        this.primary.setHolder(this);
+//        this.secondary.setHolder(this);
+//        this.primary.create();
+//        this.secondary.create();
+//        this.selectedWeapon = primary;
         n.addControl(this);
-        
-        this.character.warp(Vector3f.UNIT_Y.mult(10));
+
+        if (server) {
+            this.character.warp(Vector3f.UNIT_Y.mult(10));
+        }
     }
 
     @Override
@@ -55,14 +59,25 @@ public class DroneControl extends PlayerControl {
 
         if (spatial != null) {
             Node n = (Node) spatial;
-            this.eye = (Node) n.getChild("Eye");
-            this.eye.detachAllChildren();
-            this.eye.attachChild(this.primary.getSpatial());
-            this.eye.attachChild(this.secondary.getSpatial());
+//            this.eye = (Node) n.getChild("Eye");
+//            this.eye.detachAllChildren();
+//            this.eye.attachChild(this.primary.getSpatial());
+//            this.eye.attachChild(this.secondary.getSpatial());
 
             if (server) {
                 spatial.addControl(this.character);
                 GameController.getInstance().getPhysics().add(this.character);
+                this.character.setGravity(Vector3f.UNIT_Y.negate().mult(0.000001f));
+            } else {
+                this.spinners = new Spatial[4];
+                int ind = 0;
+                List<Spatial> chs = n.getChildren();
+                for (Spatial ch : chs) {
+                    if (ch.getName().contains("Spinner")) {
+                        this.spinners[ind] = ch;
+                        ++ind;
+                    }
+                }
             }
         } else if (server) {
             super.spatial.removeControl(this.character);
@@ -77,26 +92,25 @@ public class DroneControl extends PlayerControl {
         this.location.set(o.location);
         this.rotation.set(o.rotation);
 
-        this.primary.prepare(o.primary);
-        this.secondary.prepare(o.secondary);
+//        this.primary.prepare(o.primary);
+//        this.secondary.prepare(o.secondary);
     }
 
     @Override
     public void synchronize() {
+        System.out.println(this.location);
         super.spatial.setLocalTranslation(this.location);
         super.spatial.setLocalRotation(this.rotation);
 
-        this.eye.setLocalRotation(this.eyeRot);
-
-        this.primary.synchronize();
-        this.secondary.synchronize();
-
+        //this.eye.setLocalRotation(this.eyeRot);
+//        this.primary.synchronize();
+//        this.secondary.synchronize();
         if (super.id != PlayerControl.serverId) {
             return;
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
-        c.setLocation(this.eye.getWorldTranslation());
+        c.setLocation(this.spatial.getWorldTranslation().add(c.getDirection().mult(-3)));
     }
 
     private void updateWeapons(float tpf) {
@@ -113,7 +127,6 @@ public class DroneControl extends PlayerControl {
 
         this.primary.update(tpf);
         this.secondary.update(tpf);
-
         this.selectedWeapon.fire(super.fire);
         this.selectedWeapon.secondaryFire(super.secondaryFire);
     }
@@ -122,9 +135,16 @@ public class DroneControl extends PlayerControl {
     public void update(float tpf) {
         SyncManager manager = GameController.getInstance().getSynchronizer();
         if (manager == null) {
+            Quaternion q = new Quaternion();
+            q.fromAngleAxis(tpf * 10, Vector3f.UNIT_Y);
+
+            for (Spatial s : this.spinners) {
+                s.setLocalRotation(s.getLocalRotation().mult(q));
+            }
+
             return;
         }
-        
+
         Quaternion rot = new Quaternion();
         rot.lookAt(look, Vector3f.UNIT_Y);
 
@@ -141,10 +161,8 @@ public class DroneControl extends PlayerControl {
         t[2] = 0;
         this.eyeRot.set(new Quaternion(t));
 
-        this.updateWeapons(tpf);
-
-        this.eye.setLocalRotation(this.eyeRot);
-
+        //this.updateWeapons(tpf);
+        //this.eye.setLocalRotation(this.eyeRot);
         Vector3f walkDir = new Vector3f();
         Vector3f forward = super.look.clone();
         forward.setY(0);
@@ -164,11 +182,10 @@ public class DroneControl extends PlayerControl {
             walkDir.addLocal(leftDir.negate());
         }
 
-        walkDir.multLocal(6);
-        
-        this.character.setWalkDirection(walkDir);
-        this.location = super.spatial.getWorldTranslation().clone();
+        walkDir.normalizeLocal();
+        walkDir.multLocal(10);
 
+        this.character.setWalkDirection(walkDir);
 
         manager.update(this);
     }
