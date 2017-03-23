@@ -23,6 +23,7 @@ public class DroneControl extends PlayerControl {
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
     private transient Spatial[] spinners;
+    private transient boolean gravity;
 
     @Override
     public void create() {
@@ -32,7 +33,7 @@ public class DroneControl extends PlayerControl {
 
         boolean server = gc.getSynchronizer() != null;
         if (server) {
-            this.character = new BetterCharacterControl(1.5f, 0.5f, 10);
+            this.character = new BetterCharacterControl(1f, 2f, 10);
         }
 
         Node n = (Node) MODEL.clone();
@@ -66,7 +67,7 @@ public class DroneControl extends PlayerControl {
             if (server) {
                 spatial.addControl(this.character);
                 GameController.getInstance().getPhysics().add(this.character);
-                this.character.setGravity(Vector3f.ZERO);
+                this.character.setGravity(Vector3f.UNIT_Y.negate().mult(0.000001f));
             } else {
                 this.spinners = new Spatial[4];
                 int ind = 0;
@@ -97,6 +98,7 @@ public class DroneControl extends PlayerControl {
 
     @Override
     public void synchronize() {
+        System.out.println(this.location);
         super.spatial.setLocalTranslation(this.location);
         super.spatial.setLocalRotation(this.rotation);
 
@@ -181,10 +183,9 @@ public class DroneControl extends PlayerControl {
         }
 
         walkDir.normalizeLocal();
-        walkDir.multLocal(6);
+        walkDir.multLocal(10);
 
         this.character.setWalkDirection(walkDir);
-        this.location = super.spatial.getWorldTranslation().clone();
 
         manager.update(this);
     }
