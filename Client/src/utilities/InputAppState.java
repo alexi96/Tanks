@@ -14,6 +14,7 @@ import controls.entityes.PlayerControl;
 import controls.entityes.TankControl;
 import controls.weapons.AutoShotgun;
 import controls.weapons.CannonControl;
+import controls.weapons.GrenadeLauncher;
 import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
 
@@ -81,7 +82,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
             if (name.equals(PlayerControl.SPACE)) {
                 PlayerControl pl = new DroneControl();
                 //pl.setPrimary(new AutoShotgun());
-                //pl.setSecondary(new AutoShotgun());
+                pl.setSecondary(new GrenadeLauncher());
                 this.spawn(pl);
             }
             return;
