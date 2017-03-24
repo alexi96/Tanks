@@ -1,6 +1,9 @@
 package controls.entityes;
 
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.VehicleControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -16,7 +19,7 @@ import synchronization.Synchronizer;
 public class DroneControl extends PlayerControl {
 
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Drone.j3o");
-    private transient BetterCharacterControl character;
+    private transient VehicleControl character;
     private transient Node eye;
     private transient WeaponControl selectedWeapon;
     private Vector3f location = new Vector3f();
@@ -33,7 +36,7 @@ public class DroneControl extends PlayerControl {
 
         boolean server = gc.getSynchronizer() != null;
         if (server) {
-            this.character = new BetterCharacterControl(1f, 2f, 10);
+            this.character = new VehicleControl();
         }
 
         Node n = (Node) MODEL.clone();
@@ -49,7 +52,7 @@ public class DroneControl extends PlayerControl {
         n.addControl(this);
 
         if (server) {
-            this.character.warp(Vector3f.UNIT_Y.mult(10));
+            this.character.setPhysicsLocation(Vector3f.UNIT_Y.mult(10));
         }
     }
 
@@ -65,9 +68,13 @@ public class DroneControl extends PlayerControl {
 //            this.eye.attachChild(this.secondary.getSpatial());
 
             if (server) {
+                CollisionShape hullShape = CollisionShapeFactory.createDynamicMeshShape(spatial);
+                hullShape.setScale(Vector3f.UNIT_Y.mult(5));
+                this.character.setCollisionShape(hullShape);
+                this.character.setMass(10);
                 spatial.addControl(this.character);
                 GameController.getInstance().getPhysics().add(this.character);
-                this.character.setGravity(Vector3f.UNIT_Y.negate().mult(0.000001f));
+                this.character.setGravity(Vector3f.ZERO);
             } else {
                 this.spinners = new Spatial[4];
                 int ind = 0;
@@ -98,7 +105,6 @@ public class DroneControl extends PlayerControl {
 
     @Override
     public void synchronize() {
-        System.out.println(this.location);
         super.spatial.setLocalTranslation(this.location);
         super.spatial.setLocalRotation(this.rotation);
 
@@ -154,8 +160,6 @@ public class DroneControl extends PlayerControl {
         this.rotation.set(new Quaternion(t));
         this.location.set(super.spatial.getLocalTranslation());
 
-        this.character.setViewDirection(super.look);
-
         t = rot.toAngles(null);
         t[1] = 0;
         t[2] = 0;
@@ -181,11 +185,17 @@ public class DroneControl extends PlayerControl {
         } else if (super.right) {
             walkDir.addLocal(leftDir.negate());
         }
+        if (super.space) {
+            walkDir.addLocal(Vector3f.UNIT_Y);
+        } else if (super.ctrl) {
+            walkDir.subtractLocal(Vector3f.UNIT_Y);
+        }
 
         walkDir.normalizeLocal();
         walkDir.multLocal(10);
 
-        this.character.setWalkDirection(walkDir);
+        this.character.setPhysicsLocation(this.character.getPhysicsLocation().add(walkDir.mult(tpf)));
+        this.character.setPhysicsRotation(this.rotation);
 
         manager.update(this);
     }
