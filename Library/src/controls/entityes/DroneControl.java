@@ -99,6 +99,7 @@ public class DroneControl extends PlayerControl {
         DroneControl o = (DroneControl) newData;
         this.location.set(o.location);
         this.rotation.set(o.rotation);
+        this.eyeRot.set(o.eyeRot);
 
 //        this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
@@ -187,18 +188,20 @@ public class DroneControl extends PlayerControl {
             walkDir.addLocal(leftDir.negate());
         }
 
-        walkDir.multLocal(5);
+        walkDir.normalizeLocal();
+        walkDir.multLocal(10);
 
+        this.character.setPhysicsLocation(this.character.getPhysicsLocation().add(walkDir.mult(tpf)));
+
+        walkDir.set(0, 0, 0);
         if (super.space) {
             walkDir.addLocal(Vector3f.UNIT_Y);
         } else if (super.ctrl) {
             walkDir.subtractLocal(Vector3f.UNIT_Y);
         }
 
-        walkDir.normalizeLocal();
-        walkDir.multLocal(10);
+        this.character.setPhysicsLocation(this.character.getPhysicsLocation().add(walkDir.mult(tpf * 2)));
 
-        this.character.setPhysicsLocation(this.character.getPhysicsLocation().add(walkDir.mult(tpf)));
         this.character.setPhysicsRotation(this.rotation);
 
         manager.update(this);
