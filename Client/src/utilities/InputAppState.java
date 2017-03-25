@@ -9,10 +9,12 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controllers.GameController;
-import controls.entityes.DroneControl;
 import controls.entityes.PlayerControl;
-import controls.weapons.GrenadeLauncher;
+import controls.entityes.TankControl;
+import controls.weapons.CannonControl;
+import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
+import visual.HudFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
@@ -22,6 +24,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
     private Camera camera;
     private Vector3f lastLook = new Vector3f();
     private final ObserverListener<PlayerControl> deathListener = (p) -> this.death(p);
+    private final HudFrame hud = new HudFrame();
 
     public InputAppState() {
     }
@@ -48,6 +51,8 @@ public class InputAppState extends ClientAppState implements ActionListener {
         this.managed.put(result.getId(), result);
         result.create();
 
+        //hud
+        
         this.player = result;
     }
 
@@ -77,9 +82,9 @@ public class InputAppState extends ClientAppState implements ActionListener {
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
             if (name.equals(PlayerControl.SPACE)) {
-                PlayerControl pl = new DroneControl();
-//                pl.setPrimary(new CannonControl());
-                pl.setSecondary(new GrenadeLauncher());
+                PlayerControl pl = new TankControl();
+                pl.setPrimary(new CannonControl());
+                pl.setSecondary(new MinigunControl());
                 this.spawn(pl);
             }
             return;

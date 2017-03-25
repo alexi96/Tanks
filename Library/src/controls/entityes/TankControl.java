@@ -136,7 +136,7 @@ public class TankControl extends PlayerControl {
         Node n = (Node) TankControl.MODEL.clone();
 
         boolean server = GameController.getInstance().getSynchronizer() != null;
-        if (server) {
+        if (!server) {
             n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         }
 
@@ -178,6 +178,11 @@ public class TankControl extends PlayerControl {
         Vector3f dep = Vector3f.UNIT_Y.mult(0).add(c.getDirection().mult(-5));
         dep.multLocal(this.aimState);
         c.setLocation(this.eye.getWorldTranslation().add(dep));
+    }
+
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.vehicle.setPhysicsLocation(loc);
     }
 
     private void updateFirstPerson(float tpf) {
@@ -240,7 +245,7 @@ public class TankControl extends PlayerControl {
         this.eyeRot.set(new Quaternion(t));
         this.eye.setLocalRotation(this.eyeRot);
 
-        final float acc = 200;
+        final float acc = TankControl.MASS;
         if (super.up) {
             this.vehicle.accelerate(acc);
         } else if (!this.down) {

@@ -148,6 +148,11 @@ public class DroneControl extends PlayerControl {
         this.selectedWeapon.secondaryFire(super.secondaryFire);
     }
 
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.character.setPhysicsLocation(loc);
+    }
+
     private void updateFirstPerson(float tpf) {
         tpf *= 3;
         if (this.secondaryFire) {
