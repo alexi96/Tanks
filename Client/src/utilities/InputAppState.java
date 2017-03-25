@@ -11,13 +11,11 @@ import connection.ControlsConnection;
 import controllers.GameController;
 import controls.entityes.DroneControl;
 import controls.entityes.PlayerControl;
-import controls.entityes.TankControl;
-import controls.weapons.CannonControl;
 import controls.weapons.GrenadeLauncher;
-import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
 
 public class InputAppState extends ClientAppState implements ActionListener {
+
 
     private PlayerControl player;
     private ControlsConnection controls;
