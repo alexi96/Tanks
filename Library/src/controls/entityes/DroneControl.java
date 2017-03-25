@@ -26,6 +26,11 @@ public class DroneControl extends PlayerControl {
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
     private transient Spatial[] spinners;
+    private float aimState;
+
+    public DroneControl() {
+        super.resetHealth(60);
+    }
 
     @Override
     public void create() {
@@ -100,6 +105,7 @@ public class DroneControl extends PlayerControl {
         this.location.set(o.location);
         this.rotation.set(o.rotation);
         this.eyeRot.set(o.eyeRot);
+        this.aimState = o.aimState;
 
 //        this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
@@ -118,7 +124,10 @@ public class DroneControl extends PlayerControl {
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
-        c.setLocation(this.eye.getWorldTranslation().add(c.getDirection().mult(-3)));
+        Vector3f v = c.getDirection().mult(-3);
+        v.multLocal(this.aimState);
+        v.addLocal(this.eye.getWorldTranslation());
+        c.setLocation(v);
     }
 
     private void updateWeapons(float tpf) {
@@ -137,6 +146,25 @@ public class DroneControl extends PlayerControl {
         this.secondary.update(tpf);
         this.selectedWeapon.fire(super.fire);
         this.selectedWeapon.secondaryFire(super.secondaryFire);
+    }
+
+    private void updateFirstPerson(float tpf) {
+        tpf *= 3;
+        if (this.secondaryFire) {
+            if (this.aimState > 0) {
+                this.aimState -= tpf;
+                if (this.aimState < 0) {
+                    this.aimState = 0;
+                }
+            }
+        } else {
+            if (this.aimState < 1) {
+                this.aimState += tpf;
+                if (this.aimState > 1) {
+                    this.aimState = 1;
+                }
+            }
+        }
     }
 
     @Override
@@ -203,6 +231,8 @@ public class DroneControl extends PlayerControl {
         this.character.setPhysicsLocation(this.character.getPhysicsLocation().add(walkDir.mult(tpf * 2)));
 
         this.character.setPhysicsRotation(this.rotation);
+
+        this.updateFirstPerson(tpf);
 
         manager.update(this);
     }

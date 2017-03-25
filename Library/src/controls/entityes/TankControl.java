@@ -3,6 +3,7 @@ package controls.entityes;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.FastMath;
