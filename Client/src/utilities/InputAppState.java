@@ -24,7 +24,15 @@ public class InputAppState extends ClientAppState implements ActionListener {
     private Camera camera;
     private Vector3f lastLook = new Vector3f();
     private final ObserverListener<PlayerControl> deathListener = (p) -> this.death(p);
+    private final SpawnFrame spawnFrame = new SpawnFrame() {
+        @Override
+        public void spawn(PlayerControl p) {
+            InputAppState.this.spawn(p);
+        }
+    };
+
     private final HudFrame hud = new HudFrame();
+
 
     public InputAppState() {
     }
@@ -82,10 +90,12 @@ public class InputAppState extends ClientAppState implements ActionListener {
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
             if (name.equals(PlayerControl.SPACE)) {
-                PlayerControl pl = new TankControl();
-                pl.setPrimary(new CannonControl());
-                pl.setSecondary(new MinigunControl());
-                this.spawn(pl);
+                if (this.spawnFrame.visible()) {
+                    this.spawnFrame.hide();
+                } else {
+                    this.spawnFrame.show();
+                }
+
             }
             return;
         }

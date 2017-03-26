@@ -34,6 +34,14 @@ public abstract class WeaponControl extends GameControl {
         this.damage = damage;
     }
 
+    public float getFireRate() {
+        return fireRate;
+    }
+
+    public void setFireRate(float fireRate) {
+        this.fireRate = fireRate;
+    }
+
     public float getState() {
         return state;
     }
