@@ -1,6 +1,7 @@
 package visual;
 
 import controls.weapons.WeaponControl;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -29,8 +30,10 @@ public class WeaponInfo extends Component {
 
     @Override
     public void paint(Graphics g) {
-        String title = this.weapon.getClass().getSimpleName();
-        g.setFont(new Font(Font.MONOSPACED, , x, x));
-        
+        g.setColor(new Color(0x7f0000ff, true));
+        g.fillRect(0, 0, super.width(), super.height());
+
+//        String title = this.weapon.getClass().getSimpleName();
+        //g.setFont(new Font(Font.MONOSPACED, , x, x));
     }
 }

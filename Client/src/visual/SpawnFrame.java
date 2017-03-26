@@ -8,7 +8,8 @@ import java.awt.Graphics;
 public class SpawnFrame extends Frame {
     
     final private VehicleInfo vehicleInfo = new VehicleInfo();
-    final private WeaponInfo weaponInfo = new WeaponInfo();
+    final private WeaponInfo primaryInfo = new WeaponInfo();
+    final private WeaponInfo secondaryInfo = new WeaponInfo();
 
     private final Button nextVehicle = new Button(">") {
         @Override
@@ -38,14 +39,16 @@ public class SpawnFrame extends Frame {
         this.lastVehicle.bounds(0, 0, buttonSize, buttonSize);
         this.nextVehicle.bounds(super.width()-buttonSize, 0, buttonSize, buttonSize);
         this.vehicleInfo.bounds(buttonSize, 0, super.width() - buttonSize*2, buttonSize);
-        this.weaponInfo.bounds(buttonSize, buttonSize, super.width() - buttonSize*2, buttonSize);
+        this.primaryInfo.bounds(buttonSize, buttonSize, super.width() / 2 - buttonSize*2, buttonSize);
+        this.secondaryInfo.bounds(primaryInfo.width() + buttonSize * 3, buttonSize, super.width() / 2 - buttonSize*2, buttonSize);
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) buttonSize));
         this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) buttonSize));
 
         super.add(this.nextVehicle);
         super.add(this.vehicleInfo);
         super.add(this.lastVehicle);
-        super.add(this.weaponInfo);
+        super.add(this.primaryInfo);
+        super.add(this.secondaryInfo);
     }
 
     private void nextVehicle() {
