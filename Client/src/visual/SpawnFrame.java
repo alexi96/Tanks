@@ -31,8 +31,8 @@ public class SpawnFrame extends Frame {
 
         super.size(set.getWidth() * 3 / 4, set.getHeight() * 3 / 4);
         super.center();
-
-        final int buttonSize = 100;
+        
+        final int buttonSize = super.width() / 10;
 
         this.lastVehicle.bounds(0, 0, buttonSize, buttonSize);
         this.nextVehicle.bounds(super.width()-buttonSize, 0, buttonSize, buttonSize);
