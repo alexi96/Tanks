@@ -3,6 +3,7 @@ package controls.entityes;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -153,6 +154,17 @@ public class DroneControl extends PlayerControl {
 
     @Override
     public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 30;
+        final float max = -FastMath.DEG_TO_RAD * 25;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
     }
 
     private void updateFirstPerson(float tpf) {
