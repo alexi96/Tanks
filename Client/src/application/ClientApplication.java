@@ -62,6 +62,7 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.CTRL, new KeyTrigger(KeyInput.KEY_LCONTROL));
         inputManager.addMapping(PlayerControl.SHIFT, new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping(PlayerControl.SWAP, new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping(PlayerControl.RESPAWN, new KeyTrigger(KeyInput.KEY_M));
 
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));

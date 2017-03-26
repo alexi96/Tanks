@@ -109,11 +109,11 @@ public class SpawnFrame extends Frame {
 
         ArrayList<WeaponControl> dpw = new ArrayList<>();
         this.pWeapons.put(DroneControl.class.getSimpleName(), dpw);
-        dpw.add(new GrenadeLauncher());
+        dpw.add(new MinigunControl());
 
         ArrayList<WeaponControl> dsw = new ArrayList<>();
         this.sWeapons.put(DroneControl.class.getSimpleName(), dsw);
-        dsw.add(new MinigunControl());/////////////
+        dsw.add(new GrenadeLauncher());/////////////
 
         AppSettings set = GameController.getInstance().getSettings();
 

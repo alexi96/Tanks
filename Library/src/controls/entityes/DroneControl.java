@@ -47,12 +47,11 @@ public class DroneControl extends PlayerControl {
 
         gc.getApplication().getRootNode().attachChild(n);
 
-//        this.primary.setHolder(this);
+        this.primary.setHolder(this);
         this.secondary.setHolder(this);
-//        this.primary.create();
+        this.primary.create();
         this.secondary.create();
-        //this.selectedWeapon = primary;
-        this.selectedWeapon = secondary;//
+        this.selectedWeapon = primary;
         n.addControl(this);
 
         if (server) {
@@ -68,7 +67,7 @@ public class DroneControl extends PlayerControl {
             Node n = (Node) spatial;
             this.eye = (Node) n.getChild("Eye");
             this.eye.detachAllChildren();
-//            this.eye.attachChild(this.primary.getSpatial());
+            this.eye.attachChild(this.primary.getSpatial());
             this.eye.attachChild(this.secondary.getSpatial());
 
             if (server) {
@@ -106,7 +105,7 @@ public class DroneControl extends PlayerControl {
         this.eyeRot.set(o.eyeRot);
         this.aimState = o.aimState;
 
-//        this.primary.prepare(o.primary);
+        this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
     }
 
@@ -116,7 +115,7 @@ public class DroneControl extends PlayerControl {
         super.spatial.setLocalRotation(this.rotation);
 
         this.eye.setLocalRotation(this.eyeRot);
-//        this.primary.synchronize();
+        this.primary.synchronize();
         this.secondary.synchronize();
         if (super.id != PlayerControl.serverId) {
             return;
@@ -141,7 +140,7 @@ public class DroneControl extends PlayerControl {
             }
         }
 
-        //this.primary.update(tpf);
+        this.primary.update(tpf);
         this.secondary.update(tpf);
         this.selectedWeapon.fire(super.fire);
         this.selectedWeapon.secondaryFire(super.secondaryFire);
