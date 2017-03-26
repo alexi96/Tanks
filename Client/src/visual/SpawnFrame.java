@@ -66,6 +66,14 @@ public class SpawnFrame extends Frame {
             }
         }
     };
+    private final Button spawn = new Button("ceva") {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                SpawnFrame.this.spawn();
+            }
+        }
+    };
 
     public SpawnFrame() {
         this.players.add(new RobotControl());
@@ -91,10 +99,11 @@ public class SpawnFrame extends Frame {
         this.lastSecondary.bounds(nextPrimary.width()+unitW, unitW, unitW, unitH*2);
         this.nextSecondary.bounds(super.width()-unitW, unitH*2, unitW, unitH*2);
         this.secondaryInfo.bounds(primaryInfo.width() + unitW * 3, unitH, super.width() / 2 - unitW * 2, unitH * 2);
+        this.spawn.bounds(0, 0, 0, 0);
 
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) unitW));
         this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) unitW));
-
+        
         super.add(this.nextVehicle);
         super.add(this.vehicleInfo);
         super.add(this.lastVehicle);
