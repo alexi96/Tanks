@@ -10,11 +10,9 @@ import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
-import controls.entityes.TankControl;
-import controls.weapons.CannonControl;
-import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
 import visual.HudFrame;
+import visual.SpawnFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
