@@ -34,6 +34,38 @@ public class SpawnFrame extends Frame {
             }
         }
     };
+    private final Button nextPrimary = new Button(">") {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                SpawnFrame.this.nextPrimary();
+            }
+        }
+    };
+    private final Button lastPrimary = new Button("<") {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                SpawnFrame.this.lastPrimary();
+            }
+        }
+    };
+    private final Button nextSecondary = new Button(">") {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                SpawnFrame.this.nextSecondary();
+            }
+        }
+    };
+    private final Button lastSecondary = new Button("<") {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                SpawnFrame.this.lastSecondary();
+            }
+        }
+    };
 
     public SpawnFrame() {
         this.players.add(new RobotControl());
@@ -50,7 +82,11 @@ public class SpawnFrame extends Frame {
         this.lastVehicle.bounds(0, 0, buttonSize, buttonSize);
         this.nextVehicle.bounds(super.width() - buttonSize, 0, buttonSize, buttonSize);
         this.vehicleInfo.bounds(buttonSize, 0, super.width() - buttonSize * 2, buttonSize);
+        this.lastPrimary.bounds(0, 0, buttonSize, buttonSize);
+        this.nextPrimary.bounds(0, 0, 0, 0);
         this.primaryInfo.bounds(buttonSize, buttonSize, super.width() / 2 - buttonSize * 2, buttonSize);
+        this.lastSecondary.bounds(0, 0, 0, 0);
+        this.nextSecondary.bounds(0, 0, 0, 0);
         this.secondaryInfo.bounds(primaryInfo.width() + buttonSize * 3, buttonSize, super.width() / 2 - buttonSize * 2, buttonSize);
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) buttonSize));
         this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) buttonSize));
@@ -58,8 +94,12 @@ public class SpawnFrame extends Frame {
         super.add(this.nextVehicle);
         super.add(this.vehicleInfo);
         super.add(this.lastVehicle);
+        super.add(this.nextPrimary);
         super.add(this.primaryInfo);
+        super.add(this.lastPrimary);
+        super.add(this.nextSecondary);
         super.add(this.secondaryInfo);
+        super.add(this.lastSecondary);
 
         this.vehicleInfo.setPlayer(this.players.get(0));
     }
