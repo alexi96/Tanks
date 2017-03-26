@@ -87,7 +87,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
-            if (name.equals(PlayerControl.SPACE)) {
+            if (name.equals(PlayerControl.SPACE) && isPressed) {
                 if (this.spawnFrame.visible()) {
                     this.spawnFrame.hide();
                 } else {
