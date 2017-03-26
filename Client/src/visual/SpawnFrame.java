@@ -84,12 +84,12 @@ public class SpawnFrame extends Frame {
         this.vehicleInfo.bounds(unitW, 0, super.width() - unitW * 2, unitH);
         this.nextVehicle.bounds(super.width() - unitW, 0, unitW, unitH);
         
-        this.lastPrimary.bounds(0, 0, buttonSize, buttonSize);
-        this.nextPrimary.bounds(0, 0, 0, 0);
+        this.lastPrimary.bounds(0, unitW, unitW, unitH*2);
+        this.nextPrimary.bounds(primaryInfo.width()+unitW, unitW, unitW, unitH*2);
         this.primaryInfo.bounds(unitW, unitH, super.width() / 2 - unitW * 2, unitH * 2);
         
-        this.lastSecondary.bounds(0, 0, 0, 0);
-        this.nextSecondary.bounds(0, 0, 0, 0);
+        this.lastSecondary.bounds(nextPrimary.width()+unitW, unitW, unitW, unitH*2);
+        this.nextSecondary.bounds(super.width()-unitW, unitH*2, unitW, unitH*2);
         this.secondaryInfo.bounds(primaryInfo.width() + unitW * 3, unitH, super.width() / 2 - unitW * 2, unitH * 2);
         
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) unitW));
