@@ -3,10 +3,17 @@ package visual;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.system.AppSettings;
 import controllers.GameController;
+import controls.entityes.DroneControl;
+import controls.entityes.PlayerControl;
+import controls.entityes.RobotControl;
+import controls.entityes.TankControl;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class SpawnFrame extends Frame {
-    
+
+    private ArrayList<PlayerControl> players = new ArrayList<>();
+    private int playerIndex = 0;
     final private VehicleInfo vehicleInfo = new VehicleInfo();
     final private WeaponInfo primaryInfo = new WeaponInfo();
     final private WeaponInfo secondaryInfo = new WeaponInfo();
@@ -29,18 +36,22 @@ public class SpawnFrame extends Frame {
     };
 
     public SpawnFrame() {
+        this.players.add(new RobotControl());
+        this.players.add(new TankControl());
+        this.players.add(new DroneControl());
+
         AppSettings set = GameController.getInstance().getSettings();
 
         super.size(set.getWidth() * 3 / 4, set.getHeight() * 3 / 4);
         super.center();
-        
+
         final int buttonSize = super.width() / 10;
 
         this.lastVehicle.bounds(0, 0, buttonSize, buttonSize);
-        this.nextVehicle.bounds(super.width()-buttonSize, 0, buttonSize, buttonSize);
-        this.vehicleInfo.bounds(buttonSize, 0, super.width() - buttonSize*2, buttonSize);
-        this.primaryInfo.bounds(buttonSize, buttonSize, super.width() / 2 - buttonSize*2, buttonSize);
-        this.secondaryInfo.bounds(primaryInfo.width() + buttonSize * 3, buttonSize, super.width() / 2 - buttonSize*2, buttonSize);
+        this.nextVehicle.bounds(super.width() - buttonSize, 0, buttonSize, buttonSize);
+        this.vehicleInfo.bounds(buttonSize, 0, super.width() - buttonSize * 2, buttonSize);
+        this.primaryInfo.bounds(buttonSize, buttonSize, super.width() / 2 - buttonSize * 2, buttonSize);
+        this.secondaryInfo.bounds(primaryInfo.width() + buttonSize * 3, buttonSize, super.width() / 2 - buttonSize * 2, buttonSize);
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) buttonSize));
         this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) buttonSize));
 
@@ -49,14 +60,26 @@ public class SpawnFrame extends Frame {
         super.add(this.lastVehicle);
         super.add(this.primaryInfo);
         super.add(this.secondaryInfo);
+
+        this.vehicleInfo.setPlayer(this.players.get(0));
     }
 
     private void nextVehicle() {
-        
+        ++this.playerIndex;
+        if (this.playerIndex >= this.players.size()) {
+            this.playerIndex = 0;
+        }
+        this.vehicleInfo.setPlayer(this.players.get(this.playerIndex));
+        this.vehicleInfo.invalidate();
     }
 
     private void lastVehicle() {
-        
+        --this.playerIndex;
+        if (this.playerIndex < 0) {
+            this.playerIndex = this.players.size() - 1;
+        }
+        this.vehicleInfo.setPlayer(this.players.get(this.playerIndex));
+        this.vehicleInfo.invalidate();
     }
 
     @Override

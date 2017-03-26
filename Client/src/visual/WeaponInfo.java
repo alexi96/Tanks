@@ -2,7 +2,6 @@ package visual;
 
 import controls.weapons.WeaponControl;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 
 public class WeaponInfo extends Component {
