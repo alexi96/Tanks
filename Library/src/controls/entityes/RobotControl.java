@@ -1,6 +1,7 @@
 package controls.entityes;
 
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -125,6 +126,21 @@ public class RobotControl extends PlayerControl {
         this.character.warp(loc);
     }
 
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
+    }
+    
     private void updateDuck(float tpf) {
         tpf *= 2;
         this.character.setDucked(this.ctrl);

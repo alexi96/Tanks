@@ -117,17 +117,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
             return;
         }
 
-        final float min = FastMath.DEG_TO_RAD * 20;
-        final float max = -FastMath.DEG_TO_RAD * 45;
-
-        float[] angs = this.camera.getRotation().toAngles(null);
-        if (angs[0] > min && angs[0] < FastMath.PI) {
-            angs[0] = min;
-            this.camera.setRotation(new Quaternion(angs));
-        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
-            angs[0] = max;
-            this.camera.setRotation(new Quaternion(angs));
-        }
+        this.player.restrictCamra(this.camera);
 
         this.lastLook.set(this.camera.getDirection());
         this.controls.command(this.player.getId(), this.lastLook.clone());

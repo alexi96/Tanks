@@ -151,6 +151,10 @@ public class DroneControl extends PlayerControl {
         this.character.setPhysicsLocation(loc);
     }
 
+    @Override
+    public void restrictCamra(Camera camera) {
+    }
+
     private void updateFirstPerson(float tpf) {
         tpf *= 3;
         if (this.secondaryFire) {

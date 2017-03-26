@@ -2,6 +2,7 @@ package controls.entityes;
 
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import controllers.GameController;
 import controls.DestroyableControl;
 import controls.weapons.WeaponControl;
@@ -153,6 +154,8 @@ public abstract class PlayerControl extends DestroyableControl implements Action
             gc.getApplication().getFlyByCamera().setMoveSpeed(10);
         }
     }
+    
+    public abstract void restrictCamra(Camera camera);
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
