@@ -63,6 +63,10 @@ public class InputAppState extends ClientAppState implements ActionListener {
     }
 
     private void death(PlayerControl p) {
+        if (this.player == null) {
+            return;
+        }
+
         if (p.getId() != this.player.getId()) {
             return;
         }
