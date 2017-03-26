@@ -80,7 +80,7 @@ public class ClientApplication extends SimpleApplication {
         boolean debug = args.length > 0 && args[0].equalsIgnoreCase("debug");
         if (debug) {
             AppSettings set = new AppSettings(true);
-            set.setResolution(800, 800);
+            set.setResolution(800, 600);
             app.setSettings(set);
             app.setShowSettings(false);
         } else {
