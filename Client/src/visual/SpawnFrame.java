@@ -83,18 +83,17 @@ public class SpawnFrame extends Frame {
         this.lastVehicle.bounds(0, 0, unitW, unitH);
         this.vehicleInfo.bounds(unitW, 0, super.width() - unitW * 2, unitH);
         this.nextVehicle.bounds(super.width() - unitW, 0, unitW, unitH);
-        
-        this.lastPrimary.bounds(0, 0, buttonSize, buttonSize);
+
+        this.lastPrimary.bounds(0, 0, unitW, unitW);
         this.nextPrimary.bounds(0, 0, 0, 0);
         this.primaryInfo.bounds(unitW, unitH, super.width() / 2 - unitW * 2, unitH * 2);
-        
+
         this.lastSecondary.bounds(0, 0, 0, 0);
         this.nextSecondary.bounds(0, 0, 0, 0);
         this.secondaryInfo.bounds(primaryInfo.width() + unitW * 3, unitH, super.width() / 2 - unitW * 2, unitH * 2);
-        
+
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) unitW));
         this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) unitW));
-
 
         super.add(this.nextVehicle);
         super.add(this.vehicleInfo);
@@ -127,7 +126,21 @@ public class SpawnFrame extends Frame {
         this.vehicleInfo.invalidate();
     }
 
+    private void nextPrimary() {
+    }
+
+    private void lastPrimary() {
+    }
+    
+    private void nextSecondary() {
+    }
+
+    private void lastSecondary() {
+    }
+
     @Override
     public void paint(Graphics g) {
     }
+
+    
 }
