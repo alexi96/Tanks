@@ -11,12 +11,9 @@ import connection.ControlsConnection;
 import controllers.GameController;
 import controls.entityes.DroneControl;
 import controls.entityes.PlayerControl;
-import controls.entityes.TankControl;
-import controls.weapons.AutoShotgun;
-import controls.weapons.CannonControl;
 import controls.weapons.GrenadeLauncher;
-import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
+import visual.SpawnFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
@@ -25,6 +22,12 @@ public class InputAppState extends ClientAppState implements ActionListener {
     private Camera camera;
     private Vector3f lastLook = new Vector3f();
     private final ObserverListener<PlayerControl> deathListener = (p) -> this.death(p);
+    private final SpawnFrame spawnFrame = new SpawnFrame() {
+        @Override
+        public void spawn(PlayerControl p) {
+            InputAppState.this.spawn(p);
+        }
+    };
 
     public InputAppState() {
     }
@@ -80,10 +83,11 @@ public class InputAppState extends ClientAppState implements ActionListener {
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
             if (name.equals(PlayerControl.SPACE)) {
-                PlayerControl pl = new DroneControl();
-                //pl.setPrimary(new AutoShotgun());
-                pl.setSecondary(new GrenadeLauncher());
-                this.spawn(pl);
+                if (this.spawnFrame.visible()) {
+                    this.spawnFrame.hide();
+                } else {
+                    this.spawnFrame.show();
+                }
             }
             return;
         }

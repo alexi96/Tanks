@@ -220,7 +220,22 @@ public class SpawnFrame extends Frame {
     }
 
     private void spawn() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PlayerControl p = this.players.get(this.playerIndex);
+        ArrayList<WeaponControl> ps = this.pWeapons.get(p.getClass().getSimpleName());
+        ArrayList<WeaponControl> ss = this.sWeapons.get(p.getClass().getSimpleName());
+
+        WeaponControl pw = ps.get(this.pIndex);
+        WeaponControl sw = ss.get(this.sIndex);
+        
+        p.setPrimary(pw);
+        p.setSecondary(sw);
+        
+        this.spawn(p);
+        
+        super.hide();
+    }
+
+    public void spawn(PlayerControl p) {
     }
 
     @Override
