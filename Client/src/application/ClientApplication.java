@@ -17,8 +17,6 @@ import rpc.HiRpc;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
-import visual.HudFrame;
-import visual.SpawnFrame;
 
 public class ClientApplication extends SimpleApplication {
 

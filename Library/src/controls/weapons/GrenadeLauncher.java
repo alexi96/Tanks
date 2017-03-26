@@ -101,7 +101,7 @@ public class GrenadeLauncher extends WeaponControl {
 
         this.updateAim(tpf);
 
-        Vector3f loc = new Vector3f(-0.15f, 0, 0.1f);
+        Vector3f loc = new Vector3f(0.15f, 0, 0.1f);
         loc.multLocal(this.aimState);
         loc.addLocal(this.weaponDefaultLocation);
         loc.addLocal(0, 0, -0.03f * this.state / this.fireRate);

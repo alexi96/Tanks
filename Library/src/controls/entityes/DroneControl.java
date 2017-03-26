@@ -154,8 +154,8 @@ public class DroneControl extends PlayerControl {
 
     @Override
     public void restrictCamra(Camera camera) {
-        final float min = FastMath.DEG_TO_RAD * 30;
-        final float max = -FastMath.DEG_TO_RAD * 25;
+        final float min = FastMath.DEG_TO_RAD * 45;
+        final float max = -FastMath.DEG_TO_RAD * 10;
 
         float[] angs = camera.getRotation().toAngles(null);
         if (angs[0] > min && angs[0] < FastMath.PI) {
