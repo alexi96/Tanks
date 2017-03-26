@@ -77,6 +77,14 @@ public class SpawnFrame extends Frame {
             }
         }
     };
+    private final Button spawn = new Button("Spawn") {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                SpawnFrame.this.spawn();
+            }
+        }
+    };
 
     public SpawnFrame() {
         this.players.add(new RobotControl());
@@ -89,7 +97,7 @@ public class SpawnFrame extends Frame {
 
         ArrayList<WeaponControl> rsw = new ArrayList<>();
         this.sWeapons.put(RobotControl.class.getSimpleName(), rsw);
-        rpw.add(new AutoShotgun());
+        rsw.add(new AutoShotgun());
 
         ArrayList<WeaponControl> tpw = new ArrayList<>();
         this.pWeapons.put(TankControl.class.getSimpleName(), tpw);
@@ -97,7 +105,7 @@ public class SpawnFrame extends Frame {
 
         ArrayList<WeaponControl> tsw = new ArrayList<>();
         this.sWeapons.put(TankControl.class.getSimpleName(), tsw);
-        tpw.add(new MinigunControl());
+        tsw.add(new MinigunControl());
 
         ArrayList<WeaponControl> dpw = new ArrayList<>();
         this.pWeapons.put(DroneControl.class.getSimpleName(), dpw);
@@ -105,7 +113,7 @@ public class SpawnFrame extends Frame {
 
         ArrayList<WeaponControl> dsw = new ArrayList<>();
         this.sWeapons.put(DroneControl.class.getSimpleName(), dsw);
-        dpw.add(new MinigunControl());/////////////
+        dsw.add(new MinigunControl());/////////////
 
         AppSettings set = GameController.getInstance().getSettings();
 
@@ -126,6 +134,7 @@ public class SpawnFrame extends Frame {
         this.lastSecondary.bounds(nextPrimary.getX() + unitW, unitH, unitW, unitH * 2);
         this.secondaryInfo.bounds(primaryInfo.width() + unitW * 3, unitH, super.width() / 2 - unitW * 2, unitH * 2);
         this.nextSecondary.bounds(super.width() - unitW, unitH, unitW, unitH * 2);
+        this.spawn.bounds(0, unitH * 3, super.width(), unitH);
 
         this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) unitW));
         this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) unitW));
@@ -139,6 +148,7 @@ public class SpawnFrame extends Frame {
         super.add(this.nextSecondary);
         super.add(this.secondaryInfo);
         super.add(this.lastSecondary);
+        super.add(this.spawn);
 
         this.vehicleInfo.setPlayer(this.players.get(0));
         this.pIndex = -1;
@@ -194,8 +204,8 @@ public class SpawnFrame extends Frame {
         if (this.sIndex >= ps.size()) {
             this.sIndex = 0;
         }
-        this.primaryInfo.setWeapon(ps.get(this.pIndex));
-        this.primaryInfo.invalidate();
+        this.secondaryInfo.setWeapon(ps.get(this.sIndex));
+        this.secondaryInfo.invalidate();
     }
 
     private void lastSecondary() {
@@ -209,8 +219,11 @@ public class SpawnFrame extends Frame {
         this.primaryInfo.invalidate();*/
     }
 
+    private void spawn() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
     public void paint(Graphics g) {
     }
-
 }
