@@ -77,19 +77,24 @@ public class SpawnFrame extends Frame {
         super.size(set.getWidth() * 3 / 4, set.getHeight() * 3 / 4);
         super.center();
 
-        final int buttonSize = super.width() / 10;
+        final int unitW = super.width() / 10;
+        final int unitH = super.height() / 4;
 
-        this.lastVehicle.bounds(0, 0, buttonSize, buttonSize);
-        this.nextVehicle.bounds(super.width() - buttonSize, 0, buttonSize, buttonSize);
-        this.vehicleInfo.bounds(buttonSize, 0, super.width() - buttonSize * 2, buttonSize);
+        this.lastVehicle.bounds(0, 0, unitW, unitH);
+        this.vehicleInfo.bounds(unitW, 0, super.width() - unitW * 2, unitH);
+        this.nextVehicle.bounds(super.width() - unitW, 0, unitW, unitH);
+        
         this.lastPrimary.bounds(0, 0, buttonSize, buttonSize);
         this.nextPrimary.bounds(0, 0, 0, 0);
-        this.primaryInfo.bounds(buttonSize, buttonSize, super.width() / 2 - buttonSize * 2, buttonSize);
+        this.primaryInfo.bounds(unitW, unitH, super.width() / 2 - unitW * 2, unitH * 2);
+        
         this.lastSecondary.bounds(0, 0, 0, 0);
         this.nextSecondary.bounds(0, 0, 0, 0);
-        this.secondaryInfo.bounds(primaryInfo.width() + buttonSize * 3, buttonSize, super.width() / 2 - buttonSize * 2, buttonSize);
-        this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) buttonSize));
-        this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) buttonSize));
+        this.secondaryInfo.bounds(primaryInfo.width() + unitW * 3, unitH, super.width() / 2 - unitW * 2, unitH * 2);
+        
+        this.lastVehicle.setFont(this.lastVehicle.getFont().deriveFont((float) unitW));
+        this.nextVehicle.setFont(this.nextVehicle.getFont().deriveFont((float) unitW));
+
 
         super.add(this.nextVehicle);
         super.add(this.vehicleInfo);

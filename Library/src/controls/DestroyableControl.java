@@ -30,6 +30,14 @@ public abstract class DestroyableControl extends GameControl {
         this.health = health;
     }
 
+    public float getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(float maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
     public float getArmor() {
         return armor;
     }
