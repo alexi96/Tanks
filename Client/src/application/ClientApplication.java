@@ -43,12 +43,6 @@ public class ClientApplication extends SimpleApplication {
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        HudFrame f = new HudFrame();
-        //f.show();
-
-        SpawnFrame sf = new SpawnFrame();
-        //sf.show();
     }
 
     private void initKeys() {

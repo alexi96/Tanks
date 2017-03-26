@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/entityes/DroneControl.java</file>
-            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/entityes/PlayerControl.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/weapons/WeaponControl.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/entityes/RobotControl.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Library/src/visual/Frame.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Library/src/controls/DestroyableControl.java</file>
         </group>
     </open-files>
 </project-private>
