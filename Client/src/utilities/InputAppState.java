@@ -9,13 +9,15 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controllers.GameController;
-import controls.entityes.DroneControl;
 import controls.entityes.PlayerControl;
-import controls.weapons.GrenadeLauncher;
+import controls.entityes.TankControl;
+import controls.weapons.CannonControl;
+import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
-import visual.SpawnFrame;
+import visual.HudFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
+
 
     private PlayerControl player;
     private ControlsConnection controls;
@@ -28,6 +30,9 @@ public class InputAppState extends ClientAppState implements ActionListener {
             InputAppState.this.spawn(p);
         }
     };
+
+    private final HudFrame hud = new HudFrame();
+
 
     public InputAppState() {
     }
@@ -54,6 +59,8 @@ public class InputAppState extends ClientAppState implements ActionListener {
         this.managed.put(result.getId(), result);
         result.create();
 
+        //hud
+        
         this.player = result;
     }
 
@@ -88,6 +95,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
                 } else {
                     this.spawnFrame.show();
                 }
+
             }
             return;
         }

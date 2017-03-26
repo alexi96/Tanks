@@ -188,4 +188,8 @@ public abstract class PlayerControl extends DestroyableControl implements Action
                 break;
         }
     }
+    
+    public void moveTo(Vector3f loc) {
+        super.spatial.setLocalTranslation(loc);
+    }
 }

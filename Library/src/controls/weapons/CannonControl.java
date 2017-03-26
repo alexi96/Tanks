@@ -57,7 +57,7 @@ public class CannonControl extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getParent().getWorldRotation().getRotationColumn(2);
-        CannonRacket bc = new CannonRacket(dir, 20, super.damage, super.holder, 100);
+        CannonRacket bc = new CannonRacket(dir, 60, super.damage, super.holder, 200);
         bc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(bc);
 
