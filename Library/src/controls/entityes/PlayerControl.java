@@ -1,7 +1,5 @@
 package controls.entityes;
 
-import com.jme3.bullet.control.PhysicsControl;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import controllers.GameController;
@@ -189,5 +187,9 @@ public abstract class PlayerControl extends DestroyableControl implements Action
                 this.swap = isPressed;
                 break;
         }
+    }
+    
+    public void moveTo(Vector3f loc) {
+        super.spatial.setLocalTranslation(loc);
     }
 }

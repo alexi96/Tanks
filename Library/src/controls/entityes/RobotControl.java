@@ -113,6 +113,11 @@ public class RobotControl extends PlayerControl {
         this.updatePhysics();
     }
 
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.character.warp(loc);
+    }
+    
     private void updateDuck(float tpf) {
         tpf *= 2;
         this.character.setDucked(this.ctrl);
