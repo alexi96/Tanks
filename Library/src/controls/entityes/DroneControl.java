@@ -1,7 +1,6 @@
 package controls.entityes;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Quaternion;

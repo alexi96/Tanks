@@ -14,6 +14,7 @@ import synchronization.Synchronizer;
 
 public class RobotControl extends PlayerControl {
 
+    private final static float MAX_SPRINT = 10;
     private final static float HEIGTH = 1.7f;
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
     private transient BetterCharacterControl character;
@@ -26,6 +27,12 @@ public class RobotControl extends PlayerControl {
     private Quaternion eyeRot = new Quaternion();
     private float duckState;
     private transient float headDefaultHeigth;
+    private transient float sprint = RobotControl.MAX_SPRINT;
+    private transient boolean tired;
+
+    public RobotControl() {
+        super.resetHealth(100);
+    }
 
     @Override
     public void create() {
@@ -117,7 +124,7 @@ public class RobotControl extends PlayerControl {
     public void moveTo(Vector3f loc) {
         this.character.warp(loc);
     }
-    
+
     private void updateDuck(float tpf) {
         tpf *= 2;
         this.character.setDucked(this.ctrl);
@@ -213,6 +220,28 @@ public class RobotControl extends PlayerControl {
             super.space = false;
             this.character.jump();
         }
+
+        /*if (this.tired) {
+            if (super.shift && this.sprint > 4) {
+                this.sprint -= tpf;
+                walkDir.multLocal(2);
+                if (this.sprint <= 0) {
+                    this.tired = true;
+                }
+            } else {
+                this.sprint += tpf * 2;
+            }
+        } else {
+            if (super.shift && this.sprint > 0) {
+                this.sprint -= tpf;
+                walkDir.multLocal(2);
+                if (this.sprint <= 0) {
+                    this.tired = true;
+                }
+            } else {
+                this.sprint += tpf * 2;
+            }
+        }*/
 
         walkDir.multLocal(3);
         this.character.setWalkDirection(walkDir);
