@@ -40,7 +40,8 @@ public class AutoShotgun extends WeaponControl {
         Quaternion dirQ = new Quaternion();
         dirQ.lookAt(dir, Vector3f.UNIT_Y);
         float change = 5f * FastMath.DEG_TO_RAD;
-        for (int i = 0; i < 10; i++) {
+        final int shellNum = 10;
+        for (int i = 0; i < shellNum; i++) {
             float ax = AutoShotgun.RAND.nextInt(101);
             float ay = AutoShotgun.RAND.nextInt(101);
             ax *= change;

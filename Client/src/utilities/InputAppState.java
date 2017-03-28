@@ -3,8 +3,6 @@ package utilities;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
