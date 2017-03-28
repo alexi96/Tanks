@@ -148,6 +148,13 @@ public class DroneControl extends PlayerControl {
     }
 
     @Override
+    public void destroy() {
+        this.primary.destroy();
+        this.secondary.destroy();
+        super.destroy();
+    }
+
+    @Override
     public void moveTo(Vector3f loc) {
         this.character.setPhysicsLocation(loc.add(Vector3f.UNIT_Y.mult(5)));
     }

@@ -13,6 +13,7 @@ import controls.weapons.GrenadeLauncher;
 import controls.weapons.MachineGun;
 import controls.weapons.MinigunControl;
 import controls.weapons.RobotGrenadeLauncher;
+import controls.weapons.SniperConotrol;
 import controls.weapons.WeaponControl;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -111,11 +112,11 @@ public class SpawnFrame extends Frame {
 
         ArrayList<WeaponControl> dpw = new ArrayList<>();
         this.pWeapons.put(DroneControl.class.getSimpleName(), dpw);
-        dpw.add(new MinigunControl());
+        dpw.add(new SniperConotrol());
 
         ArrayList<WeaponControl> dsw = new ArrayList<>();
         this.sWeapons.put(DroneControl.class.getSimpleName(), dsw);
-        dsw.add(new GrenadeLauncher());/////////////
+        dsw.add(new GrenadeLauncher());
 
         AppSettings set = GameController.getInstance().getSettings();
 
