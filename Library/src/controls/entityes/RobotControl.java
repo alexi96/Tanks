@@ -1,6 +1,7 @@
 package controls.entityes;
 
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -14,6 +15,7 @@ import synchronization.Synchronizer;
 
 public class RobotControl extends PlayerControl {
 
+    private final static float MAX_SPRINT = 10;
     private final static float HEIGTH = 1.7f;
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
     private transient BetterCharacterControl character;
@@ -26,6 +28,12 @@ public class RobotControl extends PlayerControl {
     private Quaternion eyeRot = new Quaternion();
     private float duckState;
     private transient float headDefaultHeigth;
+    private transient float sprint = RobotControl.MAX_SPRINT;
+    private transient boolean tired;
+
+    public RobotControl() {
+        super.resetHealth(100);
+    }
 
     @Override
     public void create() {
@@ -116,6 +124,21 @@ public class RobotControl extends PlayerControl {
     @Override
     public void moveTo(Vector3f loc) {
         this.character.warp(loc);
+    }
+
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
     }
     
     private void updateDuck(float tpf) {
@@ -213,6 +236,28 @@ public class RobotControl extends PlayerControl {
             super.space = false;
             this.character.jump();
         }
+
+        /*if (this.tired) {
+            if (super.shift && this.sprint > 4) {
+                this.sprint -= tpf;
+                walkDir.multLocal(2);
+                if (this.sprint <= 0) {
+                    this.tired = true;
+                }
+            } else {
+                this.sprint += tpf * 2;
+            }
+        } else {
+            if (super.shift && this.sprint > 0) {
+                this.sprint -= tpf;
+                walkDir.multLocal(2);
+                if (this.sprint <= 0) {
+                    this.tired = true;
+                }
+            } else {
+                this.sprint += tpf * 2;
+            }
+        }*/
 
         walkDir.multLocal(3);
         this.character.setWalkDirection(walkDir);

@@ -185,6 +185,21 @@ public class TankControl extends PlayerControl {
         this.vehicle.setPhysicsLocation(loc);
     }
 
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
+    }
+
     private void updateFirstPerson(float tpf) {
         tpf *= 3;
         if (this.secondaryFire) {

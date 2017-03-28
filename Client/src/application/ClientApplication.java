@@ -17,8 +17,6 @@ import rpc.HiRpc;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
-import visual.HudFrame;
-import visual.SpawnFrame;
 
 public class ClientApplication extends SimpleApplication {
 
@@ -43,12 +41,6 @@ public class ClientApplication extends SimpleApplication {
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        HudFrame f = new HudFrame();
-        //f.show();
-
-        SpawnFrame sf = new SpawnFrame();
-        //sf.show();
     }
 
     private void initKeys() {
@@ -62,6 +54,7 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.CTRL, new KeyTrigger(KeyInput.KEY_LCONTROL));
         inputManager.addMapping(PlayerControl.SHIFT, new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping(PlayerControl.SWAP, new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping(PlayerControl.RESPAWN, new KeyTrigger(KeyInput.KEY_M));
 
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
