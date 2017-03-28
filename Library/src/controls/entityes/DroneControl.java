@@ -1,9 +1,9 @@
 package controls.entityes;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -26,6 +26,11 @@ public class DroneControl extends PlayerControl {
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
     private transient Spatial[] spinners;
+    private float aimState;
+
+    public DroneControl() {
+        super.resetHealth(60);
+    }
 
     @Override
     public void create() {
@@ -43,12 +48,11 @@ public class DroneControl extends PlayerControl {
 
         gc.getApplication().getRootNode().attachChild(n);
 
-//        this.primary.setHolder(this);
+        this.primary.setHolder(this);
         this.secondary.setHolder(this);
-//        this.primary.create();
+        this.primary.create();
         this.secondary.create();
-        //this.selectedWeapon = primary;
-        this.selectedWeapon = secondary;//
+        this.selectedWeapon = primary;
         n.addControl(this);
 
         if (server) {
@@ -64,7 +68,7 @@ public class DroneControl extends PlayerControl {
             Node n = (Node) spatial;
             this.eye = (Node) n.getChild("Eye");
             this.eye.detachAllChildren();
-//            this.eye.attachChild(this.primary.getSpatial());
+            this.eye.attachChild(this.primary.getSpatial());
             this.eye.attachChild(this.secondary.getSpatial());
 
             if (server) {
@@ -100,8 +104,9 @@ public class DroneControl extends PlayerControl {
         this.location.set(o.location);
         this.rotation.set(o.rotation);
         this.eyeRot.set(o.eyeRot);
+        this.aimState = o.aimState;
 
-//        this.primary.prepare(o.primary);
+        this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
     }
 
@@ -111,14 +116,17 @@ public class DroneControl extends PlayerControl {
         super.spatial.setLocalRotation(this.rotation);
 
         this.eye.setLocalRotation(this.eyeRot);
-//        this.primary.synchronize();
+        this.primary.synchronize();
         this.secondary.synchronize();
         if (super.id != PlayerControl.serverId) {
             return;
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
-        c.setLocation(this.eye.getWorldTranslation().add(c.getDirection().mult(-3)));
+        Vector3f v = c.getDirection().mult(-3);
+        v.multLocal(this.aimState);
+        v.addLocal(this.eye.getWorldTranslation());
+        c.setLocation(v);
     }
 
     private void updateWeapons(float tpf) {
@@ -133,10 +141,56 @@ public class DroneControl extends PlayerControl {
             }
         }
 
-        //this.primary.update(tpf);
+        this.primary.update(tpf);
         this.secondary.update(tpf);
         this.selectedWeapon.fire(super.fire);
         this.selectedWeapon.secondaryFire(super.secondaryFire);
+    }
+
+    @Override
+    public void destroy() {
+        this.primary.destroy();
+        this.secondary.destroy();
+        super.destroy();
+    }
+
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.character.setPhysicsLocation(loc.add(Vector3f.UNIT_Y.mult(5)));
+    }
+
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 45;
+        final float max = -FastMath.DEG_TO_RAD * 10;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
+    }
+
+    private void updateFirstPerson(float tpf) {
+        tpf *= 3;
+        if (this.secondaryFire) {
+            if (this.aimState > 0) {
+                this.aimState -= tpf;
+                if (this.aimState < 0) {
+                    this.aimState = 0;
+                }
+            }
+        } else {
+            if (this.aimState < 1) {
+                this.aimState += tpf;
+                if (this.aimState > 1) {
+                    this.aimState = 1;
+                }
+            }
+        }
     }
 
     @Override
@@ -203,6 +257,8 @@ public class DroneControl extends PlayerControl {
         this.character.setPhysicsLocation(this.character.getPhysicsLocation().add(walkDir.mult(tpf * 2)));
 
         this.character.setPhysicsRotation(this.rotation);
+
+        this.updateFirstPerson(tpf);
 
         manager.update(this);
     }

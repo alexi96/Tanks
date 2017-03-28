@@ -3,6 +3,7 @@ package controls.entityes;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.FastMath;
@@ -135,7 +136,7 @@ public class TankControl extends PlayerControl {
         Node n = (Node) TankControl.MODEL.clone();
 
         boolean server = GameController.getInstance().getSynchronizer() != null;
-        if (server) {
+        if (!server) {
             n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         }
 
@@ -177,6 +178,26 @@ public class TankControl extends PlayerControl {
         Vector3f dep = Vector3f.UNIT_Y.mult(0).add(c.getDirection().mult(-5));
         dep.multLocal(this.aimState);
         c.setLocation(this.eye.getWorldTranslation().add(dep));
+    }
+
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.vehicle.setPhysicsLocation(loc);
+    }
+
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
     }
 
     private void updateFirstPerson(float tpf) {
@@ -239,7 +260,7 @@ public class TankControl extends PlayerControl {
         this.eyeRot.set(new Quaternion(t));
         this.eye.setLocalRotation(this.eyeRot);
 
-        final float acc = 200;
+        final float acc = TankControl.MASS;
         if (super.up) {
             this.vehicle.accelerate(acc);
         } else if (!this.down) {

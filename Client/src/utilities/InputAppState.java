@@ -3,28 +3,32 @@ package utilities;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import connection.ControlsConnection;
 import controllers.GameController;
-import controls.entityes.DroneControl;
 import controls.entityes.PlayerControl;
-import controls.entityes.TankControl;
-import controls.weapons.AutoShotgun;
-import controls.weapons.CannonControl;
-import controls.weapons.GrenadeLauncher;
-import controls.weapons.MinigunControl;
 import utilities.observer.ObserverListener;
+import visual.HudFrame;
+import visual.SpawnFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
+
 
     private PlayerControl player;
     private ControlsConnection controls;
     private Camera camera;
     private Vector3f lastLook = new Vector3f();
     private final ObserverListener<PlayerControl> deathListener = (p) -> this.death(p);
+    private final SpawnFrame spawnFrame = new SpawnFrame() {
+        @Override
+        public void spawn(PlayerControl p) {
+            InputAppState.this.spawn(p);
+        }
+    };
+
+    private final HudFrame hud = new HudFrame();
+
 
     public InputAppState() {
     }
@@ -51,10 +55,16 @@ public class InputAppState extends ClientAppState implements ActionListener {
         this.managed.put(result.getId(), result);
         result.create();
 
+        //hud
+        
         this.player = result;
     }
 
     private void death(PlayerControl p) {
+        if (this.player == null) {
+            return;
+        }
+
         if (p.getId() != this.player.getId()) {
             return;
         }
@@ -79,11 +89,13 @@ public class InputAppState extends ClientAppState implements ActionListener {
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
         if (this.player == null) {
-            if (name.equals(PlayerControl.SPACE)) {
-                PlayerControl pl = new DroneControl();
-                //pl.setPrimary(new AutoShotgun());
-                pl.setSecondary(new GrenadeLauncher());
-                this.spawn(pl);
+            if (name.equals(PlayerControl.SPACE) && isPressed) {
+                if (this.spawnFrame.visible()) {
+                    this.spawnFrame.hide();
+                } else {
+                    this.spawnFrame.show();
+                }
+
             }
             return;
         }
@@ -103,17 +115,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
             return;
         }
 
-        final float min = FastMath.DEG_TO_RAD * 20;
-        final float max = -FastMath.DEG_TO_RAD * 45;
-
-        float[] angs = this.camera.getRotation().toAngles(null);
-        if (angs[0] > min && angs[0] < FastMath.PI) {
-            angs[0] = min;
-            this.camera.setRotation(new Quaternion(angs));
-        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
-            angs[0] = max;
-            this.camera.setRotation(new Quaternion(angs));
-        }
+        this.player.restrictCamra(this.camera);
 
         this.lastLook.set(this.camera.getDirection());
         this.controls.command(this.player.getId(), this.lastLook.clone());

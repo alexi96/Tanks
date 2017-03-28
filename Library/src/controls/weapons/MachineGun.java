@@ -58,16 +58,8 @@ public class MachineGun extends WeaponControl {
         
         return true;
     }
-
-    @Override
-    public void update(float tpf) {
-        SyncManager sm = GameController.getInstance().getSynchronizer();
-        if (sm == null) {
-            return;
-        }
-        
-        super.update(tpf);
-
+    
+    private void updateAim(float tpf) {
         if (this.aiming) {
             if (this.aimState > 0) {
                 this.aimState -= tpf;
@@ -83,6 +75,18 @@ public class MachineGun extends WeaponControl {
                 }
             }
         }
+    }
+
+    @Override
+    public void update(float tpf) {
+        SyncManager sm = GameController.getInstance().getSynchronizer();
+        if (sm == null) {
+            return;
+        }
+        
+        super.update(tpf);
+
+        this.updateAim(tpf);
 
         Vector3f loc = new Vector3f(-0.15f, 0, 0.1f);
         loc.multLocal(this.aimState);

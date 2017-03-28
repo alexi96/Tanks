@@ -20,4 +20,8 @@ public abstract class Map extends GameControl {
             ll.remove(0);
         }
     }
+
+    @Override
+    public void update(float tpf) {
+    }
 }
