@@ -12,6 +12,7 @@ import controls.weapons.CannonControl;
 import controls.weapons.GrenadeLauncher;
 import controls.weapons.MachineGun;
 import controls.weapons.MinigunControl;
+import controls.weapons.RobotGrenadeLauncher;
 import controls.weapons.WeaponControl;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class SpawnFrame extends Frame {
         ArrayList<WeaponControl> rsw = new ArrayList<>();
         this.sWeapons.put(RobotControl.class.getSimpleName(), rsw);
         rsw.add(new AutoShotgun());
+        rsw.add(new RobotGrenadeLauncher());
 
         ArrayList<WeaponControl> tpw = new ArrayList<>();
         this.pWeapons.put(TankControl.class.getSimpleName(), tpw);
@@ -195,6 +197,14 @@ public class SpawnFrame extends Frame {
     }
 
     private void lastPrimary() {
+        --this.pIndex;
+        PlayerControl p = this.players.get(this.playerIndex);
+        ArrayList<WeaponControl> ps = this.pWeapons.get(p.getClass().getSimpleName());
+        if (this.pIndex < 0) {
+            this.pIndex = ps.size() - 1;
+        }
+        this.primaryInfo.setWeapon(ps.get(this.pIndex));
+        this.primaryInfo.invalidate();
     }
 
     private void nextSecondary() {
@@ -210,13 +220,13 @@ public class SpawnFrame extends Frame {
 
     private void lastSecondary() {
         --this.sIndex;
-        /*PlayerControl p = this.players.get(this.playerIndex);
+        PlayerControl p = this.players.get(this.playerIndex);
         ArrayList<WeaponControl> ps = this.sWeapons.get(p.getClass().getSimpleName());
-        if (this.sIndex >= ps.size()) {
-            this.sIndex = 0;
+        if (this.sIndex < 0) {
+            this.sIndex = ps.size() - 1;
         }
-        this.primaryInfo.setWeapon(ps.get(this.pIndex));
-        this.primaryInfo.invalidate();*/
+        this.secondaryInfo.setWeapon(ps.get(this.sIndex));
+        this.secondaryInfo.invalidate();
     }
 
     private void spawn() {
@@ -226,12 +236,12 @@ public class SpawnFrame extends Frame {
 
         WeaponControl pw = ps.get(this.pIndex);
         WeaponControl sw = ss.get(this.sIndex);
-        
+
         p.setPrimary(pw);
         p.setSecondary(sw);
-        
+
         this.spawn(p);
-        
+
         super.hide();
     }
 

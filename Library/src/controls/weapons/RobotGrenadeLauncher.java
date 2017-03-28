@@ -1,20 +1,19 @@
 package controls.weapons;
 
 import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.entityes.DroneControl;
+import controls.entityes.RobotControl;
 import controls.projectiles.BulletControl;
 import controls.projectiles.ProjectileControl;
 import synchronization.SyncManager;
 
-public class GrenadeLauncher extends WeaponControl {
+public class RobotGrenadeLauncher extends WeaponControl {
 
-    private final static Node MODEL = DroneControl.getModel();
+    private final static Node MODEL = RobotControl.getModel();
     protected Vector3f location = new Vector3f();
     protected Quaternion rotation = new Quaternion();
     protected transient Spatial clip;
@@ -22,7 +21,7 @@ public class GrenadeLauncher extends WeaponControl {
     protected float aimState;
     protected transient Vector3f weaponDefaultLocation;
 
-    public GrenadeLauncher() {
+    public RobotGrenadeLauncher() {
         super(100, 1.5f, 50);
     }
 
@@ -47,7 +46,7 @@ public class GrenadeLauncher extends WeaponControl {
 
     @Override
     public void create() {
-        Spatial s = GrenadeLauncher.MODEL.getChild("GrenadeLauncher").clone();
+        Spatial s = RobotGrenadeLauncher.MODEL.getChild("GrenadeLauncher").clone();
 
         this.setSpatial(s);
     }
@@ -73,6 +72,22 @@ public class GrenadeLauncher extends WeaponControl {
         Quaternion q = new Quaternion();
         q.fromAngleAxis(this.state * 60 / this.fireRate * FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
         this.clip.setLocalRotation(q);
+        
+        float ang = this.state / this.fireRate;
+        if (ang <= 0.5f) {
+            ang *= 2;
+            ang = FastMath.QUARTER_PI * ang / 4;
+        } else {
+            ang = 1 - ang;
+            ang *= 2;
+            ang = FastMath.QUARTER_PI * ang / 4;
+        }
+
+        this.rotation.set(new Quaternion().fromAngleAxis(-ang, Vector3f.UNIT_X));
+        
+        q = new Quaternion();
+        q.fromAngleAxis(-ang, Vector3f.UNIT_X);
+        super.spatial.setLocalRotation(q);
     }
 
     private void updateAim(float tpf) {
