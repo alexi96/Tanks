@@ -6,6 +6,7 @@ import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.DroneControl;
 import controls.projectiles.BulletControl;
+import controls.projectiles.SniperBullet;
 import synchronization.SyncManager;
 
 public class SniperConotrol extends WeaponControl {
@@ -51,7 +52,7 @@ public class SniperConotrol extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getWorldRotation().getRotationColumn(2);
-        BulletControl bc = new BulletControl(dir, 200, super.damage, super.holder, 300);
+        BulletControl bc = new SniperBullet(dir, 200, super.damage, super.holder, 300);
         bc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(bc);
         
