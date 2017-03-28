@@ -23,7 +23,7 @@ public class CannonRacket extends ProjectileControl {
     }
 
     public CannonRacket(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
-        super(direction, speed, 0.03f, damage, source, range);
+        super(direction, speed, 0.25f, damage, source, range);
     }
 
     @Override

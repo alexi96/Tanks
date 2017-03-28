@@ -1,24 +1,34 @@
-<scene export_time="1490435831.3958087" formatVersion="1.0.1" exported_by="alex_" previous_export_time="1490435407.650716" >
+<scene export_time="1490692771.1639576" formatVersion="1.0.1" previous_export_time="1490691851.6957033" exported_by="alex_" >
   <nodes >
-    <node name="Rocket" >
-      <position z="-0.150000" y="0.000000" x="0.000000" />
-      <rotation qy="0.000000" qw="1.000000" qz="-0.000000" qx="0.000000" />
-      <scale z="1.000000" y="1.000000" x="1.000000" />
+    <node name="Shell" >
+      <position z="-0.000000" x="0.000000" y="0.000000" />
+      <rotation qw="1.000000" qx="0.000000" qz="-0.000000" qy="0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity friction_z="1.0" physics_type="STATIC" lock_rot_z="False" velocity_max="0.0" mass_radius="1.0" velocity_min="0.0" lock_trans_z="False" lock_rot_y="False" friction_y="1.0" lock_trans_y="False" damping_trans="0.03999999910593033" ghost="False" lock_trans_x="False" mass="1.0" meshFile="Rocket.mesh" actor="False" lock_rot_x="False" damping_rot="0.10000000149011612" anisotropic_friction="False" inertia_tensor="0.4000000059604645" friction_x="1.0" name="Rocket" />
+      <entity lock_trans_x="False" ghost="False" lock_rot_y="False" lock_rot_x="False" friction_x="1.0" inertia_tensor="0.4000000059604645" lock_rot_z="False" meshFile="Sphere.mesh" mass_radius="1.0" velocity_max="0.0" velocity_min="0.0" lock_trans_y="False" damping_rot="0.10000000149011612" name="Sphere" friction_y="1.0" damping_trans="0.03999999910593033" lock_trans_z="False" friction_z="1.0" anisotropic_friction="False" actor="False" mass="1.0" physics_type="STATIC" />
+    </node>
+    <node name="Rocket" >
+      <position z="-0.150000" x="0.000000" y="0.000000" />
+      <rotation qw="1.000000" qx="0.000000" qz="-0.000000" qy="0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity lock_trans_x="False" ghost="False" lock_rot_y="False" lock_rot_x="False" friction_x="1.0" inertia_tensor="0.4000000059604645" lock_rot_z="False" meshFile="Rocket.mesh" mass_radius="1.0" velocity_max="0.0" velocity_min="0.0" lock_trans_y="False" damping_rot="0.10000000149011612" name="Rocket" friction_y="1.0" damping_trans="0.03999999910593033" lock_trans_z="False" friction_z="1.0" anisotropic_friction="False" actor="False" mass="1.0" physics_type="STATIC" />
     </node>
     <node name="Bullet" >
-      <position z="-0.000000" y="0.000000" x="0.000000" />
-      <rotation qy="0.000000" qw="1.000000" qz="-0.000000" qx="0.000000" />
-      <scale z="1.000000" y="1.000000" x="1.000000" />
+      <position z="-0.000000" x="0.000000" y="0.000000" />
+      <rotation qw="1.000000" qx="0.000000" qz="-0.000000" qy="0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
       <game >
         <sensors />
         <actuators />
       </game>
-      <entity friction_z="1.0" physics_type="STATIC" lock_rot_z="False" velocity_max="0.0" mass_radius="1.0" velocity_min="0.0" lock_trans_z="False" lock_rot_y="False" friction_y="1.0" lock_trans_y="False" damping_trans="0.03999999910593033" ghost="False" lock_trans_x="False" mass="1.0" meshFile="Bullet.mesh" actor="False" lock_rot_x="False" damping_rot="0.10000000149011612" anisotropic_friction="False" inertia_tensor="0.4000000059604645" friction_x="1.0" name="Bullet" />
+      <entity lock_trans_x="False" ghost="False" lock_rot_y="False" lock_rot_x="False" friction_x="1.0" inertia_tensor="0.4000000059604645" lock_rot_z="False" meshFile="Bullet.mesh" mass_radius="1.0" velocity_max="0.0" velocity_min="0.0" lock_trans_y="False" damping_rot="0.10000000149011612" name="Bullet" friction_y="1.0" damping_trans="0.03999999910593033" lock_trans_z="False" friction_z="1.0" anisotropic_friction="False" actor="False" mass="1.0" physics_type="STATIC" />
     </node>
   </nodes>
   <externals >
@@ -27,8 +37,8 @@
     </item>
   </externals>
   <environment >
-    <colourBackground r="0.05087608844041824" g="0.05087608844041824" b="0.05087608844041824" />
-    <colourDiffuse r="0.05087608844041824" g="0.05087608844041824" b="0.05087608844041824" />
-    <colourAmbient r="0.0" g="0.0" b="0.0" />
+    <colourDiffuse g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient g="0.0" r="0.0" b="0.0" />
+    <colourBackground g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
   </environment>
 </scene>
