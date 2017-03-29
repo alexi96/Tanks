@@ -12,6 +12,7 @@ import controllers.GameController;
 import controls.TestBall;
 import controls.maps.HillMap;
 import controls.maps.Map;
+import controls.maps.TrenchMap;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

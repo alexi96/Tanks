@@ -11,12 +11,11 @@ import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rpc.HiRpc;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
+import visual.connect.ConnectFrame;
 
 public class ClientApplication extends SimpleApplication {
 
@@ -31,16 +30,22 @@ public class ClientApplication extends SimpleApplication {
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
-        try {
-            final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
-            InputAppState state = new InputAppState(cc);
-            HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
-            super.stateManager.attach(state);
-
-            inputManager.addListener(state, PlayerControl.MAPPINGS);
+        /*try {
+            this.connect(ip);
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        
+        new ConnectFrame(this).show();
+    }
+
+    public void connect(String ip) throws IOException {
+        final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
+        InputAppState state = new InputAppState(cc);
+        HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
+        super.stateManager.attach(state);
+
+        inputManager.addListener(state, PlayerControl.MAPPINGS);
     }
 
     private void initKeys() {

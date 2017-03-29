@@ -14,7 +14,6 @@ import visual.SpawnFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
 
-
     private PlayerControl player;
     private ControlsConnection controls;
     private Camera camera;
@@ -26,9 +25,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
             InputAppState.this.spawn(p);
         }
     };
-
     private final HudFrame hud = new HudFrame();
-
 
     public InputAppState() {
     }
@@ -55,9 +52,10 @@ public class InputAppState extends ClientAppState implements ActionListener {
         this.managed.put(result.getId(), result);
         result.create();
 
-        //hud
-        
         this.player = result;
+
+        //this.hud.setPlayer(result);
+        this.hud.show();
     }
 
     private void death(PlayerControl p) {
@@ -70,6 +68,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
         }
 
         this.player = null;
+        this.hud.hide();
         System.out.println(p.getName() + " died!");
     }
 
