@@ -9,7 +9,6 @@ import connection.ControlsConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
 import utilities.observer.ObserverListener;
-import visual.HudFrame;
 import visual.SpawnFrame;
 
 public class InputAppState extends ClientAppState implements ActionListener {
@@ -25,7 +24,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
             InputAppState.this.spawn(p);
         }
     };
-    private final HudFrame hud = new HudFrame();
+    private final Hud hud = new Hud();
 
     public InputAppState() {
     }
@@ -54,7 +53,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
 
         this.player = result;
 
-        //this.hud.setPlayer(result);
+        this.hud.setPlayer(result);
         this.hud.show();
     }
 
