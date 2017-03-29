@@ -91,7 +91,7 @@ public class SniperConotrol extends WeaponControl {
         Vector3f loc = new Vector3f(-0.15f, 0, 0.1f);
         loc.multLocal(this.aimState);
         loc.addLocal(this.weaponDefaultLocation);
-        loc.addLocal(0, 0, -0.03f * this.state / this.fireRate);
+        loc.addLocal(0, 0, -0.1f * this.state / this.fireRate);
         this.location.set(loc);
         super.spatial.setLocalTranslation(this.location);
     }
