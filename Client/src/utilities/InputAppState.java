@@ -108,6 +108,8 @@ public class InputAppState extends ClientAppState implements ActionListener {
         if (this.player == null) {
             return;
         }
+        
+        this.hud.invalidate();
 
         if (this.camera.getDirection().equals(this.lastLook)) {
             return;
