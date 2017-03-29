@@ -11,3 +11,7 @@
 /Client/nbproject
 /HiRpcJ7/nbproject
 /Library/nbproject
+/HiRPC/build/
+Client/nbproject/private/private.xml
+HiRPC/nbproject/private/private.xml
+Server/nbproject/private/private.xml

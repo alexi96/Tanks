@@ -9,40 +9,56 @@ import com.jme3.system.AppSettings;
 import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
+import controls.entityes.DroneControl;
 import controls.entityes.PlayerControl;
+import controls.weapons.GrenadeLauncher;
+import controls.weapons.SniperConotrol;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rpc.HiRpc;
 import utilities.ClientAppState;
+import utilities.Hud;
 import utilities.InputAppState;
 import utilities.LoadingManager;
 
 public class ClientApplication extends SimpleApplication {
-
+    
     private String ip;
-
+    
     @Override
     public void simpleInitApp() {
         super.cam.setFrustumPerspective(45, (float) super.settings.getWidth() / super.settings.getHeight(), 0.01f, 1000);
         super.flyCam.setMoveSpeed(15);
         this.initKeys();
-
+        
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
-        try {
-            final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
-            InputAppState state = new InputAppState(cc);
-            HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
-            super.stateManager.attach(state);
-
-            inputManager.addListener(state, PlayerControl.MAPPINGS);
+        /*try {
+            this.connect(ip);
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        //new ConnectFrame(this).show();
+        PlayerControl pc = new DroneControl();
+        pc.setPrimary(new SniperConotrol());
+        pc.setSecondary(new GrenadeLauncher());
+        
+        pc.create();
+        
+        Hud t = new Hud();
+        t.setPlayer(pc);
+        t.show();
     }
-
+    
+    public void connect(String ip) throws IOException {
+        final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
+        InputAppState state = new InputAppState(cc);
+        HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
+        super.stateManager.attach(state);
+        
+        inputManager.addListener(state, PlayerControl.MAPPINGS);
+    }
+    
     private void initKeys() {
         inputManager.addMapping(PlayerControl.UP, new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping(PlayerControl.DOWN, new KeyTrigger(KeyInput.KEY_S));
@@ -55,19 +71,19 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.SHIFT, new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping(PlayerControl.SWAP, new KeyTrigger(KeyInput.KEY_Q));
         inputManager.addMapping(PlayerControl.RESPAWN, new KeyTrigger(KeyInput.KEY_M));
-
+        
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
         inputManager.addMapping(PlayerControl.ALT_LEFT, new KeyTrigger(KeyInput.KEY_NUMPAD4));
         inputManager.addMapping(PlayerControl.ALT_RIGHT, new KeyTrigger(KeyInput.KEY_NUMPAD6));
     }
-
+    
     @Override
     public void destroy() {
         super.destroy();
         System.exit(0);
     }
-
+    
     public static void main(String[] args) {
         ClientApplication app = new ClientApplication();
         boolean debug = args.length > 0 && args[0].equalsIgnoreCase("debug");

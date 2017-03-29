@@ -43,6 +43,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     protected WeaponControl primary;
     protected WeaponControl secondary;
+    protected WeaponControl selected;
 
     public PlayerControl() {
     }
@@ -121,6 +122,10 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     public void setSecondary(WeaponControl secondary) {
         this.secondary = secondary;
+    }
+
+    public WeaponControl getSelected() {
+        return selected;
     }
 
     @Override

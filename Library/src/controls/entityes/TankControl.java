@@ -1,9 +1,7 @@
 package controls.entityes;
 
-import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.FastMath;
@@ -14,7 +12,6 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 import utilities.LoadingManager;
@@ -37,8 +34,6 @@ public class TankControl extends PlayerControl {
     private transient Node head;
     private transient Node eye;
     private float aimState;
-
-    private transient WeaponControl selectedWeapon;
 
     public TankControl() {
         super.resetHealth(400);
@@ -146,7 +141,7 @@ public class TankControl extends PlayerControl {
         this.secondary.setHolder(this);
         this.primary.create();
         this.secondary.create();
-        this.selectedWeapon = primary;
+        this.selected = primary;
         n.addControl(this);
 
         gc.getApplication().getRootNode().attachChild(n);
@@ -222,17 +217,17 @@ public class TankControl extends PlayerControl {
     private void updateWeapons(float tpf) {
         if (super.swap) {
             super.swap = false;
-            this.selectedWeapon.secondaryFire(false);
-            this.selectedWeapon.fire(false);
-            if (this.primary == this.selectedWeapon) {
-                this.selectedWeapon = this.secondary;
+            this.selected.secondaryFire(false);
+            this.selected.fire(false);
+            if (this.primary == this.selected) {
+                this.selected = this.secondary;
             } else {
-                this.selectedWeapon = this.primary;
+                this.selected = this.primary;
             }
         }
 
-        this.selectedWeapon.secondaryFire(super.secondaryFire);
-        this.selectedWeapon.fire(super.fire);
+        this.selected.secondaryFire(super.secondaryFire);
+        this.selected.fire(super.fire);
     }
 
     @Override

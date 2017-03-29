@@ -11,7 +11,6 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.weapons.WeaponControl;
 import java.util.List;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
@@ -21,7 +20,6 @@ public class DroneControl extends PlayerControl {
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Drone.j3o");
     private transient VehicleControl character;
     private transient Node eye;
-    private transient WeaponControl selectedWeapon;
     private Vector3f location = new Vector3f();
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
@@ -52,7 +50,7 @@ public class DroneControl extends PlayerControl {
         this.secondary.setHolder(this);
         this.primary.create();
         this.secondary.create();
-        this.selectedWeapon = primary;
+        this.selected = primary;
         n.addControl(this);
 
         if (server) {
@@ -132,19 +130,19 @@ public class DroneControl extends PlayerControl {
     private void updateWeapons(float tpf) {
         if (super.swap) {
             super.swap = false;
-            this.selectedWeapon.secondaryFire(false);
-            this.selectedWeapon.fire(false);
-            if (this.primary == this.selectedWeapon) {
-                this.selectedWeapon = this.secondary;
+            this.selected.secondaryFire(false);
+            this.selected.fire(false);
+            if (this.primary == this.selected) {
+                this.selected = this.secondary;
             } else {
-                this.selectedWeapon = this.primary;
+                this.selected = this.primary;
             }
         }
 
         this.primary.update(tpf);
         this.secondary.update(tpf);
-        this.selectedWeapon.fire(super.fire);
-        this.selectedWeapon.secondaryFire(super.secondaryFire);
+        this.selected.fire(super.fire);
+        this.selected.secondaryFire(super.secondaryFire);
     }
 
     @Override
