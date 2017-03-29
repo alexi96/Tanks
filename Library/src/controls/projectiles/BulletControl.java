@@ -1,18 +1,16 @@
 package controls.projectiles;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
+import synchronization.SyncManager;
 
 public class BulletControl extends ProjectileControl {
 
-    private static final AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Bullet.wav", AudioData.DataType.Buffer);
-    
     public BulletControl() {
     }
 
@@ -33,11 +31,17 @@ public class BulletControl extends ProjectileControl {
         app.getRootNode().attachChild(s);
         
         
-        if (GameController.getInstance().getSynchronizer() != null) {
+        if (!GameController.getInstance().isBestVisualStyles()) {
             return;
         }
-        AudioNode an = BulletControl.FIRE.clone();
+        AudioNode an = new AudioNode(app.getAssetManager(), "Sounds/Bullet.wav");
+        an.setPositional(true);
         an.setLocalTranslation(super.location);
         an.playInstance();
+    }
+
+    @Override
+    public void synchronize() {
+        super.spatial.setLocalTranslation(super.location);
     }
 }

@@ -10,6 +10,9 @@ import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
+import controls.entityes.TankControl;
+import controls.weapons.CannonControl;
+import controls.weapons.MinigunControl;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,19 +36,28 @@ public class ClientApplication extends SimpleApplication {
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
-        try {
+       /* try {
+            super.flyCam.setMoveSpeed(0);
             final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
             InputAppState state = new InputAppState(cc);
             HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
             super.stateManager.attach(state);
 
+            PlayerControl pl;
+
+            pl = new TankControl();
+            pl.setPrimary(new CannonControl());
+            pl.setSecondary(new MinigunControl());
+
+            state.spawn(pl);
+
             inputManager.addListener(state, PlayerControl.MAPPINGS);
         } catch (IOException ex) {
             Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        */
         HudFrame f = new HudFrame();
-        //f.show();
+        f.show();
 
         SpawnFrame sf = new SpawnFrame();
         //sf.show();
@@ -87,7 +99,7 @@ public class ClientApplication extends SimpleApplication {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
         }
-        app.ip = "localhost";
+        app.ip = null;
         if (debug) {
             if (args.length > 1) {
                 app.ip = args[1];
