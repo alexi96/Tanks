@@ -14,6 +14,7 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
 import controllers.GameController;
+import utilities.LoadingManager;
 
 public class HillMap extends Map {
 
@@ -24,6 +25,9 @@ public class HillMap extends Map {
         SimpleApplication app = gc.getApplication();
 
         boolean server = GameController.getInstance().getSynchronizer() != null;
+        
+        LoadingManager.loadNames(s);
+        
         if (server) {
             RigidBodyControl rbc = new RigidBodyControl(0);
             s.addControl(rbc);
