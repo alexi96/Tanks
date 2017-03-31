@@ -45,20 +45,22 @@ public final class MappedSettings<S> {
         }
     }
 
-    public void open() {
-        this.open(true);
+    public boolean open() {
+        return this.open(true);
     }
 
-    public void open(boolean reset) {
+    public boolean open(boolean reset) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.file))) {
             TreeMap<String, S> set = (TreeMap<String, S>) in.readObject();
             if (reset) {
                 this.settings.clear();
             }
             this.settings.putAll(set);
+            return true;
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(MappedSettings.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
 
     public static <M> MappedSettings<M> getInstance(Object obj) {

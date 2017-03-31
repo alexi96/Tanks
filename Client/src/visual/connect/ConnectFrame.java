@@ -38,7 +38,10 @@ public class ConnectFrame extends Frame {
         this.ipText.bounds(0, 0, super.width(), sz);
 
         this.settings.setFile(new File("LastIps"));
-        this.settings.open();
+        if (!this.settings.open()) {
+            this.settings.mapSetting(ConnectFrame.SETTING_NAME, new ArrayList<>());
+            this.settings.save();
+        }
         ArrayList<String> ips = this.settings.findSetting(ConnectFrame.SETTING_NAME);
         if (ips != null) {
             for (int i = 0; i < 9 && i < ips.size(); ++i) {
@@ -78,6 +81,7 @@ public class ConnectFrame extends Frame {
             this.application.connect(this.ipText.text());
             super.hide();
             this.settings.findSetting(ConnectFrame.SETTING_NAME).add(this.ipText.text());
+            this.settings.save();
         } catch (IOException ex) {
             Logger.getLogger(ConnectFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
