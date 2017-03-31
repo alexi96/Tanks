@@ -23,4 +23,9 @@ public class Hud {
         this.health.hide();
         this.ammo.hide();
     }
+
+    public void invalidate() {
+        this.health.invalidate();
+        this.ammo.invalidate();
+    }
 }
