@@ -5,7 +5,7 @@
             <url>src/application/ClientApplication.java</url>
             <bookmark id="1">
                 <name/>
-                <line>47</line>
+                <line>31</line>
                 <key/>
             </bookmark>
         </file>
@@ -13,12 +13,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Alex/Facultate/Tanks/Client/src/utilities/Hud.java</file>
-            <file>file:/D:/Alex/Facultate/Tanks/Client/src/utilities/Settings.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Client/src/visual/HudFrame.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Client/src/visual/hud/HealthHudFrame.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Client/src/application/ClientApplication.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Client/src/visual/hud/AmmoHudFrame.java</file>
             <file>file:/D:/Alex/Facultate/Tanks/Client/src/utilities/InputAppState.java</file>
+            <file>file:/D:/Alex/Facultate/Tanks/Client/src/visual/connect/ConnectFrame.java</file>
         </group>
     </open-files>
 </project-private>

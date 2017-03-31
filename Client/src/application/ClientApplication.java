@@ -77,16 +77,6 @@ public class ClientApplication extends SimpleApplication {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
         }
-        app.ip = "localhost";
-        if (debug) {
-            if (args.length > 1) {
-                app.ip = args[1];
-            }
-        } else {
-            if (args.length > 0) {
-                app.ip = args[0];
-            }
-        }
         app.start();
     }
 }

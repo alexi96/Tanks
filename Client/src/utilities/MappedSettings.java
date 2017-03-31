@@ -70,7 +70,4 @@ public final class MappedSettings<S> {
         }
         return MappedSettings.INSTANCES.get(obj);
     }
-
-    public static void main(String[] args) {
-    }
 }

@@ -9,6 +9,7 @@ import controllers.GameController;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utilities.MappedSettings;
@@ -20,7 +21,7 @@ public class ConnectFrame extends Frame {
     private static final String SETTING_NAME = "ips";
     private final IpTextFrame ipText = new IpTextFrame();
     private ClientApplication application;
-    private final MappedSettings<ArrayList<String>> settings = MappedSettings.<ArrayList<String>>getInstance(this);
+    private final MappedSettings<TreeSet<String>> settings = MappedSettings.<TreeSet<String>>getInstance(this);
 
     public ConnectFrame(ClientApplication application) {
         this();
@@ -39,30 +40,35 @@ public class ConnectFrame extends Frame {
 
         this.settings.setFile(new File("LastIps"));
         if (!this.settings.open()) {
-            this.settings.mapSetting(ConnectFrame.SETTING_NAME, new ArrayList<>());
+            this.settings.mapSetting(ConnectFrame.SETTING_NAME, new TreeSet<>());
             this.settings.save();
         }
-        ArrayList<String> ips = this.settings.findSetting(ConnectFrame.SETTING_NAME);
-        if (ips != null) {
-            for (int i = 0; i < 9 && i < ips.size(); ++i) {
-                Label l = new Label(ips.get(i)) {
-                    @Override
-                    public void onMouseButtonEvent(MouseButtonEvent evt) {
-                        if (evt.isPressed()) {
-                            ConnectFrame.this.selectIp(super.text);
-                        }
-                    }
-                };
-                l.bounds(0, sz * i + sz, super.width(), sz);
-                super.add(l);
+        TreeSet<String> ips = this.settings.findSetting(ConnectFrame.SETTING_NAME);
+        int i = 0;
+        for (String ip : ips) {
+            if (i >= 9) {
+                break;
             }
+
+            Label l = new Label(ip) {
+                @Override
+                public void onMouseButtonEvent(MouseButtonEvent evt) {
+                    if (evt.isPressed()) {
+                        ConnectFrame.this.selectIp(super.text);
+                    }
+                }
+            };
+            l.bounds(0, sz * i + sz, super.width(), sz);
+            super.add(l);
+
         }
 
         super.add(this.ipText);
     }
 
     private void selectIp(String ip) {
-        this.ipText.text();
+        this.ipText.changeText(ip);
+        super.invalidate();
     }
 
     @Override
