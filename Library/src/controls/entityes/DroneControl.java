@@ -106,6 +106,11 @@ public class DroneControl extends PlayerControl {
 
         this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
+        if (o.selected == o.primary) {
+            this.selected = this.primary;
+        } else {
+            this.selected = this.secondary;
+        }
     }
 
     @Override
