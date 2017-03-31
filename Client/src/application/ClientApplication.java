@@ -18,30 +18,28 @@ import utilities.LoadingManager;
 import visual.connect.ConnectFrame;
 
 public class ClientApplication extends SimpleApplication {
-    
-    private String ip;
-    
+
     @Override
     public void simpleInitApp() {
         super.cam.setFrustumPerspective(45, (float) super.settings.getWidth() / super.settings.getHeight(), 0.01f, 1000);
         super.flyCam.setMoveSpeed(15);
         this.initKeys();
-        
+
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
-        
+
         new ConnectFrame(this).show();
     }
-    
+
     public void connect(String ip) throws IOException {
-        final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
+        final ControlsConnection cc = HiRpc.connectSimple(ip, ClientAppState.PORT, ControlsConnection.class);
         InputAppState state = new InputAppState(cc);
-        HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
+        HiRpc.connectReverse(ip, GameConnection.PORT, state);
         super.stateManager.attach(state);
-        
+
         inputManager.addListener(state, PlayerControl.MAPPINGS);
     }
-    
+
     private void initKeys() {
         inputManager.addMapping(PlayerControl.UP, new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping(PlayerControl.DOWN, new KeyTrigger(KeyInput.KEY_S));
@@ -54,19 +52,19 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.SHIFT, new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping(PlayerControl.SWAP, new KeyTrigger(KeyInput.KEY_Q));
         inputManager.addMapping(PlayerControl.RESPAWN, new KeyTrigger(KeyInput.KEY_M));
-        
+
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
         inputManager.addMapping(PlayerControl.ALT_LEFT, new KeyTrigger(KeyInput.KEY_NUMPAD4));
         inputManager.addMapping(PlayerControl.ALT_RIGHT, new KeyTrigger(KeyInput.KEY_NUMPAD6));
     }
-    
+
     @Override
     public void destroy() {
         super.destroy();
         System.exit(0);
     }
-    
+
     public static void main(String[] args) {
         ClientApplication app = new ClientApplication();
         boolean debug = args.length > 0 && args[0].equalsIgnoreCase("debug");

@@ -27,6 +27,11 @@ public class IpTextFrame extends Component {
         return this.text.toString();
     }
 
+    public void changeText(String text) {
+        this.text.setLength(0);
+        this.text.append(text);
+    }
+    
     @Override
     public void paint(Graphics g) {
         g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, super.height()));
