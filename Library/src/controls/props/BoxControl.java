@@ -87,7 +87,9 @@ public class BoxControl extends DestroyableControl {
                 angs[0] = RAND.nextInt(100);
                 angs[1] = RAND.nextInt(100);
                 angs[2] = RAND.nextInt(100);
-                plank.rotation = ;
+
+                plank.rotation = new Quaternion(angs);
+
                 sm.create(plank);
                 
                 RigidBodyControl rbc = plank.getSpatial().getControl(RigidBodyControl.class);
