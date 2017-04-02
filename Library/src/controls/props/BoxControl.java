@@ -8,6 +8,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.DestroyableControl;
+import java.util.Random;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 
@@ -15,6 +16,7 @@ public class BoxControl extends DestroyableControl {
 
     protected static final Node PROPS = (Node) GameController.getInstance().getApplication().getAssetManager().loadModel("Models/Props.j3o");
 
+    protected static final Random RAND = new Random();
     protected Vector3f location = new Vector3f();
     protected Quaternion rotation = new Quaternion();
     protected transient Vector3f lastLoc = new Vector3f();
@@ -81,6 +83,7 @@ public class BoxControl extends DestroyableControl {
             for (int i = 1; i <= 5; i++) {
                 PlankControl plank = new PlankControl();
                 plank.location = this.location.clone();
+                float[] angs = new float[3];
                 plank.rotation = ;
                 sm.create(plank);
                 
