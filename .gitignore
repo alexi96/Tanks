@@ -6,13 +6,9 @@
 /HiRpcJ7/dist/
 /Server/build/
 /Client/build/
-/Library/nbproject
-/Server/nbproject
-/Client/nbproject
-/HiRpcJ7/nbproject
-/Library/nbproject
+/Library/nbproject/private
+/Server/nbproject/private
+/Client/nbproject/private
+/HiRpcJ7/nbproject/private
 /HiRPC/build/
-Client/nbproject/private/private.xml
-HiRPC/nbproject/private/private.xml
-Server/nbproject/private/private.xml
 /HiRPC/dist/
