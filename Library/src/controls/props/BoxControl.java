@@ -81,7 +81,8 @@ public class BoxControl extends DestroyableControl {
 
         for (int i = 1; i <= 5; i++) {
             BoxControl box = new BoxControl();
-            box.
+            box.location = this.location.clone();
+            box.rotation = this.rotation.clone();
             sm.create(box);
         }
     }
