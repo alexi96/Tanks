@@ -1,6 +1,7 @@
 package controls.props;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
@@ -84,9 +85,9 @@ public class BoxControl extends DestroyableControl {
                 PlankControl plank = new PlankControl();
                 plank.location = this.location.clone();
                 float[] angs = new float[3];
-                angs[0] = RAND.nextInt(100);
-                angs[1] = RAND.nextInt(100);
-                angs[2] = RAND.nextInt(100);
+                angs[0] = RAND.nextInt(360) * FastMath.DEG_TO_RAD;
+                angs[1] = RAND.nextInt(360) * FastMath.DEG_TO_RAD;
+                angs[2] = RAND.nextInt(360) * FastMath.DEG_TO_RAD;
 
                 plank.rotation = new Quaternion(angs);
 
