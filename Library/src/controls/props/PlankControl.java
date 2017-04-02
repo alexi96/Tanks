@@ -1,12 +1,14 @@
 package controls.props;
 
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import synchronization.SyncManager;
 
-public class PlankControl extends BoxControl {
+public class PlankControl extends PropControl {
 
     public PlankControl() {
         super(30);
@@ -29,10 +31,6 @@ public class PlankControl extends BoxControl {
         GameController.getInstance().getApplication().getRootNode().attachChild(plank);
     }
 
-    protected void die() {
-        GameController.getInstance().getSynchronizer().destroy(this);
-    }
-
     @Override
     public void setSpatial(Spatial spatial) {
         GameController gc = GameController.getInstance();
@@ -40,26 +38,36 @@ public class PlankControl extends BoxControl {
         if (gc.getSynchronizer() != null) {
             if (spatial != null) {
                 RigidBodyControl rbc = new RigidBodyControl(50);
+                rbc.setCollisionShape(new BoxCollisionShape(new Vector3f(0.1f, 0.5f, 0.1f)));
                 spatial.addControl(rbc);
 
                 gc.getPhysics().add(rbc);
+
             } else {
                 RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
                 super.spatial.removeControl(rbc);
 
                 gc.getPhysics().remove(rbc);
             }
-        }
 
-        if (spatial != null) {
-            this.location = spatial.getLocalTranslation();
-            this.rotation = spatial.getLocalRotation();
-        } else {
-            this.location = null;
-            this.rotation = null;
+            super.setSpatial(spatial);
         }
 
         super.setSpatial(spatial);
     }
 
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+
+        SyncManager sm = GameController.getInstance().getSynchronizer();
+
+        if (sm == null) {
+            return;
+        }
+        
+        if (super.location.getY() <= 100) {
+            sm.destroy(this);
+        }
+    }
 }

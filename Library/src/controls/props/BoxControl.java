@@ -5,23 +5,14 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.DestroyableControl;
 import java.util.Random;
 import synchronization.SyncManager;
-import synchronization.Synchronizer;
 
-public class BoxControl extends DestroyableControl {
-
-    protected static final Node PROPS = (Node) GameController.getInstance().getApplication().getAssetManager().loadModel("Models/Props.j3o");
+public class BoxControl extends PropControl {
 
     protected static final Random RAND = new Random();
-    protected Vector3f location = new Vector3f();
-    protected Quaternion rotation = new Quaternion();
-    protected transient Vector3f lastLoc = new Vector3f();
-    protected transient Quaternion lastRot = new Quaternion();
 
     public BoxControl() {
         super(200);
@@ -41,7 +32,7 @@ public class BoxControl extends DestroyableControl {
 
     @Override
     public void create() {
-        Spatial box = BoxControl.PROPS.getChild("Box").clone();
+        Spatial box = PropControl.PROPS.getChild("Box").clone();
 
         box.setLocalTranslation(this.location);
         box.setLocalRotation(this.rotation);
@@ -54,26 +45,6 @@ public class BoxControl extends DestroyableControl {
         box.addControl(this);
 
         GameController.getInstance().getApplication().getRootNode().attachChild(box);
-    }
-
-    @Override
-    public void prepare(Synchronizer newData) {
-        BoxControl o = (BoxControl) newData;
-        this.location.set(o.location);
-        this.rotation.set(o.rotation);
-    }
-
-    @Override
-    public void synchronize() {
-        super.spatial.setLocalTranslation(this.location);
-        super.spatial.setLocalRotation(this.rotation);
-    }
-
-    @Override
-    public void hit(float dmg, Vector3f dir, Vector3f loc) {
-        RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
-        rbc.applyImpulse(dir.mult(dmg), loc);
-        super.hit(dmg, dir, loc);
     }
 
     @Override
@@ -94,7 +65,7 @@ public class BoxControl extends DestroyableControl {
                 sm.create(plank);
                 
                 RigidBodyControl rbc = plank.getSpatial().getControl(RigidBodyControl.class);
-                rbc.applyImpulse(Vector3f.UNIT_Y.mult(10), Vector3f.ZERO);
+                rbc.applyImpulse(plank.rotation.getRotationColumn(0).mult(50), Vector3f.ZERO);
             }
         }
 
@@ -119,30 +90,6 @@ public class BoxControl extends DestroyableControl {
             }
         }
 
-        if (spatial != null) {
-            this.location = spatial.getLocalTranslation();
-            this.rotation = spatial.getLocalRotation();
-        } else {
-            this.location = null;
-            this.rotation = null;
-        }
-
         super.setSpatial(spatial);
-    }
-
-    @Override
-    public void update(float tpf) {
-        GameController gc = GameController.getInstance();
-        SyncManager sm = gc.getSynchronizer();
-        if (sm == null) {
-            return;
-        }
-
-        if (this.lastLoc.equals(this.location) && this.lastRot.equals(this.rotation)) {
-            return;
-        }
-        this.lastLoc.set(this.location);
-        this.lastRot.set(this.rotation);
-        sm.update(this);
     }
 }
