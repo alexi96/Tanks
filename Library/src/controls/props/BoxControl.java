@@ -84,6 +84,9 @@ public class BoxControl extends DestroyableControl {
                 PlankControl plank = new PlankControl();
                 plank.location = this.location.clone();
                 float[] angs = new float[3];
+                angs[0] = RAND.nextInt(100);
+                angs[1] = RAND.nextInt(100);
+                angs[2] = RAND.nextInt(100);
                 plank.rotation = ;
                 sm.create(plank);
                 
