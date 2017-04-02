@@ -29,6 +29,10 @@ public class PlankControl extends BoxControl {
         GameController.getInstance().getApplication().getRootNode().attachChild(plank);
     }
 
+    protected void die() {
+        GameController.getInstance().getSynchronizer().destroy(this);
+    }
+
     @Override
     public void setSpatial(Spatial spatial) {
         GameController gc = GameController.getInstance();
@@ -57,6 +61,5 @@ public class PlankControl extends BoxControl {
 
         super.setSpatial(spatial);
     }
-    
-    
+
 }
