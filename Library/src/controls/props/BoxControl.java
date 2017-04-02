@@ -1,4 +1,4 @@
-package controls;
+package controls.props;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
@@ -7,6 +7,7 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
+import controls.DestroyableControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 
@@ -74,7 +75,7 @@ public class BoxControl extends DestroyableControl {
 
         if (gc.getSynchronizer() != null) {
             if (spatial != null) {
-                RigidBodyControl rbc = new RigidBodyControl(100);
+                RigidBodyControl rbc = new RigidBodyControl(200);
                 spatial.addControl(rbc);
 
                 gc.getPhysics().add(rbc);

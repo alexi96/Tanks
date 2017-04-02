@@ -2,7 +2,7 @@ package utilities;
 
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.BoxControl;
+import controls.props.BoxControl;
 import synchronization.SyncManager;
 
 public class Names {
