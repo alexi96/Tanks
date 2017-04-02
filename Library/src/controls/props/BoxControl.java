@@ -75,16 +75,21 @@ public class BoxControl extends DestroyableControl {
 
     @Override
     protected void die() {
-        super.die();
-
         SyncManager sm = GameController.getInstance().getSynchronizer();
 
-        for (int i = 1; i <= 5; i++) {
-            BoxControl box = new BoxControl();
-            box.location = this.location.clone();
-            box.rotation = this.rotation.clone();
-            sm.create(box);
+        if (sm != null) {
+            for (int i = 1; i <= 5; i++) {
+                PlankControl plank = new PlankControl();
+                plank.location = this.location.clone();
+                plank.rotation = ;
+                sm.create(plank);
+                
+                RigidBodyControl rbc = plank.getSpatial().getControl(RigidBodyControl.class);
+                rbc.applyImpulse(Vector3f.UNIT_Y.mult(10), Vector3f.ZERO);
+            }
         }
+
+        super.die();
     }
 
     @Override
