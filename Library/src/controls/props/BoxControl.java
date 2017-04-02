@@ -24,6 +24,10 @@ public class BoxControl extends DestroyableControl {
         super(200);
     }
 
+    public BoxControl(float health) {
+        super(health);
+    }
+
     public Vector3f getLocation() {
         return location;
     }
