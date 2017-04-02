@@ -42,7 +42,7 @@ public class BoxControl extends DestroyableControl {
 
         box.setLocalTranslation(this.location);
         box.setLocalRotation(this.rotation);
-        
+
         SyncManager sm = GameController.getInstance().getSynchronizer();
         if (sm == null) {
             box.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
@@ -72,6 +72,16 @@ public class BoxControl extends DestroyableControl {
         rbc.applyImpulse(dir.mult(dmg), loc);
         super.hit(dmg, dir, loc);
     }
+
+    @Override
+    protected void die() {
+        super.die();
+        for (int i = 1; i <= 5; i++) {
+            BoxControl box = new BoxControl();
+            
+        }
+    }
+    
 
     @Override
     public void setSpatial(Spatial spatial) {
