@@ -11,6 +11,7 @@ public class PlankControl extends BoxControl {
         super(30);
     }
 
+    @Override
     public void create() {
         Spatial plank = BoxControl.PROPS.getChild("Plank").clone();
 
