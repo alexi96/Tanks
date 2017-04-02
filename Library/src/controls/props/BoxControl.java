@@ -84,7 +84,7 @@ public class BoxControl extends DestroyableControl {
                 PlankControl plank = new PlankControl();
                 plank.location = this.location.clone();
                 float[] angs = new float[3];
-                plank.rotation = ;
+                plank.rotation = new Quaternion(angs);
                 sm.create(plank);
                 
                 RigidBodyControl rbc = plank.getSpatial().getControl(RigidBodyControl.class);
