@@ -79,6 +79,11 @@ public class BoxControl extends DestroyableControl {
 
         SyncManager sm = GameController.getInstance().getSynchronizer();
 
+        for (int i = 1; i <= 5; i++) {
+            BoxControl box = new BoxControl();
+            box.
+            sm.create(box);
+        }
     }
 
     @Override
