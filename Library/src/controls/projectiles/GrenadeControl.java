@@ -16,8 +16,8 @@ public class GrenadeControl extends ProjectileControl {
     public GrenadeControl() {
     }
 
-    public GrenadeControl(Vector3f direction, float speed, float size, float damage, PlayerControl source, float range) {
-        super(direction, speed, size, damage, source, range);
+    public GrenadeControl(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
+        super(direction, speed, 0.1f, damage, source, range);
     }
 
     @Override

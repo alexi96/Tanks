@@ -1,14 +1,13 @@
 package controls.weapons;
 
 import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.DroneControl;
-import controls.projectiles.BulletControl;
+import controls.projectiles.GrenadeControl;
 import controls.projectiles.ProjectileControl;
 import synchronization.SyncManager;
 
@@ -37,8 +36,7 @@ public class GrenadeLauncher extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getParent().getWorldRotation().getRotationColumn(2);
-        ProjectileControl pc = new BulletControl(dir, 20, super.damage, super.holder, 100);
-        //ProjectileControl pc = new GrenadeControl(dir, 20, super.damage, super.holder, 100);
+        ProjectileControl pc = new GrenadeControl(dir, 20, super.damage, super.holder, 100);
         pc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(pc);
 
