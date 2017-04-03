@@ -11,7 +11,7 @@ import controls.entityes.PlayerControl;
 
 public class GrenadeControl extends ProjectileControl {
 
-    private static final AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/GrenadeFire.wav", AudioData.DataType.Buffer);
+    //private static final AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/GrenadeFire.wav", AudioData.DataType.Buffer);
 
     public GrenadeControl() {
     }
@@ -35,9 +35,9 @@ public class GrenadeControl extends ProjectileControl {
         if (GameController.getInstance().getSynchronizer() != null) {
             return;
         }
-        AudioNode an = GrenadeControl.FIRE.clone();
+        /*AudioNode an = GrenadeControl.FIRE.clone();
         an.setLocalTranslation(super.location);
-        an.playInstance();
+        an.playInstance();*/
     }
 
     @Override
