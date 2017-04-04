@@ -7,7 +7,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.RobotControl;
-import controls.projectiles.CannonRacket;
+import controls.projectiles.RocketControl;
 import controls.projectiles.ProjectileControl;
 import synchronization.SyncManager;
 
@@ -78,7 +78,7 @@ public class RpgControl extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getWorldRotation().getRotationColumn(2);
-        ProjectileControl bc = new CannonRacket(dir, 75, super.damage, super.holder, 100);
+        ProjectileControl bc = new RocketControl(dir, 75, super.damage, super.holder, 100);
         bc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(bc);
 

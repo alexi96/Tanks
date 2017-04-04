@@ -10,7 +10,7 @@ import controllers.GameController;
 import controls.entityes.PlayerControl;
 import synchronization.SyncManager;
 
-public class CannonRacket extends ProjectileControl {
+public class RocketControl extends ProjectileControl {
 
     private final static AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Bullet.wav", AudioData.DataType.Buffer);
     private final static AudioNode EXPLOSION = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Explosion.wav", AudioData.DataType.Buffer);
@@ -19,10 +19,10 @@ public class CannonRacket extends ProjectileControl {
         EXPLOSION.setVolume(5);
     }
 
-    public CannonRacket() {
+    public RocketControl() {
     }
 
-    public CannonRacket(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
+    public RocketControl(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
         super(direction, speed, 0.25f, damage, source, range);
     }
 
@@ -43,7 +43,7 @@ public class CannonRacket extends ProjectileControl {
             return;
         }
         
-        AudioNode an = CannonRacket.FIRE.clone();
+        AudioNode an = RocketControl.FIRE.clone();
         an.setLocalTranslation(super.location);
         an.playInstance();
     }
@@ -57,7 +57,7 @@ public class CannonRacket extends ProjectileControl {
             return;
         }
         
-        AudioNode an = CannonRacket.EXPLOSION.clone();
+        AudioNode an = RocketControl.EXPLOSION.clone();
         an.setLocalTranslation(super.location);
         an.playInstance();
     }
