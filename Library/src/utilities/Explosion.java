@@ -1,37 +1,45 @@
-package application;
+package utilities;
 
-import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.ParticleMesh.Type;
+import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterSphereShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import controllers.GameController;
+import controls.GameControl;
+import synchronization.SyncManager;
 
-public class ExplosionTest extends SimpleApplication {
+public class Explosion extends GameControl {
 
-    private float time = 0;
-    private int state = 0;
-    private Node explosionEffect = new Node("explosionFX");
-    private ParticleEmitter flame, flash, spark, roundspark, smoketrail, debris,
-                            shockwave;
-
+    private transient float time = 5;
+    private transient Node explosionEffect;
+    private transient ParticleEmitter flame, flash, spark, roundspark, smoketrail, debris, shockwave;
+    private transient AssetManager am;
 
     private static final int COUNT_FACTOR = 1;
     private static final float COUNT_FACTOR_F = 1f;
 
     private static final boolean POINT_SPRITE = true;
-    private static final Type EMITTER_TYPE = POINT_SPRITE ? Type.Point : Type.Triangle;
+    private static final ParticleMesh.Type EMITTER_TYPE = POINT_SPRITE ? ParticleMesh.Type.Point : ParticleMesh.Type.Triangle;
+    private Vector3f location = new Vector3f();
 
-    public static void main(String[] args){
-        ExplosionTest app = new ExplosionTest();
-        app.start();
+    public Vector3f getLocation() {
+        return location;
     }
 
-    private void createFlame(){
+    public void setLocation(Vector3f location) {
+        this.location = location;
+    }
+
+    public Node getExplosionEffect() {
+        return explosionEffect;
+    }
+
+    private void createFlame() {
         flame = new ParticleEmitter("Flame", EMITTER_TYPE, 32 * COUNT_FACTOR);
         flame.setSelectRandomImage(true);
         flame.setStartColor(new ColorRGBA(1f, 0.4f, 0.05f, (float) (1f / COUNT_FACTOR_F)));
@@ -47,14 +55,14 @@ public class ExplosionTest extends SimpleApplication {
         flame.getParticleInfluencer().setVelocityVariation(1f);
         flame.setImagesX(2);
         flame.setImagesY(2);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/flame.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flame.setMaterial(mat);
         explosionEffect.attachChild(flame);
     }
 
-    private void createFlash(){
+    private void createFlash() {
         flash = new ParticleEmitter("Flash", EMITTER_TYPE, 24 * COUNT_FACTOR);
         flash.setSelectRandomImage(true);
         flash.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1f / COUNT_FACTOR_F)));
@@ -70,14 +78,14 @@ public class ExplosionTest extends SimpleApplication {
         flash.setVelocityVariation(1);
         flash.setImagesX(2);
         flash.setImagesY(2);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flash.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/flash.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         flash.setMaterial(mat);
         explosionEffect.attachChild(flash);
     }
 
-    private void createRoundSpark(){
+    private void createRoundSpark() {
         roundspark = new ParticleEmitter("RoundSpark", EMITTER_TYPE, 20 * COUNT_FACTOR);
         roundspark.setStartColor(new ColorRGBA(1f, 0.29f, 0.34f, (float) (1.0 / COUNT_FACTOR_F)));
         roundspark.setEndColor(new ColorRGBA(0, 0, 0, (float) (0.5f / COUNT_FACTOR_F)));
@@ -92,15 +100,15 @@ public class ExplosionTest extends SimpleApplication {
         roundspark.setVelocityVariation(.5f);
         roundspark.setImagesX(1);
         roundspark.setImagesY(1);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/roundspark.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/roundspark.png"));
         mat.setBoolean("PointSprite", POINT_SPRITE);
         roundspark.setMaterial(mat);
         explosionEffect.attachChild(roundspark);
     }
 
-    private void createSpark(){
-        spark = new ParticleEmitter("Spark", Type.Triangle, 30 * COUNT_FACTOR);
+    private void createSpark() {
+        spark = new ParticleEmitter("Spark", ParticleMesh.Type.Triangle, 30 * COUNT_FACTOR);
         spark.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1.0f / COUNT_FACTOR_F)));
         spark.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
         spark.setStartSize(.5f);
@@ -114,14 +122,14 @@ public class ExplosionTest extends SimpleApplication {
         spark.getParticleInfluencer().setVelocityVariation(1);
         spark.setImagesX(1);
         spark.setImagesY(1);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/spark.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/spark.png"));
         spark.setMaterial(mat);
         explosionEffect.attachChild(spark);
     }
 
-    private void createSmokeTrail(){
-        smoketrail = new ParticleEmitter("SmokeTrail", Type.Triangle, 22 * COUNT_FACTOR);
+    private void createSmokeTrail() {
+        smoketrail = new ParticleEmitter("SmokeTrail", ParticleMesh.Type.Triangle, 22 * COUNT_FACTOR);
         smoketrail.setStartColor(new ColorRGBA(1f, 0.8f, 0.36f, (float) (1.0f / COUNT_FACTOR_F)));
         smoketrail.setEndColor(new ColorRGBA(1f, 0.8f, 0.36f, 0f));
         smoketrail.setStartSize(.2f);
@@ -137,14 +145,14 @@ public class ExplosionTest extends SimpleApplication {
         smoketrail.setVelocityVariation(1);
         smoketrail.setImagesX(1);
         smoketrail.setImagesY(3);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/smoketrail.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/smoketrail.png"));
         smoketrail.setMaterial(mat);
         explosionEffect.attachChild(smoketrail);
     }
 
-    private void createDebris(){
-        debris = new ParticleEmitter("Debris", Type.Triangle, 15 * COUNT_FACTOR);
+    private void createDebris() {
+        debris = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 15 * COUNT_FACTOR);
         debris.setSelectRandomImage(true);
         debris.setRandomAngle(true);
         debris.setRotateSpeed(FastMath.TWO_PI * 4);
@@ -162,14 +170,14 @@ public class ExplosionTest extends SimpleApplication {
         debris.setVelocityVariation(.60f);
         debris.setImagesX(3);
         debris.setImagesY(3);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/Debris.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/Debris.png"));
         debris.setMaterial(mat);
         explosionEffect.attachChild(debris);
     }
 
-    private void createShockwave(){
-        shockwave = new ParticleEmitter("Shockwave", Type.Triangle, 1 * COUNT_FACTOR);
+    private void createShockwave() {
+        shockwave = new ParticleEmitter("Shockwave", ParticleMesh.Type.Triangle, 1 * COUNT_FACTOR);
 //        shockwave.setRandomAngle(true);
         shockwave.setFaceNormal(Vector3f.UNIT_Y);
         shockwave.setStartColor(new ColorRGBA(.48f, 0.17f, 0.01f, (float) (.8f / COUNT_FACTOR_F)));
@@ -186,14 +194,26 @@ public class ExplosionTest extends SimpleApplication {
         shockwave.setVelocityVariation(0f);
         shockwave.setImagesX(1);
         shockwave.setImagesY(1);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/shockwave.png"));
+        Material mat = new Material(am, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", am.loadTexture("Effects/Explosion/shockwave.png"));
         shockwave.setMaterial(mat);
         explosionEffect.attachChild(shockwave);
     }
 
     @Override
-    public void simpleInitApp() {
+    public void create() {
+        this.explosionEffect = new Node();
+        this.am = GameController.getInstance().getApplication().getAssetManager();
+        this.explosionEffect.addControl(this);
+
+        this.explosionEffect.setLocalTranslation(this.location);
+        GameController.getInstance().getApplication().getRootNode().attachChild(this.explosionEffect);
+
+        SyncManager sm = GameController.getInstance().getSynchronizer();
+        if (sm != null) {
+            return;
+        }
+
         createFlame();
         createFlash();
         createSpark();
@@ -201,45 +221,48 @@ public class ExplosionTest extends SimpleApplication {
         createSmokeTrail();
         createDebris();
         createShockwave();
-        explosionEffect.setLocalScale(0.5f);
-        renderManager.preloadScene(explosionEffect);
+        this.booooom();
+    }
 
-        cam.setLocation(new Vector3f(0, 3.5135868f, 10));
-        cam.setRotation(new Quaternion(1.5714673E-4f, 0.98696727f, -0.16091813f, 9.6381607E-4f));
+    public void booooom() {
+        flash.emitAllParticles();
+        spark.emitAllParticles();
+        smoketrail.emitAllParticles();
+        debris.emitAllParticles();
+        shockwave.emitAllParticles();
 
-        rootNode.attachChild(explosionEffect);
+        flame.emitAllParticles();
+        roundspark.emitAllParticles();
     }
 
     @Override
-    public void simpleUpdate(float tpf){  
-        time += tpf / speed;
-        if (time > 1f && state == 0){
-            flash.emitAllParticles();
-            spark.emitAllParticles();
-            smoketrail.emitAllParticles();
-            debris.emitAllParticles();
-            shockwave.emitAllParticles();
-            state++;
+    public void destroy() {
+        super.destroy();
+        SyncManager sm = GameController.getInstance().getSynchronizer();
+        if (sm != null) {
+            return;
         }
-        if (time > 1f + .05f / speed && state == 1){
-            flame.emitAllParticles();
-            roundspark.emitAllParticles();
-            state++;
-        }
-        
-        // rewind the effect
-        if (time > 5 / speed && state == 2){
-            state = 0;
-            time = 0;
 
-            flash.killAllParticles();
-            spark.killAllParticles();
-            smoketrail.killAllParticles();
-            debris.killAllParticles();
-            flame.killAllParticles();
-            roundspark.killAllParticles();
-            shockwave.killAllParticles();
-        }
+        flash.killAllParticles();
+        spark.killAllParticles();
+        smoketrail.killAllParticles();
+        debris.killAllParticles();
+        shockwave.killAllParticles();
+
+        flame.killAllParticles();
+        roundspark.killAllParticles();
     }
 
+    @Override
+    public void update(float tpf) {
+        SyncManager sm = GameController.getInstance().getSynchronizer();
+        if (sm == null) {
+            return;
+        }
+
+        this.time -= tpf;
+        if (this.time <= 0) {
+            sm.destroy(this);
+        }
+    }
 }
