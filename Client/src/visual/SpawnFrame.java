@@ -13,6 +13,7 @@ import controls.weapons.GrenadeLauncher;
 import controls.weapons.MachineGun;
 import controls.weapons.MinigunControl;
 import controls.weapons.RobotGrenadeLauncher;
+import controls.weapons.RpgControl;
 import controls.weapons.SniperConotrol;
 import controls.weapons.WeaponControl;
 import java.awt.Graphics;
@@ -96,6 +97,7 @@ public class SpawnFrame extends Frame {
         ArrayList<WeaponControl> rpw = new ArrayList<>();
         this.pWeapons.put(RobotControl.class.getSimpleName(), rpw);
         rpw.add(new MachineGun());
+        rpw.add(new RpgControl());
 
         ArrayList<WeaponControl> rsw = new ArrayList<>();
         this.sWeapons.put(RobotControl.class.getSimpleName(), rsw);

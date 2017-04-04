@@ -160,7 +160,7 @@ public abstract class ProjectileControl extends GameControl {
             manager.destroy(this);
             return;
         }
-
+        
         this.location.addLocal(this.direction.mult(dist));
         super.spatial.setLocalTranslation(this.location);
 

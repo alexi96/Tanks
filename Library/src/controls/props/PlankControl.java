@@ -66,7 +66,7 @@ public class PlankControl extends PropControl {
             return;
         }
         
-        if (super.location.getY() <= 100) {
+        if (super.location.getY() <= -100) {
             sm.destroy(this);
         }
     }
