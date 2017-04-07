@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utilities.observer.ObserverListener;
+import utilities.observer.ScoreObserverSubject;
 
 public class ControlsAppState extends ServerAppState implements ControlsConnection {
 
@@ -24,6 +25,12 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     protected final TreeMap<Integer, PlayerControl> players = new TreeMap<>();
     protected final ArrayList<Vector3f> spawnPoints = new ArrayList<>();
     private final ObserverListener<PlayerControl> deathListener = (p) -> this.players.remove(p.getId());
+
+    public ControlsAppState() {
+        ScoreObserverSubject scores = GameController.getInstance().getScoreListener();
+        scores.addHitListener((s, d, dm) -> System.out.println(s + " " + d + " " + dm));
+        scores.addKillListener((s, d) -> System.out.println(s + " " + d));
+    }
 
     public void findSpawnPoints(Node map) {
         this.spawnPoints.clear();
