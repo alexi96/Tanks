@@ -11,13 +11,13 @@ import controls.entityes.PlayerControl;
 
 public class GrenadeControl extends ProjectileControl {
 
-    private static final AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/GrenadeFire.wav", AudioData.DataType.Buffer);
+    //private static final AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/GrenadeFire.wav", AudioData.DataType.Buffer);
 
     public GrenadeControl() {
     }
 
-    public GrenadeControl(Vector3f direction, float speed, float size, float damage, PlayerControl source, float range) {
-        super(direction, speed, size, damage, source, range);
+    public GrenadeControl(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
+        super(direction, speed, 0.1f, damage, source, range);
     }
 
     @Override
@@ -35,9 +35,9 @@ public class GrenadeControl extends ProjectileControl {
         if (GameController.getInstance().getSynchronizer() != null) {
             return;
         }
-        AudioNode an = GrenadeControl.FIRE.clone();
+        /*AudioNode an = GrenadeControl.FIRE.clone();
         an.setLocalTranslation(super.location);
-        an.playInstance();
+        an.playInstance();*/
     }
 
     @Override

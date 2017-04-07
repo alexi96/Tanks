@@ -55,6 +55,8 @@ public class HillMap extends Map {
             
             WaterFilter water = new WaterFilter((Node) s, sun.getDirection());
             water.setReflectionScene(s);
+            water.setLightColor(ColorRGBA.White);
+            water.setLightDirection(sun.getDirection());
             water.setDeepWaterColor(ColorRGBA.Cyan);
             FilterPostProcessor fpp = new FilterPostProcessor(app.getAssetManager());
             fpp.addFilter(water);
