@@ -7,22 +7,21 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.RobotControl;
-import controls.projectiles.GrenadeControl;
+import controls.projectiles.RocketControl;
 import controls.projectiles.ProjectileControl;
 import synchronization.SyncManager;
 
-public class RobotGrenadeLauncher extends WeaponControl {
+public class RpgControl extends WeaponControl {
 
     private final static Node MODEL = RobotControl.getModel();
+    protected transient Spatial scope;
     protected Vector3f location = new Vector3f();
-    protected Quaternion rotation = new Quaternion();
-    protected transient Spatial clip;
+    protected transient Vector3f weaponDefaultLocation;
     protected transient boolean aiming;
     protected float aimState;
-    protected transient Vector3f weaponDefaultLocation;
 
-    public RobotGrenadeLauncher() {
-        super(100, 1.5f, 50);
+    public RpgControl() {
+        super(100, 5f, 10);
     }
 
     @Override
@@ -31,62 +30,59 @@ public class RobotGrenadeLauncher extends WeaponControl {
     }
 
     @Override
-    public boolean fire() {
-        if (!super.fire()) {
-            return false;
-        }
-        Vector3f dir = super.spatial.getParent().getWorldRotation().getRotationColumn(2);
-        ProjectileControl pc = new GrenadeControl(dir, 20, super.damage, super.holder, 100);
-        pc.setLocation(super.barrel.getWorldTranslation().clone());
-        GameController.getInstance().getSynchronizer().create(pc);
-
-        return true;
-    }
-
-    @Override
     public void create() {
-        Spatial s = RobotGrenadeLauncher.MODEL.getChild("GrenadeLauncher").clone();
+        Spatial s = RpgControl.MODEL.getChild("Rpg").clone();
 
         this.setSpatial(s);
     }
 
     @Override
     public void setSpatial(Spatial spatial) {
-        super.setSpatial(spatial);
-
         if (spatial != null) {
             Node n = (Node) spatial;
-            this.clip = n.getChild("Clip");
+            this.scope = n.getChild("Aim");
             this.weaponDefaultLocation = spatial.getLocalTranslation().clone();
-        } else {
-            this.clip = null;
         }
+
+        super.setSpatial(spatial);
     }
 
     @Override
     public void synchronize() {
         super.spatial.setLocalTranslation(this.location);
-        super.spatial.setLocalRotation(this.rotation);
 
-        Quaternion q = new Quaternion();
-        q.fromAngleAxis(this.state * 60 / this.fireRate * FastMath.DEG_TO_RAD, Vector3f.UNIT_Z);
-        this.clip.setLocalRotation(q);
-        
-        float ang = this.state / this.fireRate;
-        if (ang <= 0.5f) {
-            ang *= 2;
-            ang = FastMath.QUARTER_PI * ang / 4;
+        this.scope.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.HALF_PI * this.aimState, Vector3f.UNIT_Y));
+
+        Quaternion r = new Quaternion();
+
+        float t = super.state / super.fireRate;
+        t = 1 - t;
+        if (t <= 0.1f) {
+            t /= 0.1f;
+            r.fromAngleAxis(-FastMath.QUARTER_PI * t / 2, Vector3f.UNIT_X);
+        } else if (t > 0.1f && t < 0.9f) {
+            r.fromAngleAxis(-FastMath.QUARTER_PI / 2, Vector3f.UNIT_X);
         } else {
-            ang = 1 - ang;
-            ang *= 2;
-            ang = FastMath.QUARTER_PI * ang / 4;
+            t -= 0.9f;
+            t = t / 0.1f;
+            t = 1 - t;
+            r.fromAngleAxis(-FastMath.QUARTER_PI * t / 2, Vector3f.UNIT_X);
         }
 
-        this.rotation.set(new Quaternion().fromAngleAxis(-ang, Vector3f.UNIT_X));
-        
-        q = new Quaternion();
-        q.fromAngleAxis(-ang, Vector3f.UNIT_X);
-        super.spatial.setLocalRotation(q);
+        super.spatial.setLocalRotation(r);
+    }
+
+    @Override
+    public boolean fire() {
+        if (!super.fire()) {
+            return false;
+        }
+        Vector3f dir = super.spatial.getWorldRotation().getRotationColumn(2);
+        ProjectileControl bc = new RocketControl(dir, 75, super.damage, super.holder, 100);
+        bc.setLocation(super.barrel.getWorldTranslation().clone());
+        GameController.getInstance().getSynchronizer().create(bc);
+
+        return true;
     }
 
     private void updateAim(float tpf) {
@@ -114,15 +110,15 @@ public class RobotGrenadeLauncher extends WeaponControl {
             return;
         }
 
+        super.update(tpf);
+
         this.updateAim(tpf);
 
-        Vector3f loc = new Vector3f(0.15f, 0, 0.1f);
+        Vector3f loc = new Vector3f(-0.15f, 0, 0.1f);
         loc.multLocal(this.aimState);
         loc.addLocal(this.weaponDefaultLocation);
         loc.addLocal(0, 0, -0.03f * this.state / this.fireRate);
         this.location.set(loc);
         super.spatial.setLocalTranslation(this.location);
-
-        super.update(tpf);
     }
 }

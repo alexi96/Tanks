@@ -9,8 +9,11 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
+import java.awt.Color;
+import java.awt.Graphics;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
+import visual.Frame;
 
 public class RobotControl extends PlayerControl {
 
@@ -55,6 +58,22 @@ public class RobotControl extends PlayerControl {
         super.selected = primary;
 
         n.addControl(this);
+        f = new Frame() {
+            {
+                size(50, 50);
+            }
+
+            @Override
+            public void show() {
+                GameController.getInstance().getApplication().getGuiNode().attachChild(this.screen);
+            }
+
+            @Override
+            public void paint(Graphics g) {
+                g.setColor(Color.RED);
+                g.fillRect(0, 0, super.width(), super.height());
+            }
+        };
     }
 
     @Override
@@ -101,12 +120,21 @@ public class RobotControl extends PlayerControl {
 
     private void updatePhysics() {
         if (super.id != PlayerControl.serverId) {
+            if (!f.visible()) {
+                f.show();
+            }
+            Vector3f tv = GameController.getInstance().getApplication().getCamera().getScreenCoordinates(this.location);
+            System.out.println(tv);
+            f.location((int) tv.x, (int) tv.y);
+
             return;
         }
 
         Camera c = GameController.getInstance().getApplication().getCamera();
         c.setLocation(this.eye.getWorldTranslation());
     }
+
+    transient Frame f;
 
     @Override
     public void synchronize() {
@@ -143,7 +171,7 @@ public class RobotControl extends PlayerControl {
             camera.setRotation(new Quaternion(angs));
         }
     }
-    
+
     private void updateDuck(float tpf) {
         tpf *= 2;
         this.character.setDucked(this.ctrl);
@@ -261,7 +289,6 @@ public class RobotControl extends PlayerControl {
                 this.sprint += tpf * 2;
             }
         }*/
-
         walkDir.multLocal(3);
         this.character.setWalkDirection(walkDir);
         this.location = super.spatial.getWorldTranslation().clone();
