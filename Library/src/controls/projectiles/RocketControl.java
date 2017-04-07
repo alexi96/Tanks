@@ -4,20 +4,15 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.ParticleMesh;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
 import synchronization.SyncManager;
 import utilities.Explosion;
 
-public class RocketControl extends ProjectileControl {
+public class RocketControl extends ExplosibileProjectile {
 
     private final static AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Bullet.wav", AudioData.DataType.Buffer);
     private final static AudioNode EXPLOSION = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Explosion.wav", AudioData.DataType.Buffer);
@@ -31,7 +26,7 @@ public class RocketControl extends ProjectileControl {
     }
 
     public RocketControl(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
-        super(direction, speed, 0.25f, damage, source, range);
+        super(5f, direction, speed, 0.25f, damage, source, range);
     }
 
     @Override
