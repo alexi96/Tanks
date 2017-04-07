@@ -159,7 +159,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
             gc.getApplication().getFlyByCamera().setMoveSpeed(10);
         }
     }
-    
+
     public abstract void restrictCamra(Camera camera);
 
     @Override

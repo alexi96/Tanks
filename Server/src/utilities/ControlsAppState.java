@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import utilities.observer.ObserverListener;
 
 public class ControlsAppState extends ServerAppState implements ControlsConnection {
 
@@ -22,6 +23,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
 
     protected final TreeMap<Integer, PlayerControl> players = new TreeMap<>();
     protected final ArrayList<Vector3f> spawnPoints = new ArrayList<>();
+    private final ObserverListener<PlayerControl> deathListener = (p) -> this.players.remove(p.getId());
 
     public void findSpawnPoints(Node map) {
         this.spawnPoints.clear();
@@ -42,8 +44,15 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     @Override
     public void stateAttached(AppStateManager stateManager) {
         this.findSpawnPoints(GameController.getInstance().getApplication().getRootNode());
+        GameController.getInstance().getDeathSubject().addListener(this.deathListener);
     }
-    
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+        super.stateDetached(stateManager);
+        GameController.getInstance().getDeathSubject().removeListener(this.deathListener);
+    }
+
     @Override
     public void command(int id, String com, boolean pressed) {
         PlayerControl pc = this.players.get(id);
@@ -59,7 +68,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     @Override
     public PlayerControl spawn(final PlayerControl pl) {
         final Vector3f spawn = this.spawnPoints.get(ControlsAppState.rand.nextInt(this.spawnPoints.size()));
-        
+
         try {
             final GameController gc = GameController.getInstance();
             return gc.getApplication().enqueue(() -> {
