@@ -55,19 +55,21 @@ public abstract class DestroyableControl extends GameControl {
         this.maxHealth = health;
     }
 
-    private void hit(float val) {
+    private boolean hit(float val) {
         if (this.armor >= val) {
-            return;
+            return false;
         }
         val -= this.armor;
         this.health -= val;
         if (this.health <= 0) {
             this.die();
+            return true;
         }
+        return false;
     }
     
-    public void hit(float dmg, Vector3f dir, Vector3f loc) {
-        this.hit(dmg);
+    public boolean hit(float dmg, Vector3f dir, Vector3f loc) {
+        return this.hit(dmg);
     }
 
     protected void die() {

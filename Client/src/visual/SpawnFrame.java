@@ -242,6 +242,7 @@ public class SpawnFrame extends Frame {
 
         p.setPrimary(pw);
         p.setSecondary(sw);
+        p.setName(PlayerControl.playerName);
 
         this.spawn(p);
 

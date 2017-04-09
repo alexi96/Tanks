@@ -42,6 +42,8 @@ public class TankControl extends PlayerControl {
     @Override
     public void prepare(Synchronizer newData) {
         TankControl o = (TankControl) newData;
+        super.health = o.health;
+
         this.location.set(o.location);
         this.rotation.set(o.rotation);
         this.eyeRot.set(o.eyeRot);
@@ -321,10 +323,10 @@ public class TankControl extends PlayerControl {
     }
 
     @Override
-    public void hit(float dmg, Vector3f dir, Vector3f loc) {
+    public boolean hit(float dmg, Vector3f dir, Vector3f loc) {
         this.vehicle.applyImpulse(dir.mult(dmg), loc);
 
-        super.hit(dmg, dir, loc);
+        return super.hit(dmg, dir, loc);
     }
 
     @Override

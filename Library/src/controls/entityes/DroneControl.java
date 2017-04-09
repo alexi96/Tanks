@@ -99,6 +99,8 @@ public class DroneControl extends PlayerControl {
     @Override
     public void prepare(Synchronizer newData) {
         DroneControl o = (DroneControl) newData;
+        super.health = o.health;
+
         this.location.set(o.location);
         this.rotation.set(o.rotation);
         this.eyeRot.set(o.eyeRot);

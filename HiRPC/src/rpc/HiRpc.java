@@ -37,7 +37,7 @@ public final class HiRpc {
     public static Object connect(String ip, int port, Class... procs) throws IOException {
         Socket s = new Socket(ip, port);
 
-        s.getOutputStream().write(0);
+        s.getOutputStream().write(RpcServer.INVOCATION_TYPE);
 
         InvocationEndPoint inv = new InvocationEndPoint(s);
         Object r = Proxy.newProxyInstance(HiRpc.class.getClassLoader(), procs, inv);
@@ -47,10 +47,10 @@ public final class HiRpc {
     public static void connectReverse(String ip, int port, Object client) throws IOException {
         Socket s = new Socket(ip, port);
 
+        s.getOutputStream().write(RpcServer.EXECUTION_TYPE);
+
         ExecutionEndPoint exe = new ExecutionEndPoint(s, client);
         String name = "Client " + client.getClass().getSimpleName() + " (" + port + ')';
         new Thread(exe, name).start();
-
-        s.getOutputStream().write(1);
     }
 }

@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class ExecutionEndPoint implements Runnable {
+public class ExecutionEndPoint implements Runnable {
 
     private Socket socket;
     private Object procedures;
