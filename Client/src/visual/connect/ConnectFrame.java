@@ -19,6 +19,7 @@ import visual.Label;
 public class ConnectFrame extends Frame {
 
     private static final String SETTING_NAME = "ips";
+    private static final String NAME_SETTING_NAME = "name";
     private final TextField ipText = new TextField() {
         @Override
         public void onMouseButtonEvent(MouseButtonEvent evt) {
@@ -36,7 +37,7 @@ public class ConnectFrame extends Frame {
         }
     };
     private ClientApplication application;
-    private final MappedSettings<TreeSet<String>> settings = MappedSettings.<TreeSet<String>>getInstance(this);
+    private final MappedSettings<Object> settings = MappedSettings.<Object>getInstance(this);
     private TextField selectedField = this.ipText;
 
     public ConnectFrame(ClientApplication application) {
@@ -55,12 +56,13 @@ public class ConnectFrame extends Frame {
         this.ipText.bounds(0, 0, super.width(), sz);
         this.nameText.bounds(0, sz, super.width(), sz);
 
-        this.settings.setFile(new File("LastIps"));
+        this.settings.setFile(new File("LastSettings"));
         if (!this.settings.open()) {
             this.settings.mapSetting(ConnectFrame.SETTING_NAME, new TreeSet<>());
+            this.settings.mapSetting(ConnectFrame.NAME_SETTING_NAME, "");
             this.settings.save();
         }
-        TreeSet<String> ips = this.settings.findSetting(ConnectFrame.SETTING_NAME);
+        TreeSet<String> ips = (TreeSet<String>) this.settings.findSetting(ConnectFrame.SETTING_NAME);
         int i = 0;
         for (String ip : ips) {
             if (i >= 8) {
@@ -77,8 +79,9 @@ public class ConnectFrame extends Frame {
             };
             l.bounds(0, sz * i + sz * 2, super.width(), sz);
             super.add(l);
-
+            ++i;
         }
+        this.nameText.changeText((String) this.settings.findSetting(ConnectFrame.NAME_SETTING_NAME));
 
         super.add(this.ipText);
         super.add(this.nameText);
@@ -105,7 +108,9 @@ public class ConnectFrame extends Frame {
             PlayerControl.playerName = this.nameText.text();
             this.application.connect(this.ipText.text());
             super.hide();
-            this.settings.findSetting(ConnectFrame.SETTING_NAME).add(this.ipText.text());
+            TreeSet<String> ips = (TreeSet<String>) this.settings.findSetting(ConnectFrame.SETTING_NAME);
+            ips.add(this.ipText.text());
+            this.settings.mapSetting(ConnectFrame.NAME_SETTING_NAME, this.nameText.text());
             this.settings.save();
         } catch (IOException ex) {
             Logger.getLogger(ConnectFrame.class.getName()).log(Level.SEVERE, null, ex);

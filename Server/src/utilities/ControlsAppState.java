@@ -14,12 +14,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,10 +37,12 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     private final ObserverListener<PlayerControl> deathListener = (p) -> {
         this.players.remove(p.getId());
 
+        Collections.sort(this.scores);
         while (this.scores.size() > 10) {
-            this.scores.remove(this.scores.first());
+            this.scores.remove(this.scores.get(0));
         }
 
+        System.out.println(this.scores);
         this.saveScores();
     };
     private final ScoreKillListener killListener = (s, d) -> {
@@ -51,7 +52,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         this.scoreMaps.get(s).addPoints(1);
     };
     private final TreeMap<PlayerControl, Score> scoreMaps = new TreeMap<>();
-    private final TreeSet<Score> scores = new TreeSet<>();
+    private final ArrayList<Score> scores = new ArrayList<>();
 
     public ControlsAppState() {
     }
@@ -131,7 +132,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
 
     private void openScores() {
         try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(ControlsAppState.SCORES))) {
-            Set<Score> scs = (Set<Score>) out.readObject();
+            ArrayList<Score> scs = (ArrayList<Score>) out.readObject();
             this.scores.addAll(scs);
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ControlsAppState.class.getName()).log(Level.SEVERE, null, ex);
