@@ -27,9 +27,9 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     private final ObserverListener<PlayerControl> deathListener = (p) -> this.players.remove(p.getId());
 
     public ControlsAppState() {
-        ScoreObserverSubject scores = GameController.getInstance().getScoreListener();
-        scores.addHitListener((s, d, dm) -> System.out.println(s + " " + d + " " + dm));
-        scores.addKillListener((s, d) -> System.out.println(s + " " + d));
+        ScoreObserverSubject scores = GameController.getInstance().getScoreSubject();
+        scores.addHitListener((s, d, dm) -> System.out.println(s + " hitted " + d + " " + dm));
+        scores.addKillListener((s, d) -> System.out.println(s + " killed " + d));
     }
 
     public void findSpawnPoints(Node map) {

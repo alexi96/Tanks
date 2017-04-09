@@ -12,6 +12,7 @@ import controls.GameControl;
 import controls.entityes.PlayerControl;
 import synchronization.SyncManager;
 import utilities.LoadingManager;
+import utilities.observer.ScoreObserverSubject;
 
 public abstract class ProjectileControl extends GameControl {
 
@@ -128,7 +129,16 @@ public abstract class ProjectileControl extends GameControl {
     }
 
     public void hit(DestroyableControl d, Vector3f dir, Vector3f loc) {
-        d.hit(this.damage, dir, loc);
+        boolean died = d.hit(this.damage, dir, loc);
+        if (!(d instanceof PlayerControl)) {
+            return;
+        }
+        
+        ScoreObserverSubject so = GameController.getInstance().getScoreSubject();
+        so.hitted(this.source, (PlayerControl) d, this.damage);
+        if (died) {
+            so.killed(this.source, (PlayerControl) d);
+        }
     }
 
     

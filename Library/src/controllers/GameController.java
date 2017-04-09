@@ -18,7 +18,7 @@ public final class GameController {
     private LoadingManager loader;
     private SyncManager synchronizer = new SyncManager();
     private final ObserverSubject<PlayerControl> deathSubject = new ObserverSubject<>();
-    private final ScoreObserverSubject scores = new ScoreObserverSubject();
+    private final ScoreObserverSubject scoreSubject = new ScoreObserverSubject();
 
     private GameController() {
     }
@@ -47,10 +47,11 @@ public final class GameController {
         return deathSubject;
     }
 
-    public ScoreObserverSubject getScoreListener() {
-        return this.scores;
+    public ScoreObserverSubject getScoreSubject() {
+        return scoreSubject;
     }
 
+    
     public void initialise(SimpleApplication application, AppSettings settings, LoadingManager loader, PhysicsSpace physics, SyncManager synchronizer) {
         this.application = application;
         this.loader = loader;
