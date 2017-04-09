@@ -10,6 +10,7 @@ import controls.weapons.WeaponControl;
 public abstract class PlayerControl extends DestroyableControl implements ActionListener {
 
     public static int serverId;
+    public static String playerName = "";
     public static final String DOWN = "DOWN";
     public static final String UP = "UP";
     public static final String LEFT = "LEFT";

@@ -6,6 +6,7 @@ import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.system.AppSettings;
 import controllers.GameController;
+import controls.entityes.PlayerControl;
 import java.io.File;
 import java.io.IOException;
 import java.util.TreeSet;
@@ -18,9 +19,25 @@ import visual.Label;
 public class ConnectFrame extends Frame {
 
     private static final String SETTING_NAME = "ips";
-    private final IpTextFrame ipText = new IpTextFrame();
+    private final TextField ipText = new TextField() {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                ConnectFrame.this.focusGained(this);
+            }
+        }
+    };
+    private final TextField nameText = new TextField() {
+        @Override
+        public void onMouseButtonEvent(MouseButtonEvent evt) {
+            if (evt.isPressed()) {
+                ConnectFrame.this.focusGained(this);
+            }
+        }
+    };
     private ClientApplication application;
     private final MappedSettings<TreeSet<String>> settings = MappedSettings.<TreeSet<String>>getInstance(this);
+    private TextField selectedField = this.ipText;
 
     public ConnectFrame(ClientApplication application) {
         this();
@@ -36,6 +53,7 @@ public class ConnectFrame extends Frame {
         final int sz = super.height() / 10;
 
         this.ipText.bounds(0, 0, super.width(), sz);
+        this.nameText.bounds(0, sz, super.width(), sz);
 
         this.settings.setFile(new File("LastIps"));
         if (!this.settings.open()) {
@@ -45,7 +63,7 @@ public class ConnectFrame extends Frame {
         TreeSet<String> ips = this.settings.findSetting(ConnectFrame.SETTING_NAME);
         int i = 0;
         for (String ip : ips) {
-            if (i >= 9) {
+            if (i >= 8) {
                 break;
             }
 
@@ -57,12 +75,13 @@ public class ConnectFrame extends Frame {
                     }
                 }
             };
-            l.bounds(0, sz * i + sz, super.width(), sz);
+            l.bounds(0, sz * i + sz * 2, super.width(), sz);
             super.add(l);
 
         }
 
         super.add(this.ipText);
+        super.add(this.nameText);
     }
 
     private void selectIp(String ip) {
@@ -77,12 +96,13 @@ public class ConnectFrame extends Frame {
                 this.action();
             }
 
-            this.ipText.input(evt.getKeyChar(), evt.getKeyCode());
+            this.selectedField.input(evt.getKeyChar(), evt.getKeyCode());
         }
     }
 
     private void action() {
         try {
+            PlayerControl.playerName = this.nameText.text();
             this.application.connect(this.ipText.text());
             super.hide();
             this.settings.findSetting(ConnectFrame.SETTING_NAME).add(this.ipText.text());
@@ -90,5 +110,9 @@ public class ConnectFrame extends Frame {
         } catch (IOException ex) {
             Logger.getLogger(ConnectFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void focusGained(TextField f) {
+        this.selectedField = f;
     }
 }

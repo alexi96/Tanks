@@ -7,7 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import visual.Component;
 
-public class IpTextFrame extends Component {
+public class TextField extends Component {
 
     private StringBuilder text = new StringBuilder();
 
