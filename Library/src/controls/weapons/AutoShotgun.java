@@ -40,20 +40,36 @@ public class AutoShotgun extends WeaponControl {
         Quaternion dirQ = new Quaternion();
         dirQ.lookAt(dir, Vector3f.UNIT_Y);
         float change = 2f * FastMath.DEG_TO_RAD;
-        final int shellNum = 10;
+
+        float ax = AutoShotgun.RAND.nextInt(101);
+        float ay = AutoShotgun.RAND.nextInt(101);
+        ax *= change;
+        ay *= change;
+        ax /= 100f;
+        ay /= 100f;
+
+        Quaternion t = dirQ.clone();
+        t.multLocal(new Quaternion().fromAngleAxis(ax, Vector3f.UNIT_Y));
+        t.multLocal(new Quaternion().fromAngleAxis(ay, Vector3f.UNIT_X));
+
+        ShotgunShell bc = new ShotgunShell.NoisyShotgunShell(t.getRotationColumn(2), 75, super.damage, super.holder, 300);
+        bc.setLocation(super.barrel.getWorldTranslation().clone());
+        GameController.getInstance().getSynchronizer().create(bc);
+
+        final int shellNum = 9;
         for (int i = 0; i < shellNum; i++) {
-            float ax = AutoShotgun.RAND.nextInt(101);
-            float ay = AutoShotgun.RAND.nextInt(101);
+            ax = AutoShotgun.RAND.nextInt(101);
+            ay = AutoShotgun.RAND.nextInt(101);
             ax *= change;
             ay *= change;
             ax /= 100f;
             ay /= 100f;
-            
-            Quaternion t = dirQ.clone();
+
+            t = dirQ.clone();
             t.multLocal(new Quaternion().fromAngleAxis(ax, Vector3f.UNIT_Y));
             t.multLocal(new Quaternion().fromAngleAxis(ay, Vector3f.UNIT_X));
-            
-            ShotgunShell bc = new ShotgunShell(t.getRotationColumn(2), 75, super.damage, super.holder, 300);
+
+            bc = new ShotgunShell(t.getRotationColumn(2), 75, super.damage, super.holder, 300);
             bc.setLocation(super.barrel.getWorldTranslation().clone());
             GameController.getInstance().getSynchronizer().create(bc);
         }
@@ -114,7 +130,7 @@ public class AutoShotgun extends WeaponControl {
         loc.addLocal(0, 0, -0.03f * this.state / this.fireRate);
         this.location.set(loc);
         super.spatial.setLocalTranslation(this.location);
-        
+
         float ang = this.state / this.fireRate;
         if (ang <= 0.5f) {
             ang *= 2;

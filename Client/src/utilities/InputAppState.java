@@ -46,15 +46,19 @@ public class InputAppState extends ClientAppState implements ActionListener {
     }
 
     public void spawn(PlayerControl player) {
-        PlayerControl result = this.controls.spawn(player);
-        PlayerControl.serverId = result.getId();
-        this.managed.put(result.getId(), result);
-        result.create();
+        GameController.getInstance().getApplication().enqueue(() -> {
+            PlayerControl result = this.controls.spawn(player);
+            PlayerControl.serverId = result.getId();
+            this.managed.put(result.getId(), result);
+            result.create();
 
-        this.player = result;
+            this.player = result;
 
-        this.hud.setPlayer(result);
-        this.hud.show();
+            this.hud.setPlayer(result);
+            this.hud.show();
+            
+            this.spawnFrame.hide();
+        });
     }
 
     private void death(PlayerControl p) {
@@ -108,7 +112,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
         if (this.player == null) {
             return;
         }
-        
+
         this.hud.invalidate();
 
         if (this.camera.getDirection().equals(this.lastLook)) {

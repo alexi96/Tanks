@@ -1,5 +1,6 @@
 package controls.projectiles;
 
+import com.jme3.bounding.BoundingBox;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
@@ -87,14 +88,16 @@ public abstract class ExplosibileProjectile extends ProjectileControl {
             if (dc == null || dc == d) {
                 continue;
             }
-            float sz = s.getWorldBound().getVolume();
-            Vector3f center = s.getWorldBound().getCenter();
+            BoundingBox box = (BoundingBox) s.getWorldBound();
+            float sz = (box.getXExtent() + box.getYExtent() + box.getZExtent());
+            sz /= 3f;
+            Vector3f center = box.getCenter();
             float dist = center.subtract(loc).length();
             if (dist > this.explosionRange + sz) {
                 continue;
             }
 
-            this.hitExplosion(dc, loc.subtract(center).normalize(), center, dist - sz);
+            this.hitExplosion(dc, center.subtract(loc).normalize(), center, dist - sz);
         }
     }
 }
