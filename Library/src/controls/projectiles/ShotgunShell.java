@@ -1,6 +1,8 @@
 package controls.projectiles;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.audio.AudioData;
+import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Quaternion;
@@ -16,6 +18,8 @@ import controls.entityes.PlayerControl;
 import utilities.LoadingManager;
 
 public class ShotgunShell extends BulletControl {
+
+    private static final AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/ShotgunFire.wav", AudioData.DataType.Buffer);
 
     public ShotgunShell() {
     }
@@ -74,12 +78,27 @@ public class ShotgunShell extends BulletControl {
         s.setLocalTranslation(super.location);
         s.addControl(this);
         app.getRootNode().attachChild(s);
+    }
 
-        if (GameController.getInstance().getSynchronizer() != null) {
-            return;
+    public static class NoisyShotgunShell extends ShotgunShell {
+
+        public NoisyShotgunShell() {
         }
-        /*AudioNode an = BulletControl.FIRE.clone();
-        an.setLocalTranslation(super.location);
-        an.playInstance();*/
+
+        public NoisyShotgunShell(Vector3f direction, float speed, float damage, PlayerControl source, float range) {
+            super(direction, speed, damage, source, range);
+        }
+
+        @Override
+        public void create() {
+            super.create();
+
+            if (GameController.getInstance().getSynchronizer() != null) {
+                return;
+            }
+            AudioNode an = ShotgunShell.FIRE.clone();
+            an.setLocalTranslation(super.location);
+            an.playInstance();
+        }
     }
 }

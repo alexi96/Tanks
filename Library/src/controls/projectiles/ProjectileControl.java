@@ -148,11 +148,6 @@ public abstract class ProjectileControl extends GameControl {
     }
     
     @Override
-    public void destroy() {
-        super.destroy();
-    }
-    
-    @Override
     public void update(float tpf) {
         SyncManager manager = GameController.getInstance().getSynchronizer();
         if (manager == null) {

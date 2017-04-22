@@ -14,8 +14,8 @@ import utilities.Explosion;
 
 public class RocketControl extends ExplosibileProjectile {
 
-    private final static AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Bullet.wav", AudioData.DataType.Buffer);
-    private final static AudioNode EXPLOSION = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Explosion.wav", AudioData.DataType.Buffer);
+    private final static AudioNode FIRE = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/RPGFire.wav", AudioData.DataType.Buffer);
+    protected final static AudioNode EXPLOSION = new AudioNode(GameController.getInstance().getApplication().getAssetManager(), "Sounds/Explosion.wav", AudioData.DataType.Buffer);
 
     static {
         FIRE.setVolume(3);
@@ -60,9 +60,6 @@ public class RocketControl extends ExplosibileProjectile {
             AudioNode an = RocketControl.EXPLOSION.clone();
             an.setLocalTranslation(super.location);
             an.playInstance();
-
-            SimpleApplication sa = GameController.getInstance().getApplication();
-            AssetManager am = sa.getAssetManager();
         } else {
             Explosion ex = new Explosion();
             ex.setLocation(super.location);
