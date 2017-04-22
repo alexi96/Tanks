@@ -93,7 +93,7 @@ public abstract class ProjectileControl extends GameControl {
         this.range = range;
     }
 
-    public boolean colides(float dist) {
+    protected boolean colides(float dist) {
         Ray ray = new Ray(this.location, this.direction);
         ray.setLimit(dist);
         Node root = GameController.getInstance().getApplication().getRootNode();
@@ -128,7 +128,7 @@ public abstract class ProjectileControl extends GameControl {
         return false;
     }
 
-    public void hit(DestroyableControl d, Vector3f dir, Vector3f loc) {
+    protected void hit(DestroyableControl d, Vector3f dir, Vector3f loc) {
         boolean died = d.hit(this.damage, dir, loc);
         if (!(d instanceof PlayerControl)) {
             return;
