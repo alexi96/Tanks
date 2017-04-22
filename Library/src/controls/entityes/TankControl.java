@@ -1,6 +1,5 @@
 package controls.entityes;
 
-import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.VehicleControl;
@@ -13,7 +12,6 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 import utilities.LoadingManager;
@@ -37,8 +35,6 @@ public class TankControl extends PlayerControl {
     private transient Node eye;
     private float aimState;
 
-    private transient WeaponControl selectedWeapon;
-
     public TankControl() {
         super.resetHealth(400);
     }
@@ -46,6 +42,8 @@ public class TankControl extends PlayerControl {
     @Override
     public void prepare(Synchronizer newData) {
         TankControl o = (TankControl) newData;
+        super.health = o.health;
+
         this.location.set(o.location);
         this.rotation.set(o.rotation);
         this.eyeRot.set(o.eyeRot);
@@ -53,11 +51,19 @@ public class TankControl extends PlayerControl {
         this.wheelManager.prepare(o.wheelManager);
         this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
+        if (o.selected == o.primary) {
+            this.selected = this.primary;
+        } else {
+            this.selected = this.secondary;
+        }
+
         this.aimState = o.aimState;
     }
 
     @Override
     public void setSpatial(Spatial spatial) {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+
         if (spatial != null) {
             Node n = (Node) spatial;
             this.wheels[0] = n.getChild("Wheel.FL");
@@ -71,8 +77,6 @@ public class TankControl extends PlayerControl {
             this.eye.detachAllChildren();
             this.eye.attachChild(this.primary.getSpatial());
             this.eye.attachChild(this.secondary.getSpatial());
-
-            boolean server = GameController.getInstance().getSynchronizer() != null;
 
             if (server) {
                 Spatial hull = LoadingManager.findByName(spatial, "Hull");
@@ -110,11 +114,15 @@ public class TankControl extends PlayerControl {
 
                 wheel = this.wheels[5];
                 this.vehicle.addWheel(wheel, wheel.getWorldBound().getCenter(), direction, axle, 0.2f, radius, false);
+
+                GameController.getInstance().getPhysics().add(this.vehicle);
+                this.wheelManager.initialise(this.vehicle);
             }
 
             this.location = spatial.getLocalTranslation();
             this.rotation = spatial.getLocalRotation();
-        } else {
+        } else if (server) {
+            GameController.getInstance().getPhysics().remove(this.vehicle);
             super.spatial.removeControl(this.vehicle);
             this.vehicle = null;
         }
@@ -130,25 +138,23 @@ public class TankControl extends PlayerControl {
 
         Node n = (Node) TankControl.MODEL.clone();
 
-        if (gc.isBestVisualStyles()) {
+        boolean server = GameController.getInstance().getSynchronizer() != null;
+        if (!server) {
             n.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         }
-        boolean server = GameController.getInstance().getSynchronizer() != null;
+
         this.wheels = new Spatial[6];
 
         this.primary.setHolder(this);
         this.secondary.setHolder(this);
         this.primary.create();
         this.secondary.create();
-        this.selectedWeapon = primary;
+        this.selected = primary;
         n.addControl(this);
 
         gc.getApplication().getRootNode().attachChild(n);
 
         if (server) {
-            gc.getPhysics().add(this.vehicle);
-            this.wheelManager.initialise(this.vehicle);
-            
             this.vehicle.setPhysicsLocation(Vector3f.UNIT_Y);
         }
     }
@@ -177,6 +183,26 @@ public class TankControl extends PlayerControl {
         c.setLocation(this.eye.getWorldTranslation().add(dep));
     }
 
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.vehicle.setPhysicsLocation(loc);
+    }
+
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
+    }
+
     private void updateFirstPerson(float tpf) {
         tpf *= 3;
         if (this.secondaryFire) {
@@ -199,19 +225,19 @@ public class TankControl extends PlayerControl {
     private void updateWeapons(float tpf) {
         if (super.swap) {
             super.swap = false;
-            this.selectedWeapon.secondaryFire(false);
-            this.selectedWeapon.fire(false);
-            if (this.primary == this.selectedWeapon) {
-                this.selectedWeapon = this.secondary;
+            this.selected.secondaryFire(false);
+            this.selected.fire(false);
+            if (this.primary == this.selected) {
+                this.selected = this.secondary;
             } else {
-                this.selectedWeapon = this.primary;
+                this.selected = this.primary;
             }
         }
-        
-        this.selectedWeapon.secondaryFire(super.secondaryFire);
-        this.selectedWeapon.fire(super.fire);
+
+        this.selected.secondaryFire(super.secondaryFire);
+        this.selected.fire(super.fire);
     }
-    
+
     @Override
     public void update(float tpf) {
         SyncManager sm = GameController.getInstance().getSynchronizer();
@@ -237,7 +263,7 @@ public class TankControl extends PlayerControl {
         this.eyeRot.set(new Quaternion(t));
         this.eye.setLocalRotation(this.eyeRot);
 
-        final float acc = 200;
+        final float acc = TankControl.MASS;
         if (super.up) {
             this.vehicle.accelerate(acc);
         } else if (!this.down) {
@@ -297,9 +323,10 @@ public class TankControl extends PlayerControl {
     }
 
     @Override
-    public void hit(float dmg, Vector3f dir, Vector3f loc) {
-        super.hit(dmg, dir, loc);
+    public boolean hit(float dmg, Vector3f dir, Vector3f loc) {
         this.vehicle.applyImpulse(dir.mult(dmg), loc);
+
+        return super.hit(dmg, dir, loc);
     }
 
     @Override

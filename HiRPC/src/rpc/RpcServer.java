@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 
 public class RpcServer implements Runnable {
 
-    private static final int SERVER_TYPE = 0;
-    private static final int CLIENT_TYPE = 1;
+    public static final int INVOCATION_TYPE = 0;
+    public static final int EXECUTION_TYPE = 1;
 
     private ServerSocket server;
     private Object serverProcedures;
@@ -66,7 +66,7 @@ public class RpcServer implements Runnable {
 
     private void accept(Socket s) throws IOException, ClassNotFoundException {
         int type = s.getInputStream().read();
-        if (type == RpcServer.SERVER_TYPE) {
+        if (type == RpcServer.INVOCATION_TYPE) {
             ExecutionEndPoint exe = new ExecutionEndPoint(s, this.serverProcedures);
             new Thread(exe, s.getInetAddress().getHostAddress()).start();
         } else {

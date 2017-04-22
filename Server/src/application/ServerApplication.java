@@ -10,8 +10,8 @@ import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.TestBall;
+import controls.maps.HillMap;
 import controls.maps.Map;
-import controls.maps.TestMap;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,17 +40,19 @@ public class ServerApplication extends SimpleApplication {
             Logger.getLogger(ServerApplication.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        super.stateManager.attach(s);
 
         GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), s);
-        GameController.getInstance().setBestVisualStyles(false);
 
-        Map t = new TestMap();
+        Map t = new HillMap();
         s.create(t);
+
+        super.stateManager.attach(s);
 
         TestBall tb = new TestBall();
         s.create(tb);
         Spatial sp = tb.getSpatial();
-        sp.getControl(RigidBodyControl.class).setPhysicsLocation(Vector3f.UNIT_Y.mult(3).add(Vector3f.UNIT_X.mult(3)));
+        sp.getControl(RigidBodyControl.class).setPhysicsLocation(Vector3f.UNIT_Y.mult(17));
+
+        GameController.getInstance().getDeathSubject().addListener((p) -> System.out.println(p.getName() + " died!"));
     }
 }

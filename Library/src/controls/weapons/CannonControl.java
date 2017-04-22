@@ -7,7 +7,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
 import controls.entityes.TankControl;
-import controls.projectiles.BulletControl;
+import controls.projectiles.RocketControl;
 import synchronization.SyncManager;
 
 public class CannonControl extends WeaponControl {
@@ -57,14 +57,7 @@ public class CannonControl extends WeaponControl {
             return false;
         }
         Vector3f dir = super.spatial.getParent().getWorldRotation().getRotationColumn(2);
-        BulletControl bc = new BulletControl(dir, 20, super.damage, super.holder, 100) {
-
-            @Override
-            public void create() {
-                super.create(); //To change body of generated methods, choose Tools | Templates.
-                super.spatial.scale(10);
-            }
-        };
+        RocketControl bc = new RocketControl(dir, 60, super.damage, super.holder, 200);
         bc.setLocation(super.barrel.getWorldTranslation().clone());
         GameController.getInstance().getSynchronizer().create(bc);
 

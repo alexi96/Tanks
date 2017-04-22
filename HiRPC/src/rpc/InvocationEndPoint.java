@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class InvocationEndPoint implements InvocationHandler {
+public class InvocationEndPoint implements InvocationHandler {
 
     public Socket socket;
     public ObjectInputStream input;

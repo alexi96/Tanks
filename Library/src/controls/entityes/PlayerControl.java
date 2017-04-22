@@ -1,9 +1,8 @@
 package controls.entityes;
 
-import com.jme3.bullet.control.PhysicsControl;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import controllers.GameController;
 import controls.DestroyableControl;
 import controls.weapons.WeaponControl;
@@ -11,6 +10,7 @@ import controls.weapons.WeaponControl;
 public abstract class PlayerControl extends DestroyableControl implements ActionListener {
 
     public static int serverId;
+    public static String playerName = "";
     public static final String DOWN = "DOWN";
     public static final String UP = "UP";
     public static final String LEFT = "LEFT";
@@ -21,13 +21,14 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public static final String CTRL = "CTRL";
     public static final String SHIFT = "SHIFT";
     public static final String SWAP = "SWAP";
+    public static final String RESPAWN = "RESPAWN";
 
     public static final String ALT_UP = "ALT_UP";
     public static final String ALT_DOWN = "ALT_DOWN";
     public static final String ALT_LEFT = "ALT_LEFT";
     public static final String ALT_RIGHT = "ALT_RIGHT";
 
-    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT};
+    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT, PlayerControl.RESPAWN};
     protected String name = "";
     protected transient boolean up;
     protected transient boolean down;
@@ -43,6 +44,7 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     protected WeaponControl primary;
     protected WeaponControl secondary;
+    protected WeaponControl selected;
 
     public PlayerControl() {
     }
@@ -123,17 +125,21 @@ public abstract class PlayerControl extends DestroyableControl implements Action
         this.secondary = secondary;
     }
 
+    public WeaponControl getSelected() {
+        return selected;
+    }
+
     @Override
     public void create() {
         super.create();
-        
+
         this.look = new Vector3f(0, 0, 1);
-        
+
         GameController gc = GameController.getInstance();
         if (gc.getSynchronizer() != null) {
             return;
         }
-        
+
         if (super.id == PlayerControl.serverId) {
             gc.getApplication().getFlyByCamera().setMoveSpeed(0);
         }
@@ -141,8 +147,10 @@ public abstract class PlayerControl extends DestroyableControl implements Action
 
     @Override
     public void destroy() {
+        GameController.getInstance().getDeathSubject().changeState(this);
+
         super.destroy();
-        
+
         GameController gc = GameController.getInstance();
         if (gc.getSynchronizer() != null) {
             return;
@@ -152,6 +160,8 @@ public abstract class PlayerControl extends DestroyableControl implements Action
             gc.getApplication().getFlyByCamera().setMoveSpeed(10);
         }
     }
+
+    public abstract void restrictCamra(Camera camera);
 
     @Override
     public void onAction(String name, boolean isPressed, float tpf) {
@@ -186,6 +196,15 @@ public abstract class PlayerControl extends DestroyableControl implements Action
             case PlayerControl.SWAP:
                 this.swap = isPressed;
                 break;
+            case PlayerControl.RESPAWN:
+                if (isPressed) {
+                    super.hit(super.getMaxHealth(), Vector3f.ZERO, Vector3f.ZERO);
+                }
+                break;
         }
+    }
+
+    public void moveTo(Vector3f loc) {
+        super.spatial.setLocalTranslation(loc);
     }
 }

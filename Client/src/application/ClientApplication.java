@@ -10,22 +10,14 @@ import connection.ControlsConnection;
 import connection.GameConnection;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
-import controls.entityes.TankControl;
-import controls.weapons.CannonControl;
-import controls.weapons.MinigunControl;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import rpc.HiRpc;
 import utilities.ClientAppState;
 import utilities.InputAppState;
 import utilities.LoadingManager;
-import visual.HudFrame;
-import visual.SpawnFrame;
+import visual.connect.ConnectFrame;
 
 public class ClientApplication extends SimpleApplication {
-
-    private String ip;
 
     @Override
     public void simpleInitApp() {
@@ -36,31 +28,16 @@ public class ClientApplication extends SimpleApplication {
         LoadingManager loader = new LoadingManager(this.assetManager);
         GameController.getInstance().initialise(this, super.settings, loader, null, null);
 
-        try {
-            super.flyCam.setMoveSpeed(0);
-            final ControlsConnection cc = HiRpc.connectSimple(this.ip, ClientAppState.PORT, ControlsConnection.class);
-            InputAppState state = new InputAppState(cc);
-            HiRpc.connectReverse(this.ip, GameConnection.PORT, state);
-            super.stateManager.attach(state);
+        new ConnectFrame(this).show();
+    }
 
-            PlayerControl pl;
+    public void connect(String ip) throws IOException {
+        final ControlsConnection cc = HiRpc.connectSimple(ip, ClientAppState.PORT, ControlsConnection.class);
+        InputAppState state = new InputAppState(cc);
+        HiRpc.connectReverse(ip, GameConnection.PORT, state);
+        super.stateManager.attach(state);
 
-            pl = new TankControl();
-            pl.setPrimary(new CannonControl());
-            pl.setSecondary(new MinigunControl());
-
-            state.spawn(pl);
-
-            inputManager.addListener(state, PlayerControl.MAPPINGS);
-        } catch (IOException ex) {
-            Logger.getLogger(ClientApplication.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        HudFrame f = new HudFrame();
-        //f.show();
-
-        SpawnFrame sf = new SpawnFrame();
-        //sf.show();
+        inputManager.addListener(state, PlayerControl.MAPPINGS);
     }
 
     private void initKeys() {
@@ -74,6 +51,7 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.CTRL, new KeyTrigger(KeyInput.KEY_LCONTROL));
         inputManager.addMapping(PlayerControl.SHIFT, new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping(PlayerControl.SWAP, new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addMapping(PlayerControl.RESPAWN, new KeyTrigger(KeyInput.KEY_M));
 
         inputManager.addMapping(PlayerControl.ALT_UP, new KeyTrigger(KeyInput.KEY_NUMPAD8));
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
@@ -98,16 +76,6 @@ public class ClientApplication extends SimpleApplication {
         } else {
             app.setDisplayFps(false);
             app.setDisplayStatView(false);
-        }
-        app.ip = "localhost";
-        if (debug) {
-            if (args.length > 1) {
-                app.ip = args[1];
-            }
-        } else {
-            if (args.length > 0) {
-                app.ip = args[0];
-            }
         }
         app.start();
     }

@@ -1,0 +1,34 @@
+<scene previous_export_time="0" formatVersion="1.0.1" exported_by="alex_" export_time="1491146956.2181063" >
+  <nodes >
+    <node name="Plank" >
+      <position x="0.000000" z="-0.000000" y="0.000000" />
+      <rotation qx="0.000000" qw="1.000000" qy="0.000000" qz="-0.000000" />
+      <scale x="1.000000" z="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity actor="False" velocity_max="0.0" anisotropic_friction="False" physics_type="STATIC" lock_rot_x="False" name="Plank" lock_trans_x="False" ghost="False" mass_radius="1.0" velocity_min="0.0" mass="1.0" damping_trans="0.03999999910593033" friction_x="1.0" inertia_tensor="0.4000000059604645" damping_rot="0.10000000149011612" lock_trans_y="False" friction_z="1.0" lock_rot_y="False" friction_y="1.0" meshFile="Plank.mesh" lock_trans_z="False" lock_rot_z="False" />
+    </node>
+    <node name="Box" >
+      <position x="0.000000" z="-0.000000" y="0.000000" />
+      <rotation qx="0.000000" qw="1.000000" qy="0.000000" qz="-0.000000" />
+      <scale x="1.000000" z="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity actor="False" velocity_max="0.0" anisotropic_friction="False" physics_type="STATIC" lock_rot_x="False" name="Box" lock_trans_x="False" ghost="False" mass_radius="1.0" velocity_min="0.0" mass="1.0" damping_trans="0.03999999910593033" friction_x="1.0" inertia_tensor="0.4000000059604645" damping_rot="0.10000000149011612" lock_trans_y="False" friction_z="1.0" lock_rot_y="False" friction_y="1.0" meshFile="Box.mesh" lock_trans_z="False" lock_rot_z="False" />
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="D:\Alex\Facultate\Tanks\Library\assets\Models\Props.material" />
+    </item>
+  </externals>
+  <environment >
+    <colourDiffuse g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient g="0.0" r="0.0" b="0.0" />
+    <colourBackground g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+  </environment>
+</scene>

@@ -1,0 +1,150 @@
+<scene exported_by="alex_" previous_export_time="1490974718.9975054" formatVersion="1.0.1" export_time="1490975996.3473225" >
+  <nodes >
+    <node name="Props" >
+      <position z="-0.000000" x="0.000000" y="0.000000" />
+      <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <node name="Box1#Box" >
+        <position z="44.872700" x="-34.547501" y="8.007570" />
+        <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box10#Box" >
+        <position z="51.961525" x="30.000000" y="8.000000" />
+        <rotation qw="0.500000" qy="0.866025" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box11#Box" >
+        <position z="30.000000" x="-51.961525" y="8.000000" />
+        <rotation qw="0.965926" qy="0.258819" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box2#Box" >
+        <position z="9.138078" x="-9.361518" y="13.006900" />
+        <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box3#Box" >
+        <position z="-0.000000" x="-60.000000" y="8.000000" />
+        <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box4#Box" >
+        <position z="-30.000000" x="-51.961525" y="8.000000" />
+        <rotation qw="0.965926" qy="-0.258819" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box5#Box" >
+        <position z="-51.961525" x="-30.000000" y="8.000000" />
+        <rotation qw="0.866025" qy="-0.500000" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box6#Box" >
+        <position z="-51.961525" x="30.000000" y="8.000000" />
+        <rotation qw="0.500000" qy="-0.866025" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box7#Box" >
+        <position z="-30.000000" x="51.961525" y="8.000000" />
+        <rotation qw="0.258819" qy="-0.965926" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box8#Box" >
+        <position z="-0.000000" x="60.000000" y="8.000000" />
+        <rotation qw="-0.000000" qy="1.000000" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+      <node name="Box9#Box" >
+        <position z="30.000000" x="51.961525" y="8.000000" />
+        <rotation qw="0.258819" qy="0.965926" qx="0.000000" qz="-0.000000" />
+        <scale z="1.000000" x="1.000000" y="1.000000" />
+        <game >
+          <sensors />
+          <actuators />
+        </game>
+      </node>
+    </node>
+    <node name="2$Spawn" >
+      <position z="-0.752034" x="-3.252263" y="13.000000" />
+      <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+    </node>
+    <node name="1$Spawn" >
+      <position z="79.267082" x="-0.149909" y="1.619455" />
+      <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+    </node>
+    <node name="SpawnPoint" >
+      <position z="-0.000000" x="0.000000" y="12.000000" />
+      <rotation qw="1.000000" qy="0.000000" qx="0.000000" qz="-0.000000" />
+      <scale z="1.000000" x="1.000000" y="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity damping_rot="0.10000000149011612" lock_trans_x="False" lock_rot_x="False" anisotropic_friction="False" lock_rot_y="False" physics_type="STATIC" name="Circle" velocity_min="0.0" lock_trans_z="False" mass_radius="1.0" friction_z="1.0" friction_y="1.0" meshFile="Circle.mesh" damping_trans="0.03999999910593033" mass="1.0" lock_rot_z="False" ghost="False" lock_trans_y="False" friction_x="1.0" velocity_max="0.0" inertia_tensor="0.4000000059604645" actor="False" />
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="D:\Alex\Facultate\Tanks\Library\assets\Models\HillMap.material" />
+    </item>
+  </externals>
+  <environment >
+    <colourBackground g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourDiffuse g="0.05087608844041824" r="0.05087608844041824" b="0.05087608844041824" />
+    <colourAmbient g="0.0" r="0.0" b="0.0" />
+  </environment>
+</scene>

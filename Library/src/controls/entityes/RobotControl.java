@@ -1,6 +1,7 @@
 package controls.entityes;
 
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -8,24 +9,29 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import controls.weapons.WeaponControl;
 import synchronization.SyncManager;
 import synchronization.Synchronizer;
 
 public class RobotControl extends PlayerControl {
 
+    private final static float MAX_SPRINT = 10;
     private final static float HEIGTH = 1.7f;
     private final static Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Robot.j3o");
     private transient BetterCharacterControl character;
     private transient Node eye;
     private transient Spatial body;
     private transient Spatial head;
-    private transient WeaponControl selectedWeapon;
     private Vector3f location = new Vector3f();
     private Quaternion rotation = new Quaternion();
     private Quaternion eyeRot = new Quaternion();
     private float duckState;
     private transient float headDefaultHeigth;
+    private transient float sprint = RobotControl.MAX_SPRINT;
+    private transient boolean tired;
+
+    public RobotControl() {
+        super.resetHealth(100);
+    }
 
     @Override
     public void create() {
@@ -46,7 +52,7 @@ public class RobotControl extends PlayerControl {
         this.secondary.setHolder(this);
         this.primary.create();
         this.secondary.create();
-        this.selectedWeapon = primary;
+        super.selected = primary;
 
         n.addControl(this);
     }
@@ -79,6 +85,8 @@ public class RobotControl extends PlayerControl {
     @Override
     public void prepare(Synchronizer newData) {
         RobotControl o = (RobotControl) newData;
+        super.health = o.health;
+        
         this.location.set(o.location);
         this.rotation.set(o.rotation);
         this.eyeRot.set(o.eyeRot);
@@ -86,6 +94,11 @@ public class RobotControl extends PlayerControl {
 
         this.primary.prepare(o.primary);
         this.secondary.prepare(o.secondary);
+        if (o.selected == o.primary) {
+            this.selected = this.primary;
+        } else {
+            this.selected = this.secondary;
+        }
     }
 
     private void updatePhysics() {
@@ -111,6 +124,26 @@ public class RobotControl extends PlayerControl {
         this.secondary.synchronize();
 
         this.updatePhysics();
+    }
+
+    @Override
+    public void moveTo(Vector3f loc) {
+        this.character.warp(loc);
+    }
+
+    @Override
+    public void restrictCamra(Camera camera) {
+        final float min = FastMath.DEG_TO_RAD * 20;
+        final float max = -FastMath.DEG_TO_RAD * 45;
+
+        float[] angs = camera.getRotation().toAngles(null);
+        if (angs[0] > min && angs[0] < FastMath.PI) {
+            angs[0] = min;
+            camera.setRotation(new Quaternion(angs));
+        } else if (angs[0] < max && angs[0] > -FastMath.PI) {
+            angs[0] = max;
+            camera.setRotation(new Quaternion(angs));
+        }
     }
 
     private void updateDuck(float tpf) {
@@ -142,20 +175,20 @@ public class RobotControl extends PlayerControl {
     private void updateWeapons(float tpf) {
         if (super.swap) {
             super.swap = false;
-            this.selectedWeapon.secondaryFire(false);
-            this.selectedWeapon.fire(false);
-            if (this.primary == this.selectedWeapon) {
-                this.selectedWeapon = this.secondary;
+            this.selected.secondaryFire(false);
+            this.selected.fire(false);
+            if (this.primary == this.selected) {
+                this.selected = this.secondary;
             } else {
-                this.selectedWeapon = this.primary;
+                this.selected = this.primary;
             }
         }
 
         this.primary.update(tpf);
         this.secondary.update(tpf);
 
-        this.selectedWeapon.fire(super.fire);
-        this.selectedWeapon.secondaryFire(super.secondaryFire);
+        this.selected.fire(super.fire);
+        this.selected.secondaryFire(super.secondaryFire);
     }
 
     @Override
@@ -209,6 +242,27 @@ public class RobotControl extends PlayerControl {
             this.character.jump();
         }
 
+        /*if (this.tired) {
+            if (super.shift && this.sprint > 4) {
+                this.sprint -= tpf;
+                walkDir.multLocal(2);
+                if (this.sprint <= 0) {
+                    this.tired = true;
+                }
+            } else {
+                this.sprint += tpf * 2;
+            }
+        } else {
+            if (super.shift && this.sprint > 0) {
+                this.sprint -= tpf;
+                walkDir.multLocal(2);
+                if (this.sprint <= 0) {
+                    this.tired = true;
+                }
+            } else {
+                this.sprint += tpf * 2;
+            }
+        }*/
         walkDir.multLocal(3);
         this.character.setWalkDirection(walkDir);
         this.location = super.spatial.getWorldTranslation().clone();

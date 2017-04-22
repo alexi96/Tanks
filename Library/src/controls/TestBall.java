@@ -44,9 +44,10 @@ public class TestBall extends DestroyableControl {
     }
 
     @Override
-    public void hit(float dmg, Vector3f dir, Vector3f loc) {
+    public boolean hit(float dmg, Vector3f dir, Vector3f loc) {
         RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
         rbc.applyImpulse(dir.mult(dmg), loc);
+        return false;
     }
 
     @Override
