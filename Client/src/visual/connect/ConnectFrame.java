@@ -20,7 +20,7 @@ public class ConnectFrame extends Frame {
 
     private static final String SETTING_NAME = "ips";
     private static final String NAME_SETTING_NAME = "name";
-    private final TextField ipText = new TextField() {
+    private final TextField ipText = new TextField("Ip") {
         @Override
         public void onMouseButtonEvent(MouseButtonEvent evt) {
             if (evt.isPressed()) {
@@ -28,7 +28,7 @@ public class ConnectFrame extends Frame {
             }
         }
     };
-    private final TextField nameText = new TextField() {
+    private final TextField nameText = new TextField("Name") {
         @Override
         public void onMouseButtonEvent(MouseButtonEvent evt) {
             if (evt.isPressed()) {
