@@ -72,7 +72,7 @@ public class ServerAppState extends SyncManager implements ConnectionHandler, Ap
                     } catch (Exception e) {
                         lost.add(c);
                         System.out.println("Lost: ");
-                    }
+                    }                       
                 }
                 this.created.clear();
             }

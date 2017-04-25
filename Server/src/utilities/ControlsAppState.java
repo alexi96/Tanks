@@ -38,11 +38,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         this.players.remove(p.getId());
 
         Collections.sort(this.scores);
-        while (this.scores.size() > 10) {
-            this.scores.remove(this.scores.get(0));
-        }
 
-        System.out.println(this.scores);
         this.saveScores();
     };
     private final ScoreKillListener killListener = (s, d) -> {
@@ -53,6 +49,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     };
     private final TreeMap<PlayerControl, Score> scoreMaps = new TreeMap<>();
     private final ArrayList<Score> scores = new ArrayList<>();
+    private final ArrayList<Score> sessionScores = new ArrayList<>();
 
     public ControlsAppState() {
     }
@@ -113,6 +110,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
                 Score sc = new Score(0, pl.getName(), new Date());
                 this.scoreMaps.put(pl, sc);
                 this.scores.add(sc);
+                this.sessionScores.add(sc);
                 pl.moveTo(spawn);
                 return pl;
             }).get();
@@ -123,8 +121,13 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
     }
 
     private void saveScores() {
+        ArrayList<Score> ss = new ArrayList<>(this.scores);
+        while (ss.size() > 10) {
+            ss.remove(ss.get(0));
+        }
+
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ControlsAppState.SCORES))) {
-            out.writeObject(this.scores);
+            out.writeObject(ss);
         } catch (IOException ex) {
             Logger.getLogger(ControlsAppState.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -137,5 +140,21 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ControlsAppState.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public Score[] requestScores() {
+        Score[] res = new Score[20];
+        Collections.sort(this.scores);
+        for (int i = 0; i < 10 && i < this.scores.size(); i++) {
+            res[i] = this.scores.get(i);
+        }
+        
+        Collections.sort(this.sessionScores);
+        for (int i = 0; i < 10 && i < this.sessionScores.size(); i++) {
+            res[i + 10] = this.sessionScores.get(i);
+        }
+
+        return res;
     }
 }

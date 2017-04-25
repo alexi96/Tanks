@@ -31,8 +31,8 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public static final String ALT_DOWN = "ALT_DOWN";
     public static final String ALT_LEFT = "ALT_LEFT";
     public static final String ALT_RIGHT = "ALT_RIGHT";
-
-    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT, PlayerControl.RESPAWN};
+    
+    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT, RESPAWN};
     protected String name = "";
     protected transient boolean up;
     protected transient boolean down;
