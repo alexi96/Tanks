@@ -1,5 +1,7 @@
 package visual;
 
+import com.jme3.input.KeyInput;
+import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.system.AppSettings;
 import controllers.GameController;
@@ -232,6 +234,13 @@ public class SpawnFrame extends Frame {
         this.secondaryInfo.invalidate();
     }
 
+    @Override
+    public void onKeyEvent(KeyInputEvent evt) {
+        if (evt.isPressed() && evt.getKeyCode() == KeyInput.KEY_RETURN) {
+            this.spawn();
+        }
+    }
+    
     private void spawn() {
         PlayerControl p = this.players.get(this.playerIndex);
         ArrayList<WeaponControl> ps = this.pWeapons.get(p.getClass().getSimpleName());
