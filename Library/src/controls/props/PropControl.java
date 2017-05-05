@@ -60,7 +60,6 @@ public abstract class PropControl extends DestroyableControl {
         super.setSpatial(spatial);
     }
     
-    
     @Override
     public void update(float tpf) {
         GameController gc = GameController.getInstance();

@@ -2,9 +2,7 @@ package application;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.jme3.system.JmeContext;
 import connection.ControlsConnection;
 import connection.GameConnection;
@@ -50,8 +48,7 @@ public class ServerApplication extends SimpleApplication {
 
         TestBall tb = new TestBall();
         s.create(tb);
-        Spatial sp = tb.getSpatial();
-        sp.getControl(RigidBodyControl.class).setPhysicsLocation(Vector3f.UNIT_Y.mult(17));
+        tb.move(Vector3f.UNIT_Y.mult(17));
 
         GameController.getInstance().getDeathSubject().addListener((p) -> System.out.println(p.getName() + " died!"));
     }
