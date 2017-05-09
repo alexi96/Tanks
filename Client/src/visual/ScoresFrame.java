@@ -42,6 +42,7 @@ public class ScoresFrame extends Frame {
         GameController.getInstance().getApplication().getGuiNode().attachChild(this.screen);
 
         this.screen.addControl(this);
+        super.invalidate();
     }
 
     @Override

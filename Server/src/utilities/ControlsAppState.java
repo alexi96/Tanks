@@ -42,7 +42,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         this.saveScores();
     };
     private final ScoreKillListener killListener = (s, d) -> {
-        if (s != d) {
+        if (s == d) {
             return;
         }
         this.scoreMaps.get(s).addPoints(1);
