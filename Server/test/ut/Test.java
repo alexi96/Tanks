@@ -26,7 +26,14 @@ public class Test {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                BoxControl bc = new BoxControl();
+                BoxControl bc = new BoxControl() {
+                    @Override
+                    public boolean hit(float dmg, Vector3f dir, Vector3f loc) {
+                        System.out.println(dmg);
+                        return super.hit(dmg, dir, loc);
+                    }
+                
+                };
                 bc.getLocation().set(i - 1, 0.5f + j, 0);
                 sm.create(bc);
             }
@@ -36,8 +43,14 @@ public class Test {
     private static void projectiles() {
         SyncManager sm = GameController.getInstance().getSynchronizer();
 
-        RocketControl rc = new RocketControl(Vector3f.UNIT_Z, 1, 10, null, 10000);
-        rc.setLocation(Vector3f.UNIT_Z.negate().mult(20).add(Vector3f.UNIT_Y.mult(2)));
+        RocketControl rc = new RocketControl(Vector3f.UNIT_Z, 1, 10, null, 10000) {
+            @Override
+            public void destroy() {
+                System.out.println("Done");
+                super.destroy(); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        rc.setLocation(Vector3f.UNIT_Z.negate().mult(5).add(Vector3f.UNIT_Y.mult(2)));
         sm.create(rc);
     }
 }

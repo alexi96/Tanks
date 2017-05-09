@@ -25,9 +25,7 @@ public class ServerApplication extends SimpleApplication {
         s.start(JmeContext.Type.Headless);
 
         s.enqueue(() -> {
-            Map t = new HillMap();
-            SyncManager m = GameController.getInstance().getSynchronizer();
-            m.create(t);
+        SyncManager m = GameController.getInstance().getSynchronizer();
 
             TestBall tb = new TestBall();
             m.create(tb);
@@ -51,6 +49,9 @@ public class ServerApplication extends SimpleApplication {
         }
 
         GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), s);
+
+        Map t = new HillMap();
+        s.create(t);
 
         super.stateManager.attach(s);
 
