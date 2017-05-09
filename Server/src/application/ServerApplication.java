@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rpc.HiRpc;
+import synchronization.SyncManager;
 import utilities.ControlsAppState;
 import utilities.LoadingManager;
 
@@ -22,6 +23,16 @@ public class ServerApplication extends SimpleApplication {
     public static void main(String[] args) {
         ServerApplication s = new ServerApplication();
         s.start(JmeContext.Type.Headless);
+
+        s.enqueue(() -> {
+            Map t = new HillMap();
+            SyncManager m = GameController.getInstance().getSynchronizer();
+            m.create(t);
+
+            TestBall tb = new TestBall();
+            m.create(tb);
+            tb.move(Vector3f.UNIT_Y.mult(17));
+        });
     }
 
     @Override
@@ -41,14 +52,7 @@ public class ServerApplication extends SimpleApplication {
 
         GameController.getInstance().initialise(this, super.settings, loader, bulletState.getPhysicsSpace(), s);
 
-        Map t = new HillMap();
-        s.create(t);
-
         super.stateManager.attach(s);
-
-        TestBall tb = new TestBall();
-        s.create(tb);
-        tb.move(Vector3f.UNIT_Y.mult(17));
 
         GameController.getInstance().getDeathSubject().addListener((p) -> System.out.println(p.getName() + " died!"));
     }
