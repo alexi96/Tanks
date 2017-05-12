@@ -55,7 +55,7 @@ public class ClientApplication extends SimpleApplication {
         inputManager.addMapping(PlayerControl.ALT_DOWN, new KeyTrigger(KeyInput.KEY_NUMPAD2));
         inputManager.addMapping(PlayerControl.ALT_LEFT, new KeyTrigger(KeyInput.KEY_NUMPAD4));
         inputManager.addMapping(PlayerControl.ALT_RIGHT, new KeyTrigger(KeyInput.KEY_NUMPAD6));
-        
+
         inputManager.addMapping(InputAppState.SHOW_SCORES, new KeyTrigger(KeyInput.KEY_TAB));
     }
 

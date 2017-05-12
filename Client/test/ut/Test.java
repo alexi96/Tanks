@@ -3,7 +3,9 @@ package ut;
 import application.ClientApplication;
 import com.jme3.system.AppSettings;
 import controllers.GameController;
+import java.io.File;
 import utilities.LoadingManager;
+import utilities.MappedSettings;
 import visual.SpawnFrame;
 import visual.connect.ConnectFrame;
 
@@ -28,15 +30,33 @@ public class Test {
 
         app.enqueue(Test::connect);
         app.enqueue(Test::spawn);
+
+        Test.save();    
     }
 
-    public static void connect() {
+    private static void connect() {
         ConnectFrame cf = new ConnectFrame();
         cf.show();
     }
-    
-    public static void spawn() {
-         SpawnFrame sw = new SpawnFrame();
+
+    private static void spawn() {
+        SpawnFrame sw = new SpawnFrame();
         sw.show();
+    }
+
+    private static void save() {
+        MappedSettings<Integer> ms = MappedSettings.<Integer>getInstance(Test.class);
+        File f = new File("utSettings");
+        ms.setFile(f);
+        if (!ms.open(true)) {
+            ms.mapSetting("set1", 6);
+            ms.mapSetting("set2", 7);
+            ms.mapSetting("set3", 8);
+            ms.save();
+        }
+
+        System.out.println(ms.findSetting("set1"));
+        System.out.println(ms.findSetting("set2"));
+        System.out.println(ms.findSetting("set3"));
     }
 }
