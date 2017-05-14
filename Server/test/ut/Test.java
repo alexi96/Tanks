@@ -33,6 +33,7 @@ public class Test {
                         return super.hit(dmg, dir, loc);
                     }
                 
+                    
                 };
                 bc.getLocation().set(i - 1, 0.5f + j, 0);
                 sm.create(bc);
