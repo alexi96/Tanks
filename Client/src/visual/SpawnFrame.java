@@ -14,6 +14,7 @@ import controls.weapons.CannonControl;
 import controls.weapons.GrenadeLauncher;
 import controls.weapons.MachineGun;
 import controls.weapons.MinigunControl;
+import controls.weapons.MissleLauncher;
 import controls.weapons.RobotGrenadeLauncher;
 import controls.weapons.RpgControl;
 import controls.weapons.SniperConotrol;
@@ -109,6 +110,7 @@ public class SpawnFrame extends Frame {
         ArrayList<WeaponControl> tpw = new ArrayList<>();
         this.pWeapons.put(TankControl.class.getSimpleName(), tpw);
         tpw.add(new CannonControl());
+        tpw.add(new MissleLauncher());
 
         ArrayList<WeaponControl> tsw = new ArrayList<>();
         this.sWeapons.put(TankControl.class.getSimpleName(), tsw);

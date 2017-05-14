@@ -17,7 +17,7 @@ import utilities.LoadingManager;
 
 public abstract class ExplosibileProjectile extends ProjectileControl {
 
-    private transient float explosionRange;
+    protected transient float explosionRange;
 
     public ExplosibileProjectile() {
     }
