@@ -38,7 +38,7 @@ public class ClientApplication extends SimpleApplication {
         super.stateManager.attach(state);
     }
 
-    private void initKeys() {
+    protected void initKeys() {
         inputManager.addMapping(PlayerControl.UP, new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping(PlayerControl.DOWN, new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping(PlayerControl.LEFT, new KeyTrigger(KeyInput.KEY_A));
