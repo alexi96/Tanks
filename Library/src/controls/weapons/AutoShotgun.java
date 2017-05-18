@@ -79,7 +79,7 @@ public class AutoShotgun extends WeaponControl {
 
     @Override
     public void create() {
-        Spatial s = AutoShotgun.MODEL.getChild("TestWeapon").clone();
+        Spatial s = AutoShotgun.MODEL.getChild("AutoShotgun").clone();
 
         this.setSpatial(s);
     }

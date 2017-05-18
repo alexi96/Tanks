@@ -50,7 +50,7 @@ public class Score implements Serializable, Comparable<Score> {
 
     @Override
     public int compareTo(Score t) {
-        return this.score - t.score;
+        return t.score - this.score;
     }
 
     @Override

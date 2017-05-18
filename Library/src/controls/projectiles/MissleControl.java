@@ -1,5 +1,6 @@
 package controls.projectiles;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import controllers.GameController;
 import controls.entityes.PlayerControl;
@@ -16,6 +17,14 @@ public class MissleControl extends RocketControl {
     }
 
     @Override
+    public void synchronize() {
+        super.synchronize();
+        Quaternion rot = new Quaternion();
+        rot.lookAt(super.direction, Vector3f.UNIT_Y);
+        super.spatial.setLocalRotation(rot);
+    }
+
+    @Override
     public void update(float tpf) {
         SyncManager manager = GameController.getInstance().getSynchronizer();
         if (manager == null) {
@@ -23,7 +32,7 @@ public class MissleControl extends RocketControl {
         }
 
         this.direction.y -= tpf;
-
+        
         float dist = this.speed * tpf;
         if (this.colides(dist + this.size)) {
             manager.destroy(this);

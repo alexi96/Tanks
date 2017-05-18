@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import model.Score;
 
 public class ScoresFrame extends Frame {
