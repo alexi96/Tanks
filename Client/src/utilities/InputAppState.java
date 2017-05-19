@@ -121,7 +121,7 @@ public class InputAppState extends ClientAppState implements ActionListener {
                         ses.add(ss[i]);
                     }
                 }
-                this.scores.setAll(all);
+                this.scores.setAll(all);    
                 this.scores.setSession(ses);
 
                 this.scores.show();

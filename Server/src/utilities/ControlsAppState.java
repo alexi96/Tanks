@@ -38,6 +38,7 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         this.players.remove(p.getId());
 
         Collections.sort(this.scores);
+        this.scoreMaps.remove(p);
 
         this.saveScores();
     };
@@ -149,12 +150,18 @@ public class ControlsAppState extends ServerAppState implements ControlsConnecti
         for (int i = 0; i < 10 && i < this.scores.size(); i++) {
             res[i] = this.scores.get(i);
         }
-        
+
         Collections.sort(this.sessionScores);
         for (int i = 0; i < 10 && i < this.sessionScores.size(); i++) {
             res[i + 10] = this.sessionScores.get(i);
         }
 
+        for (int i = 0; i < res.length; i++) {
+            if (res[i] == null) {
+                continue;
+            }
+            res[i] = (Score) res[i].cloneScore();
+        }
         return res;
     }
 }
