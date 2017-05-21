@@ -1,11 +1,15 @@
 package controls.entityes;
 
+import com.jme3.audio.AudioNode;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import controllers.GameController;
 import controls.DestroyableControl;
+import controls.projectiles.RocketControl;
 import controls.weapons.WeaponControl;
+import synchronization.SyncManager;
+import utilities.Explosion;
 
 public abstract class PlayerControl extends DestroyableControl implements ActionListener {
 
@@ -27,8 +31,8 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public static final String ALT_DOWN = "ALT_DOWN";
     public static final String ALT_LEFT = "ALT_LEFT";
     public static final String ALT_RIGHT = "ALT_RIGHT";
-
-    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT, PlayerControl.RESPAWN};
+    
+    public static final String[] MAPPINGS = {UP, DOWN, LEFT, RIGHT, FIRE, SECONDARY_FIRE, SPACE, CTRL, SHIFT, SWAP, ALT_UP, ALT_DOWN, ALT_LEFT, ALT_RIGHT, RESPAWN};
     protected String name = "";
     protected transient boolean up;
     protected transient boolean down;
@@ -149,16 +153,29 @@ public abstract class PlayerControl extends DestroyableControl implements Action
     public void destroy() {
         GameController.getInstance().getDeathSubject().changeState(this);
 
+        GameController gc = GameController.getInstance();
+        SyncManager manager = GameController.getInstance().getSynchronizer();
+
+        if (manager != null) {
+            Explosion ex = new Explosion();
+            ex.setLocation(super.spatial.getLocalTranslation());
+            manager.create(ex);
+        } else {
+            AudioNode an = RocketControl.getExplosion().clone();
+            an.setLocalTranslation(super.spatial.getLocalTranslation());
+            an.playInstance();
+        }
+
         super.destroy();
 
-        GameController gc = GameController.getInstance();
-        if (gc.getSynchronizer() != null) {
+        if (manager != null) {
             return;
         }
 
         if (super.id == PlayerControl.serverId) {
             gc.getApplication().getFlyByCamera().setMoveSpeed(10);
         }
+
     }
 
     public abstract void restrictCamra(Camera camera);

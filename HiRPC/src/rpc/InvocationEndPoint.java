@@ -51,6 +51,7 @@ public class InvocationEndPoint implements InvocationHandler {
         synchronized (this) {
             RemoteInvocation inv = new RemoteInvocation(method.getName(), method.getParameterTypes(), args);
             this.output.reset();
+            //this.output.writeObject(inv);
             this.output.writeObject(inv);
             if (method.getReturnType().equals(Void.TYPE)) {
                 return Void.TYPE;

@@ -66,4 +66,8 @@ public class RocketControl extends ExplosibileProjectile {
             manager.create(ex);
         }
     }
+
+    public static AudioNode getExplosion() {
+        return EXPLOSION;
+    }
 }

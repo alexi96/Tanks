@@ -85,7 +85,7 @@ public abstract class WeaponControl extends GameControl {
         super.setSpatial(spatial);
     }
 
-    public boolean fire() {
+    protected boolean fire() {
         if (ammo <= 0) {
             return false;
         }

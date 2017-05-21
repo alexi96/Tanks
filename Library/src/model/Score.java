@@ -48,9 +48,13 @@ public class Score implements Serializable, Comparable<Score> {
         this.score += pts;
     }
 
+    public Score cloneScore() {
+        return new Score(score, name, date);
+    }
+
     @Override
     public int compareTo(Score t) {
-        return this.score - t.score;
+        return t.score - this.score;
     }
 
     @Override

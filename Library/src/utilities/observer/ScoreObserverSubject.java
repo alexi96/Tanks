@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class ScoreObserverSubject {
 
-    private final ArrayList<ScoreHitListener> hits = new ArrayList<>();
     private final ArrayList<ScoreKillListener> kills = new ArrayList<>();
+    private final ArrayList<ScoreHitListener> hits = new ArrayList<>();
 
     public void hitted(PlayerControl s, PlayerControl d, float dmg) {
         this.hits.forEach((k) -> k.playerHit(s, d, dmg));

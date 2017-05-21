@@ -1,46 +1,55 @@
 package controls;
 
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
 import controllers.GameController;
-import synchronization.SyncManager;
+import controls.props.PropControl;
 
-public class TestBall extends DestroyableControl {
-
-    private Vector3f loc;
-    private Quaternion rot;
+public class TestBall extends PropControl {
 
     @Override
     public void create() {
         GameController gc = GameController.getInstance();
         Spatial s = gc.getLoader().loadModel("Models/Ball.j3o");
-        s.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+
+        s.setLocalTranslation(this.location);
+        s.setLocalRotation(this.rotation);
+
+        if (gc.getSynchronizer() == null) {
+            s.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+        }
 
         gc.getApplication().getRootNode().attachChild(s);
 
         s.addControl(this);
-
-        boolean server = GameController.getInstance().getSynchronizer() != null;
-        if (!server) {
-            return;
-        }
-
-        RigidBodyControl rbc = new RigidBodyControl(300);
-        s.addControl(rbc);
-        gc.getPhysics().add(rbc);
     }
 
     @Override
     public void setSpatial(Spatial spatial) {
-        if (spatial != null) {
-            this.loc = spatial.getLocalTranslation();
-            this.rot = spatial.getLocalRotation();
+        GameController gc = GameController.getInstance();
+
+        if (gc.getSynchronizer() != null) {
+            if (spatial != null) {
+                RigidBodyControl rbc = new RigidBodyControl(200);
+                spatial.addControl(rbc);
+
+                gc.getPhysics().add(rbc);
+            } else {
+                RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
+                super.spatial.removeControl(rbc);
+
+                gc.getPhysics().remove(rbc);
+            }
         }
 
         super.setSpatial(spatial);
+    }
+
+    public void move(Vector3f loc) {
+        RigidBodyControl rbc = super.spatial.getControl(RigidBodyControl.class);
+        rbc.setPhysicsLocation(loc);
     }
 
     @Override
@@ -51,22 +60,7 @@ public class TestBall extends DestroyableControl {
     }
 
     @Override
-    public void synchronize() {
-        super.spatial.setLocalTranslation(this.loc);
-        super.spatial.setLocalRotation(this.rot);
-    }
-
-    @Override
-    public void update(float tpf) {
-        SyncManager s = GameController.getInstance().getSynchronizer();
-        if (s == null) {
-            return;
-        }
-        s.update(this);
-    }
-
-    @Override
     public String toString() {
-        return this.loc.toString();
+        return this.location.toString();
     }
 }

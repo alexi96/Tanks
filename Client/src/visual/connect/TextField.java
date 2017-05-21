@@ -10,7 +10,32 @@ import visual.Component;
 public class TextField extends Component {
 
     private StringBuilder text = new StringBuilder();
+    private String toolTip;
+    private boolean selected;
 
+    public TextField() {
+    }
+
+    public TextField(String toolTip) {
+        this.toolTip = toolTip;
+    }
+
+    public String getToolTip() {
+        return toolTip;
+    }
+
+    public void setToolTip(String toolTip) {
+        this.toolTip = toolTip;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+    
     public void input(char ch, int code) {
         if (Character.isLetterOrDigit(ch) || (ch > 32 && ch < 128)) {
             this.text.append(ch);
@@ -39,6 +64,14 @@ public class TextField extends Component {
 
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, super.width(), super.height());
+        
+        if (this.text.length() == 0) {
+            g.setColor(Color.LIGHT_GRAY);
+        g.drawString(this.toolTip, 0, (super.height() + fm.getHeight() / 2) / 2);
+            return;
+        }
+        
+        
         g.setColor(Color.BLACK);
         g.drawString(this.text.toString(), 0, (super.height() + fm.getHeight() / 2) / 2);
     }

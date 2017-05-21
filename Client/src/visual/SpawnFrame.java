@@ -1,5 +1,7 @@
 package visual;
 
+import com.jme3.input.KeyInput;
+import com.jme3.input.event.KeyInputEvent;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.system.AppSettings;
 import controllers.GameController;
@@ -12,6 +14,7 @@ import controls.weapons.CannonControl;
 import controls.weapons.GrenadeLauncher;
 import controls.weapons.MachineGun;
 import controls.weapons.MinigunControl;
+import controls.weapons.MissleLauncher;
 import controls.weapons.RobotGrenadeLauncher;
 import controls.weapons.RpgControl;
 import controls.weapons.SniperConotrol;
@@ -107,6 +110,7 @@ public class SpawnFrame extends Frame {
         ArrayList<WeaponControl> tpw = new ArrayList<>();
         this.pWeapons.put(TankControl.class.getSimpleName(), tpw);
         tpw.add(new CannonControl());
+        tpw.add(new MissleLauncher());
 
         ArrayList<WeaponControl> tsw = new ArrayList<>();
         this.sWeapons.put(TankControl.class.getSimpleName(), tsw);
@@ -232,6 +236,13 @@ public class SpawnFrame extends Frame {
         this.secondaryInfo.invalidate();
     }
 
+    @Override
+    public void onKeyEvent(KeyInputEvent evt) {
+        if (evt.isPressed() && evt.getKeyCode() == KeyInput.KEY_RETURN) {
+            this.spawn();
+        }
+    }
+    
     private void spawn() {
         PlayerControl p = this.players.get(this.playerIndex);
         ArrayList<WeaponControl> ps = this.pWeapons.get(p.getClass().getSimpleName());

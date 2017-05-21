@@ -4,6 +4,7 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import controllers.GameController;
@@ -17,6 +18,10 @@ import utilities.observer.ScoreObserverSubject;
 public abstract class ProjectileControl extends GameControl {
 
     protected static final Node MODEL = (Node) GameController.getInstance().getLoader().loadModel("Models/Projectiles.j3o");
+
+    static {
+        ProjectileControl.MODEL.getChild("Rocket").setShadowMode(RenderQueue.ShadowMode.Cast);
+    }
     protected Vector3f direction;
     protected Vector3f location;
     protected transient float speed;
@@ -93,7 +98,7 @@ public abstract class ProjectileControl extends GameControl {
         this.range = range;
     }
 
-    public boolean colides(float dist) {
+    protected boolean colides(float dist) {
         Ray ray = new Ray(this.location, this.direction);
         ray.setLimit(dist);
         Node root = GameController.getInstance().getApplication().getRootNode();
@@ -128,12 +133,12 @@ public abstract class ProjectileControl extends GameControl {
         return false;
     }
 
-    public void hit(DestroyableControl d, Vector3f dir, Vector3f loc) {
+    protected void hit(DestroyableControl d, Vector3f dir, Vector3f loc) {
         boolean died = d.hit(this.damage, dir, loc);
         if (!(d instanceof PlayerControl)) {
             return;
         }
-        
+
         ScoreObserverSubject so = GameController.getInstance().getScoreSubject();
         so.hitted(this.source, (PlayerControl) d, this.damage);
         if (died) {
@@ -141,12 +146,11 @@ public abstract class ProjectileControl extends GameControl {
         }
     }
 
-    
     @Override
     public void synchronize() {
         super.spatial.setLocalTranslation(this.location);
     }
-    
+
     @Override
     public void update(float tpf) {
         SyncManager manager = GameController.getInstance().getSynchronizer();
@@ -165,7 +169,7 @@ public abstract class ProjectileControl extends GameControl {
             manager.destroy(this);
             return;
         }
-        
+
         this.location.addLocal(this.direction.mult(dist));
         super.spatial.setLocalTranslation(this.location);
 

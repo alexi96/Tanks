@@ -14,10 +14,11 @@ import controls.GameControl;
 import controls.entityes.PlayerControl;
 import java.util.List;
 import utilities.LoadingManager;
+import utilities.observer.ScoreObserverSubject;
 
 public abstract class ExplosibileProjectile extends ProjectileControl {
 
-    private transient float explosionRange;
+    protected transient float explosionRange;
 
     public ExplosibileProjectile() {
     }
@@ -76,7 +77,17 @@ public abstract class ExplosibileProjectile extends ProjectileControl {
         }
         dist /= this.explosionRange;
         dist = 1 - dist;
-        d.hit(this.damage * dist, dir, loc);
+        
+        boolean died = d.hit(this.damage * dist, dir, loc);
+        if (!(d instanceof PlayerControl)) {
+            return;
+        }
+
+        ScoreObserverSubject so = GameController.getInstance().getScoreSubject();
+        so.hitted(this.source, (PlayerControl) d, this.damage);
+        if (died) {
+            so.killed(this.source, (PlayerControl) d);
+        }
     }
 
     protected void blow(DestroyableControl d, Vector3f loc) {
